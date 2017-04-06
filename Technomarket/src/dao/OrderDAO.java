@@ -6,10 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import model.Order;
-import model.Product;
 
 public class OrderDAO {
 	
@@ -33,7 +31,7 @@ public class OrderDAO {
 		PreparedStatement st = null;
 		ResultSet res = null;
 		try{
-			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);4
+			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			st.setDate(1,  Date.valueOf(o.getDate()));
 			st.setString(2, o.getStatus());
 			st.setString(3, o.getEmail());
@@ -54,7 +52,7 @@ public class OrderDAO {
 			o.setOrderId(orderId);
 			//TODO
 		} catch(SQLException e){
-			System.out.println("addOrder: " e.getMessage());
+			System.out.println("addOrder: " + e.getMessage());
 		}
 		
 	}
