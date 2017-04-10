@@ -26,21 +26,20 @@ public class ProductDAO {
 	
 	public synchronized void addProduct(Product p){
 		//TODO if is admin
-		String sql = "INSERT INTO products (category, sub_category, sub_sub_category, descrition, quantity, price, promo_price, specifications, brand, picture_url) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO products (description, quantity, price, promo_price, specifications, brand, picture_url, sub_category, sub_sub_category) values (?, ?, ?, ?, ?, ?, ?, (SELECT sub_category from  sub_category where sub_category = sub_category_id), (SELECT sub_sub_category from  sub_sub_category where sub_sub_category = sub_sub_category_id))";
 		PreparedStatement st = null;
 		ResultSet res = null;
 		try{
 			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			st.setString(1, p.getCategory());
-			st.setString(2, p.getSubCategory());
-			st.setString(3, p.getSubSubCategory());
-			st.setString(4, p.getDescription());
-			st.setInt(5, p.getQuantity());
-			st.setDouble(6, p.getPrice());
-			st.setDouble(7, p.getPromoPrice());
-			st.setString(8, p.getSpecifications());
-			st.setString(9, p.getBrand());
-			st.setString(10, p.getPictureUrl());
+			st.setString(1, p.getDescription());
+			st.setInt(2, p.getQuantity());
+			st.setDouble(3, p.getPrice());
+			st.setDouble(4, p.getPromoPrice());
+			st.setString(5, p.getSpecifications());
+			st.setString(6, p.getBrand());
+			st.setString(7, p.getPictureUrl());
+			st.setString(8, p.getSubCategory());
+			st.setString(9, p.getSubSubCategory());
 			res = st.getGeneratedKeys();
 			res.next();
 			long productId = res.getLong(1);
@@ -51,9 +50,23 @@ public class ProductDAO {
 		}
 	}
 	
+	public void addFavouriteProduct(Product p){
+		String sql = "";
+		PreparedStatement st = null;
+		ResultSet res = null;
+		try{
+			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			
+			res = st.getGeneratedKeys();
+			res.next();
+		} catch (SQLException e) {
+			System.out.println("addProduct: " + e.getMessage());
+		}
+	}
+	
 	public HashMap<Long, Product> getAllProducts(){
 		if(allProducts.isEmpty()){
-			String sql = "SELECT product_id, category, sub_category, sub_sub_category, descrition, quantity, price, promo_pprice, specifications, brand, picture_url FROM products";
+			String sql = "SELECT product_id, description, quantity, price, promo_price, specifications, brand, picture_url, sub_category, sub_sub_category FROM products";
 			PreparedStatement st = null;
 			ResultSet set = null;
 			try {
@@ -65,7 +78,7 @@ public class ProductDAO {
 					String category = set.getString("category");
 					String subCategory = set.getString("sub_category");
 					String subSubCategory = set.getString("sub_sub_category");
-					String description = set.getString("descrition");
+					String description = set.getString("description");
 					int quantity = set.getInt("quantity");
 					double price = set.getDouble("price");
 					double promoPrice = set.getDouble("promo_price");
