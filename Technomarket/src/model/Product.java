@@ -1,5 +1,7 @@
 package model;
 
+import java.util.HashMap;
+
 public class Product {
 	
 	private String category;
@@ -10,15 +12,12 @@ public class Product {
 	private int quantity;
 	private double price;
 	private double promoPrice;
-	private String specifications;
 	private String brand;
 	private String pictureUrl;
+	private HashMap<String, String> specifications;
 	
-	public Product(String category, String subCategory, String subSubCategory, String description, int quantity,
-			double price, double promoPrice, String specifications, String brand, String pictureUrl) {
-		if(category != null && !category.isEmpty()){
-			this.category = category;
-		}
+	public Product(String subCategory, String subSubCategory, String description, int quantity,
+			double price, double promoPrice, String brand, String pictureUrl) {
 		if(subCategory != null && !subCategory.isEmpty()){
 			this.subCategory = subCategory;
 		}
@@ -35,15 +34,13 @@ public class Product {
 		if(price >= 0){
 			this.promoPrice = promoPrice;
 		}
-		if(specifications != null && !specifications.isEmpty()){
-			this.specifications = specifications;
-		}
 		if(brand != null && !brand.isEmpty()){
 			this.brand = brand;
 		}
 		if(pictureUrl != null && !pictureUrl.isEmpty()){
 			this.pictureUrl = pictureUrl;
 		}
+		this.specifications = new HashMap<>();
 	}
 
 	public String getCategory() {
@@ -77,11 +74,7 @@ public class Product {
 	public double getPromoPrice() {
 		return promoPrice;
 	}
-
-	public String getSpecifications() {
-		return specifications;
-	}
-
+	
 	public String getBrand() {
 		return brand;
 	}
@@ -109,7 +102,6 @@ public class Product {
 		temp = Double.doubleToLongBits(promoPrice);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + quantity;
-		result = prime * result + ((specifications == null) ? 0 : specifications.hashCode());
 		result = prime * result + ((subCategory == null) ? 0 : subCategory.hashCode());
 		result = prime * result + ((subSubCategory == null) ? 0 : subSubCategory.hashCode());
 		return result;
@@ -152,11 +144,6 @@ public class Product {
 			return false;
 		if (quantity != other.quantity)
 			return false;
-		if (specifications == null) {
-			if (other.specifications != null)
-				return false;
-		} else if (!specifications.equals(other.specifications))
-			return false;
 		if (subCategory == null) {
 			if (other.subCategory != null)
 				return false;
@@ -169,7 +156,7 @@ public class Product {
 			return false;
 		return true;
 	}
-	
-	
+
+
 	
 }
