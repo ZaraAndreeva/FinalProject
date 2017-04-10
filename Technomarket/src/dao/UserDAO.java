@@ -1,6 +1,5 @@
 package dao;
 
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -52,19 +51,28 @@ public class UserDAO {
 		} catch (SQLException e) {
 			System.out.println("oops " + e.getMessage());
 		}
+		finally {
+			if(st != null){
+				try {
+					st.close();
+				} catch (SQLException e) {
+					System.out.println("oops " + e.getMessage());
+				}
+			}
+		}
 		
 		allUsers.put(u.getEmail(), u);
 	}
 	
-	public synchronized String getEmailById(long id){
-		String sql = "SELECT email FROM users WHERE user_id = " + id;
-		PreparedStatement st = null;
-		try {
-			st = DBManager.getInstance().getConnection().prepareStatement(sql);
-		} catch (SQLException e) {
-			System.out.println("oops " + e.getMessage());
-		}
-	}
+//	public synchronized String getEmailById(long id){
+//		String sql = "SELECT email FROM users WHERE user_id = " + id;
+//		PreparedStatement st = null;
+//		try {
+//			st = DBManager.getInstance().getConnection().prepareStatement(sql);
+//		} catch (SQLException e) {
+//			System.out.println("oops " + e.getMessage());
+//		}
+//	}
 	
 	public synchronized HashMap<String, User> getAllUsers(){
 		if(allUsers.isEmpty()){

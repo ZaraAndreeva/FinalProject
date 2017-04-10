@@ -59,11 +59,7 @@ public class Order {
 	public String getStatus() {
 		return status;
 	}
-
-	public String getEmail() {
-		return email;
-	}
-
+	
 	public double getPrice() {
 		return price;
 	}
@@ -100,7 +96,7 @@ public class Order {
 		return floor;
 	}
 
-	public String getApartment() {
+	public int getApartment() {
 		return apartment;
 	}
 
@@ -116,11 +112,10 @@ public class Order {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((apartment == null) ? 0 : apartment.hashCode());
+		result = prime * result + apartment;
 		result = prime * result + block;
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + ((descriptionAddress == null) ? 0 : descriptionAddress.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((entrance == null) ? 0 : entrance.hashCode());
 		result = prime * result + ((familyName == null) ? 0 : familyName.hashCode());
 		result = prime * result + floor;
@@ -134,6 +129,7 @@ public class Order {
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((street == null) ? 0 : street.hashCode());
 		result = prime * result + ((town == null) ? 0 : town.hashCode());
+		result = prime * result + (int) (userId ^ (userId >>> 32));
 		return result;
 	}
 
@@ -146,10 +142,7 @@ public class Order {
 		if (getClass() != obj.getClass())
 			return false;
 		Order other = (Order) obj;
-		if (apartment == null) {
-			if (other.apartment != null)
-				return false;
-		} else if (!apartment.equals(other.apartment))
+		if (apartment != other.apartment)
 			return false;
 		if (block != other.block)
 			return false;
@@ -162,11 +155,6 @@ public class Order {
 			if (other.descriptionAddress != null)
 				return false;
 		} else if (!descriptionAddress.equals(other.descriptionAddress))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
 			return false;
 		if (entrance == null) {
 			if (other.entrance != null)
@@ -214,8 +202,12 @@ public class Order {
 				return false;
 		} else if (!town.equals(other.town))
 			return false;
+		if (userId != other.userId)
+			return false;
 		return true;
 	}
+
+	
 	
 	
 	

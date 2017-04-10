@@ -7,17 +7,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.HashMap;
-<<<<<<< HEAD
 
 import model.Order;
-=======
-import java.util.HashSet;
+
 import java.util.LinkedHashSet;
 
-import model.Order;
 import model.Product;
 import model.User;
->>>>>>> fixed OrderDAO
 
 public class OrderDAO {
 	
@@ -37,14 +33,14 @@ public class OrderDAO {
 	
 	public synchronized void addOrder(Order o, User u){
 		
-		String sql = "INSERT INTO orders (date, status, email, price, name, family_name, phone, town, street, block, entrance, floor, apartment, description_address) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO orders (date, status, user_id, price, name, family_name, phone, town, street, block, entrance, floor, apartment, description_address) values (?, ?, (select user_id from users where user_id = user_id), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement st = null;
 		ResultSet res = null;
 		try{
 			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			st.setDate(1,  Date.valueOf(o.getDate()));
 			st.setString(2, o.getStatus());
-			st.setString(3, o.getEmail());
+			st.setInt(3, (int) u.getUserId());
 			st.setDouble(4, o.getPrice());
 			st.setString(5, o.getName());
 			st.setString(6, o.getFamilyName());
@@ -54,7 +50,7 @@ public class OrderDAO {
 			st.setInt(10, o.getBlock());
 			st.setString(11, o.getEntrance());
 			st.setInt(12, o.getFloor());
-			st.setString(13, o.getApartment());
+			st.setInt(13, o.getApartment());
 			st.setString(14, o.getDescriptionAddress());
 			
 			st.execute();
@@ -68,8 +64,6 @@ public class OrderDAO {
 			
 		} catch(SQLException e){
 			System.out.println("addOrder: " + e.getMessage());
-<<<<<<< HEAD
-=======
 		}
 		finally {
 			if(st != null){
@@ -87,7 +81,6 @@ public class OrderDAO {
 					
 				}
 			}
->>>>>>> fixed OrderDAO
 		}
 		
 		if(!allOrders.containsKey(u.getUserId())){
@@ -152,6 +145,23 @@ public class OrderDAO {
 				}
 			} catch(SQLException e){
 				System.out.println("getAllProducts: " + e.getMessage());
+			}
+			finally {
+				if(st != null){
+					try {
+						st.close();
+					} catch (SQLException e) {
+						System.out.println("oops " + e.getMessage());
+					}
+				}
+				if(res != null){
+					try {
+						res.close();
+					} catch (SQLException e) {
+						System.out.println("oops " + e.getMessage());
+						
+					}
+				}
 			}
 		}
 		return allOrders;

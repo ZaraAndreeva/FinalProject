@@ -25,6 +25,7 @@ public class User {
 		this.birthDate = birthDate;
 		this.isAdmin = isAdmin;
 		this.cart = new LinkedHashSet<>();
+		this.favouriteProducts = new LinkedHashSet<>();
 	}
 
 	public String getName() {
@@ -79,10 +80,6 @@ public class User {
 			return;
 		}
 		this.favouriteProducts.add(p);
-	}
-
-	public long getUserId() {
-		return userId;
 	}
 
 	public LinkedHashSet<Product> getCart() {
