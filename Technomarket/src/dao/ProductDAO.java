@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 
 import model.Product;
+import model.User;
 
 public class ProductDAO {
 	
@@ -50,18 +51,20 @@ public class ProductDAO {
 		}
 	}
 	
-	public void addFavouriteProduct(Product p){
-		String sql = "";
-		PreparedStatement st = null;
-		ResultSet res = null;
-		try{
-			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			
-			res = st.getGeneratedKeys();
-			res.next();
-		} catch (SQLException e) {
-			System.out.println("addProduct: " + e.getMessage());
-		}
+	public void addFavouriteProduct(Product p, User u){
+ 		String sql = "insert into favourite_products (user_id, product_id) values ((select user_id from users where user_id = user_id),(select product_id from products where product_id = product_id))";
+ 		PreparedStatement st = null;
+ 		ResultSet res = null;
+ 		try{
+ 			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+ 			st.setLong(1, u.getUserId());
+			st.setLong(2, p.getProductId());
+ 			res = st.getGeneratedKeys();
+ 			res.next();
+ 			u.addFavouriteProduct(p);
+ 		} catch (SQLException e) {
+ 			System.out.println("addProduct: " + e.getMessage());
+ 		}
 	}
 	
 	public HashMap<Long, Product> getAllProducts(){
