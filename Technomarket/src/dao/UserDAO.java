@@ -56,6 +56,16 @@ public class UserDAO {
 		allUsers.put(u.getEmail(), u);
 	}
 	
+	public synchronized String getEmailById(long id){
+		String sql = "SELECT email FROM users WHERE user_id = " + id;
+		PreparedStatement st = null;
+		try {
+			st = DBManager.getInstance().getConnection().prepareStatement(sql);
+		} catch (SQLException e) {
+			System.out.println("oops " + e.getMessage());
+		}
+	}
+	
 	public synchronized HashMap<String, User> getAllUsers(){
 		if(allUsers.isEmpty()){
 			String sql = "SELECT user_id, email, password, name, family_name, gender, birth_date, is_admin FROM users" ;
