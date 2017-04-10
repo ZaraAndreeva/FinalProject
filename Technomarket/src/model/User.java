@@ -1,7 +1,7 @@
 package model;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 
 public class User {
@@ -14,6 +14,7 @@ public class User {
 	private LocalDate birthDate;
 	private boolean isAdmin;
 	private LinkedHashSet<Product> cart;
+	private LinkedHashSet<Product> favouriteProducts;
 	
 	public User(String name, String familyName, String email, String password, String gender, LocalDate birthDate, boolean isAdmin) {
 		this.name = name;
@@ -72,4 +73,24 @@ public class User {
 		}
 		this.cart.add(p);
 	}
+	
+	public void addFavouriteProduct(Product p){
+		if(p == null){
+			return;
+		}
+		this.favouriteProducts.add(p);
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public LinkedHashSet<Product> getCart() {
+		return (LinkedHashSet<Product>) Collections.unmodifiableSet(cart);
+	}
+
+	public LinkedHashSet<Product> getFavouriteProducts() {
+		return (LinkedHashSet<Product>) Collections.unmodifiableSet(favouriteProducts);
+	}
+	
 }
