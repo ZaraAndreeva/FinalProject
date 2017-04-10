@@ -64,10 +64,6 @@ public class User {
 		this.userId = userId;
 	}
 	
-	public long getUserId() {
-		return userId;
-	}
-	
 	public void addToCart(Product p){
 		if(p == null){
 			return;
@@ -88,6 +84,10 @@ public class User {
 
 	public LinkedHashSet<Product> getFavouriteProducts() {
 		return (LinkedHashSet<Product>) Collections.unmodifiableSet(favouriteProducts);
+	}
+
+	public long getUserId() {
+		return userId;
 	}
 	
 }

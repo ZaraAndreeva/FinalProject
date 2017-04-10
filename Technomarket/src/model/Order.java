@@ -59,7 +59,7 @@ public class Order {
 	public String getStatus() {
 		return status;
 	}
-	
+
 	public double getPrice() {
 		return price;
 	}
@@ -106,6 +106,10 @@ public class Order {
 
 	public LinkedHashSet<Product> getProducts() {
 		return products;
+	}
+	
+	public long getUserId() {
+		return userId;
 	}
 
 	@Override
