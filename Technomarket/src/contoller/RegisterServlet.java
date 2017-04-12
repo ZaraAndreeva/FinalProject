@@ -2,6 +2,8 @@ package contoller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,8 +28,11 @@ public class RegisterServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String gender = request.getParameter("gender");
 		String birthDate = request.getParameter("birthdate");
+	
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+        LocalDate date = LocalDate.parse(birthDate, formatter);
 		
-		User u = new User(name, familyName, email, password, gender, LocalDate.parse(birthDate), false);
+		User u = new User(name, familyName, email, password, gender, date, false);
 		UserDAO.getInstance().addUser(u);
 		//TODO
 		response.sendRedirect("uspeshnaRegistraciya.html");
