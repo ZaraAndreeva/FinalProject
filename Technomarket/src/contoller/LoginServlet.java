@@ -19,8 +19,8 @@ public class LoginServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String email = request.getParameter("email").trim();
-		String password = request.getParameter("password").trim();
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
 		
 		if(UserDAO.getInstance().validLogin(email, password)){
 			User u = UserDAO.getInstance().getAllUsers().get(email);
