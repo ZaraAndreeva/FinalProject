@@ -82,7 +82,7 @@ public class UserDAO {
 				st = DBManager.getInstance().getConnection().prepareStatement(sql);
 				ResultSet res = st.executeQuery();
 				while(res.next()){
-					String name = res.getString("username");
+					String name = res.getString("name");
 					String familyName = res.getString("family_name");
 					String email = res.getString("email");
 					String password = res.getString("password");
@@ -102,9 +102,9 @@ public class UserDAO {
 		return allUsers;
 	}
 	
-	public synchronized boolean validLogin(String email, String pass){
+	public synchronized boolean validLogin(String email, String password){
 		if(getAllUsers().containsKey(email)){
-			return getAllUsers().get(email).getPassword().equals(pass);
+			return getAllUsers().get(email).getPassword().equals(password);
 		}
 		return false;
 	}
