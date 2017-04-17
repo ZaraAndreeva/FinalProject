@@ -2,6 +2,9 @@ package model;
 
 import java.util.HashMap;
 
+
+import dao.SubCategoryDAO;
+
 public class Product {
 	
 	private String category;
@@ -18,6 +21,10 @@ public class Product {
 	
 	public Product(String subCategory, String subSubCategory, String description, int quantity,
 			double price, double promoPrice, String brand, String pictureUrl) {
+
+		if(category != null && !category.isEmpty()){
+			this.category = category;
+		}
 		if(subCategory != null && !subCategory.isEmpty()){
 			this.subCategory = subCategory;
 		}
@@ -74,7 +81,7 @@ public class Product {
 	public double getPromoPrice() {
 		return promoPrice;
 	}
-	
+
 	public String getBrand() {
 		return brand;
 	}
@@ -158,5 +165,65 @@ public class Product {
 	}
 
 
+	@Override
+	public String toString() {
+		return "Product [category=" + category + ", subCategory=" + subCategory + ", subSubCategory=" + subSubCategory
+				+ ", productId=" + productId + ", description=" + description + ", quantity=" + quantity + ", price="
+				+ price + ", promoPrice=" + promoPrice + ", brand=" + brand + ", pictureUrl=" + pictureUrl + "]";
+	}
+
+	public static boolean validProduct(String description, String quantity, String price, String brand,
+			String pictureUrl, String subCategory, String subSubCategory) {
+		//TODO validSubSubCategory()
+		return validText(description) && validQuantity(quantity) && validPrice(price)
+				&& validText(brand) && validPictureUrl(pictureUrl) && validSubCategory(subCategory);
+		
+	}
+	
+	public static boolean validText(String text) {
+		return !text.trim().isEmpty() && text != null;
+	}
+
+	public static boolean validQuantity(String quantity) {
+		if(isInteger(quantity)){
+			return Integer.parseInt(quantity) > 0;
+		}
+		
+		return false;
+	}
+
+	public static boolean validPrice(String price) {
+		if(isDouble(price)){
+			return Double.parseDouble(price) > 0;
+		}
+		
+		return false;
+	}
+
+	public static boolean validPictureUrl(String pictureUrl) {
+		//TODO regex
+//		String pattern = "(http(s?):/)(/[^/]+)+" + "/.(?:jpg|gif|png)";
+//		return pictureUrl.matches(pattern);
+//		return true;
+		return pictureUrl.matches("http(s?)://([\\w-]+\\.)+[\\w-]+(/[\\w- ./]*)+\\.(?:[gG][iI][fF]|[jJ][pP][gG]|[jJ][pP][eE][gG]|[pP][nN][gG]|[bB][mM][pP])");
+	}
+
+	public static boolean validSubCategory(String subCategory) {
+		return SubCategoryDAO.getInstance().getAllSubCategories().containsKey(subCategory);
+	}
+
+	public static boolean isInteger(String text) {
+		return text.matches("^[0-9]*$") && text != null && !text.isEmpty();
+	}
+	
+	public static boolean isDouble(String text) {
+		return text.matches("^[0-9.]*$") && text != null && !text.isEmpty();
+	}
+
+	
+
+	
+
+	
 	
 }

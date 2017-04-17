@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
+import dao.SubCategoryDAO;
+
 public class User {
 	private long userId;
 	private String name;
@@ -86,8 +88,10 @@ public class User {
 		return (LinkedHashSet<Product>) Collections.unmodifiableSet(favouriteProducts);
 	}
 
+
 	public long getUserId() {
 		return userId;
 	}
+
 	
 }
