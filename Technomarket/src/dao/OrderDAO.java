@@ -10,10 +10,12 @@ import java.util.HashMap;
 
 import model.Order;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import model.Product;
 import model.User;
+
 
 public class OrderDAO {
 	
@@ -32,8 +34,8 @@ public class OrderDAO {
 	}
 	
 	public synchronized void addOrder(Order o, User u){
-		
 		String sql = "INSERT INTO orders (date, status, user_id, price, name, family_name, phone, town, street, block, entrance, floor, apartment, description_address) values (?, ?, (select user_id from users where user_id = user_id), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
 		PreparedStatement st = null;
 		ResultSet res = null;
 		try{
@@ -41,6 +43,7 @@ public class OrderDAO {
 			st.setDate(1,  Date.valueOf(o.getDate()));
 			st.setString(2, o.getStatus());
 			st.setInt(3, (int) u.getUserId());
+
 			st.setDouble(4, o.getPrice());
 			st.setString(5, o.getName());
 			st.setString(6, o.getFamilyName());
@@ -64,23 +67,25 @@ public class OrderDAO {
 			
 		} catch(SQLException e){
 			System.out.println("addOrder: " + e.getMessage());
+
 		}
 		finally {
 			if(st != null){
 				try {
 					st.close();
-				} catch (SQLException e) {
-					System.out.println("oops " + e.getMessage());
+				} catch (SQLException e2) {
+					System.out.println("oops " + e2.getMessage());
 				}
 			}
 			if(res != null){
 				try {
 					res.close();
-				} catch (SQLException e) {
-					System.out.println("oops " + e.getMessage());
+				} catch (SQLException e2) {
+					System.out.println("oops " + e2.getMessage());
 					
 				}
 			}
+
 		}
 		
 		if(!allOrders.containsKey(u.getUserId())){

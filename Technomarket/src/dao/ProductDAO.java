@@ -25,9 +25,16 @@ public class ProductDAO {
 		return instance;
 	}
 	
-	public synchronized void addProduct(Product p){
+	public void addProduct(Product p){
+		
 		//TODO if is admin
-		String sql = "INSERT INTO products (description, quantity, price, promo_price, brand, picture_url, sub_category, sub_sub_category) values (?, ?, ?, ?, ?, ?, (SELECT sub_category_id from  sub_category where sub_category = sub_category_id), (SELECT sub_sub_category_id from  sub_sub_category where sub_sub_category = sub_sub_category_id))";
+
+		int subCategoryId = SubCategoryDAO.getInstance().getAllSubCategories().get(p.getSubCategory());
+		String sql = "INSERT INTO products (description, quantity, price, promo_price, brand, picture_url, sub_category, sub_sub_category) "
+				+ "values (?, ?, ?, ?, ?, ?, "
+				+ "(SELECT sub_category_id from sub_categories where sub_category_id = " + subCategoryId + "), "
+				+ "(SELECT sub_sub_category_id from  sub_sub_categories where sub_sub_category_id = 2))";
+
 		PreparedStatement st = null;
 		ResultSet res = null;
 		try{
@@ -38,8 +45,14 @@ public class ProductDAO {
 			st.setDouble(4, p.getPromoPrice());
 			st.setString(5, p.getBrand());
 			st.setString(6, p.getPictureUrl());
-			st.setString(7, p.getSubCategory());
-			st.setString(8, p.getSubSubCategory());
+
+//			st.setString(7, p.getSubCategory());
+//			st.setString(8, p.getSubSubCategory());
+			
+			synchronized(this){
+				st.execute();
+			}
+			
 			res = st.getGeneratedKeys();
 			res.next();
 			long productId = res.getLong(1);
@@ -111,7 +124,6 @@ public class ProductDAO {
 				
 				while(set.next()){
 					long productId = set.getInt("product_id");
-					String category = set.getString("category");
 					String subCategory = set.getString("sub_category");
 					String subSubCategory = set.getString("sub_sub_category");
 					String description = set.getString("description");
