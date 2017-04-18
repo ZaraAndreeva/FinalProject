@@ -49,14 +49,14 @@ public class UserDAO {
 			u.setUserId(user_id);
 			
 		} catch (SQLException e) {
-			System.out.println("oops " + e.getMessage());
+			System.out.println("addUser " + e.getMessage());
 		}
 		finally {
 			if(st != null){
 				try {
 					st.close();
 				} catch (SQLException e) {
-					System.out.println("oops " + e.getMessage());
+					System.out.println("addUser " + e.getMessage());
 				}
 			}
 		}

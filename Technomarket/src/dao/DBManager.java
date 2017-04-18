@@ -17,12 +17,12 @@ public class DBManager {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			System.out.println("oops " + e.getMessage());
+			System.out.println("DBManager: " + e.getMessage());
 		}
 		try {
 			con = DriverManager.getConnection("jdbc:mysql://"+ DB_IP +":" + DB_PORT + "/" + DB_NAME + "?autoReconnect=true&useSSL=false", DB_USER, DB_PASS);
 		} catch (SQLException e) {
-			System.out.println("oops " + e.getMessage());
+			System.out.println("DBManager con: " + e.getMessage());
 		}
 	}
 	
