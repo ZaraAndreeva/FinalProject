@@ -1,29 +1,35 @@
-package controller;
+package main.controller;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 
-import dao.ProductDAO;
-import model.Product;
-import model.User;
+import main.dao.ProductDAO;
+import main.model.Product;
 
-@WebServlet("/addProduct")
-public class AddProductServlet extends HttpServlet {
+@Controller
+@RequestMapping(value="/product")
+public class ProductController {
 	
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Scanner sc = new Scanner(req.getInputStream());
+	@RequestMapping(value = "/addProduct", method = RequestMethod.POST)
+	public void addProduct(Model model,  HttpServletRequest req, HttpServletResponse resp){
+		Scanner sc = null;
+		try {
+			sc = new Scanner(req.getInputStream());
+		} catch (IOException e) {
+			System.out.println("oops " + e.getMessage());
+		}
 		StringBuilder sb = new StringBuilder();
 		while(sc.hasNextLine()){
 			sb.append(sc.nextLine());
@@ -96,12 +102,20 @@ public class AddProductServlet extends HttpServlet {
 				
 			}
 			respJSON.add("errors", errorsArray);
-			resp.getWriter().append(respJSON.toString());
+			try {
+				resp.getWriter().append(respJSON.toString());
+			} catch (IOException e) {
+				System.out.println("oops " + e.getMessage());
+			}
 			return;
 		}
 		else{
 			respJSON.addProperty("error", false);
-			resp.getWriter().append(respJSON.toString());
+			try {
+				resp.getWriter().append(respJSON.toString());
+			} catch (IOException e) {
+				System.out.println("oops " + e.getMessage());
+			}
 		}
 		
 		//TODO
@@ -119,4 +133,5 @@ public class AddProductServlet extends HttpServlet {
 		
 		System.out.println(sb);
 	}
+	
 }

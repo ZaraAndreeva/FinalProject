@@ -1,10 +1,10 @@
-package model;
+package main.model;
 
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
-import dao.SubCategoryDAO;
+import main.dao.SubCategoryDAO;
 
 public class User {
 	private long userId;
