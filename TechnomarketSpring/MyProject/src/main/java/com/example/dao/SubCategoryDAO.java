@@ -49,7 +49,9 @@ public class SubCategoryDAO {
 			} catch(SQLException e){
 				System.out.println("getAllProducts: " + e.getMessage());
 			}
-		}
+		}  
+		
+
 		return allSubCategories;
 	}
 

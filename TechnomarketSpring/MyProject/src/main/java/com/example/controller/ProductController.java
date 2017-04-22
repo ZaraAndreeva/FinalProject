@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +29,7 @@ public class ProductController {
 	@ResponseBody
 	@RequestMapping(value = "/addProduct", method = RequestMethod.POST)
 	public String addProduct(Model model,  HttpServletRequest req, HttpServletResponse resp){
-
+		
 //	System.out.println("hello");
 		Scanner sc = null;
 		try {
