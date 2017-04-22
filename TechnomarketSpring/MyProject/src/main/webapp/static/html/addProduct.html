@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+Description: <input type="text" id="description" required="required"><br>
+<h3 id="descriptionError"></h3>
+Quantity: <input type="text" id="quantity" required="required"><br>
+<h3 id="quantityError"></h3>
+Price: <input type="text" id="price" required="required"><br>
+<h3 id="priceError"></h3>
+Brand: <input type="text" id="brand" required="required"><br>
+<h3 id="brandError"></h3>
+Picture URL: <input type="text" id="picture_url" required="required"><br>
+<h3 id="urlError"></h3>
+Sub category:<input type="text" id="sub_category" required="required"><br>
+<h3 id="subCategoryError"></h3>
+Sub sub category<input type="text" id="sub_sub_category" required="required"><br>
+<h2 id="status"></h2>
+<button id="btn">Add product</button>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script>
+	var btn = document.getElementById("btn"); 
+	btn.addEventListener("click", function() {
+		$.ajax({
+			  url: "/MyProject/product/addProduct",
+			  type: "POST", //send it through get method
+			  contentType : 'application/json; charset=utf-8',
+			  dataType : 'json',
+			  data: JSON.stringify(
+					  	{
+							description: document.getElementById("description").value,	  		
+							quantity: document.getElementById("quantity").value,
+							price: document.getElementById("price").value,
+							brand: document.getElementById("brand").value,
+							pictureUrl: document.getElementById("picture_url").value,
+							subCategory: document.getElementById("sub_category").value,
+							subSubCategory: document.getElementById("sub_sub_category").value
+					  	}			  
+			  ),
+			  success: function(response) {
+				  	var responseData = response;
+				  	document.getElementById("descriptionError").innerHTML="";	  		
+					document.getElementById("quantityError").innerHTML="";
+					document.getElementById("priceError").innerHTML="";
+					document.getElementById("brandError").innerHTML="";
+					document.getElementById("urlError").innerHTML="";
+					document.getElementById("subCategoryError").innerHTML="";
+					document.getElementById("status").innerHTML="";
+				  	
+				  if(!responseData.error){
+					  	document.getElementById("status").innerHTML="You successfully added a product!!!";
+					  	document.getElementById("description").value="";	  		
+						document.getElementById("quantity").value="";
+						document.getElementById("price").value="";
+						document.getElementById("brand").value="";
+						document.getElementById("picture_url").value="";
+						document.getElementById("sub_category").value="";
+						document.getElementById("sub_sub_category").value="";
+				  }
+				  else{
+					  var errors = responseData.errors;
+					  for(var i = 0; i < errors.length; i++){
+						  //document.getElementById(errors[i]).innerHTML="Error";
+						  document.getElementById(errors[i].errorPlace).innerHTML = errors[i].errorMessege;
+					  }
+				  }
+				  
+				  
+			  },
+			  error: function(xhr) {
+				  document.getElementById("status").innerHTML="Unfortunately your product was not added. Try again later...";
+			  }
+			});    
+		
+		
+	});
+</script>
+
+</body>
+</html>
