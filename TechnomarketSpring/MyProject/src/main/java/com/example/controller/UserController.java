@@ -43,14 +43,24 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(value = "/logout", method = RequestMethod.POST)
+	@RequestMapping(value = "/loginPage", method = RequestMethod.GET)
+	public String loginPage(){
+		return("technomarket_login");
+	}
+	
+	@RequestMapping(value = "/openProfile", method = RequestMethod.GET)
+	public String openProfile(){
+		return("technomarket_profile");
+	}
+	
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request){
 		HttpSession session = request.getSession(true);
 		session.setAttribute("logged", false);
 		request.getSession().invalidate();
 //		response.sendRedirect("index.jsp");
 	
-		return "index";
+		return ("new");
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -71,4 +81,6 @@ public class UserController {
 //		response.sendRedirect("uspeshnaRegistraciya.html");
 		return ("redirect:uspeshnaRegistraciya.html");
 	}
+	
+
 }
