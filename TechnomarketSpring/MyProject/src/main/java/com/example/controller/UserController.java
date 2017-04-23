@@ -34,7 +34,7 @@ public class UserController {
 			session.setAttribute("logged", true);
 			//TODO
 //			response.sendRedirect("index.jsp");
-			return "index";
+			return "new";
 		}
 		else{
 			//TODO
