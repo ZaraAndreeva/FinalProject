@@ -41,14 +41,12 @@
                 </div>
             </div>
             <div class="online-info">
-            	Уважаеми клиенти, цените на technomarket.bg се обновяват на всеки един час. Възможно е несъответствие с цените в магазините. Всички цени са за покупки онлайн.<br>
-                При възникване на спор, свързан с покупка онлайн можете да ползвате сайта <a href="https://webgate.ec.europa.eu/odr/main/index.cfm?event=main.home.show&lng=BG" target="_blank" rel="nofollow">ОРС</a>.
-            </div>
+            	</div>
         </div>
     </div><!-- /.inner -->
     <div class="copyrights">
         <div class="container">
-            <span class="copy">Copyright &reg; 2016 Техномаркет. Всички права запазени.</span>
+           
             <span class="mc-logos">
                             <img src="//cdn.technomarket.bg/images/3e561a8.png" alt="Technomarket" />
                         </span>

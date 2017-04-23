@@ -98,27 +98,7 @@
             	<link itemprop="url" href="http://www.technomarket.bg">
                 <ul itemprop='contactPoint' itemscope itemtype='http://schema.org/ContactPoint' class="nav navbar-nav nav-left">                	
                     <meta itemprop="contactType" content="Customer service">
-                    <li><a href="/kontakti"><strong><i class="icon-phone"></i> <span itemprop='telephone' class="hidden">+359-02-9421-103</span> 0700 10 800</strong></a></li>
-                    <li class="nav-at-home">
-                    	<a href="/home">
-                        	<img src="//cdn.technomarket.bg/uploads/BG/home-logo.png" alt="@Home" class="hidden-xs" />
-                            <span class="visible-xs">@Home</span>
-                    	</a>
-                    </li>
-                    <li class="nav-apple-shop">
-                    	<a href="/apple-shop">
-                                                	<img src="//cdn.technomarket.bg/images/f74f1ec.jpg" alt="Apple Shop" class="hidden-xs" />
-                            <span class="visible-xs">Apple Shop</span>
-                                            	</a>
-                    </li>
-                    <li class="nav-promo"><a href="/promocii"><i class="icon-gift"></i> Промоции</a></li>
-                    <li class="nav-services">
-                        <a href="/services">
-                            <img src="//cdn.technomarket.bg/uploads/BG/icon-services.png" alt="services" class="hidden-xs" />
-                            <span class="">Услуги</span>
-                        </a>
-                    </li>
-                    <li><a href="/magazini"><i class="icon-location"></i> Магазини</a></li>
+                    
                 </ul>
                 <ul itemscope itemtype="http://schema.org/Organization" class="nav navbar-nav nav-right">
                 	<link itemprop="url" href="http://www.technomarket.bg"> 
@@ -136,7 +116,7 @@
             <div class="row">
                 <div class="logo" itemscope itemtype="http://schema.org/Organization">
                 	<span itemprop="name" class="hidden">Техномаркет</span>
-                    <a itemprop="url" href="/">
+                    <a itemprop="url" href="http://localhost:8080/MyProject">
                         <img itemprop="logo" src="//cdn.technomarket.bg/uploads/BG/tm-logo.png" alt="Technomarket" />
                     </a>
                 </div><!-- /.logo -->
@@ -159,7 +139,7 @@
 	                            	<i class="icon-profile"></i> <span class="hidden-xs">Вход</span>
 	                            </button>
 	                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-	                                <li><a href="http://localhost:8080/MyProject/src/main/WEB-INF/views/jsp/technomarket_login.jsp">Вход</a></li>
+	                                <li><a href="http://localhost:8080/MyProject/user/loginPage">Вход</a></li>
 	                                <li><a href="http://localhost:8080/MyProject/html/technomarket_register.html">Регистрация</a></li>
 	                            </ul>
 	                        </div><!-- /.user-account -->
@@ -172,25 +152,57 @@
                     </c:if>
                     
                     <c:if test="${sessionScope.user != null}">
-                   		 <div class="user-bar">
-	                                                <div class="user-account dropdown">
-	                            <button class="btn btn-tm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-	                            	<i class="icon-profile"></i> <span class="hidden-xs"> </span>
-	                            </button>
-	                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-	                                <li><a href="">Профил</a></li>
-	                                <li><a href="">Поръчки</a></li>
-	                                <li><a href="">Любими</a></li>
-	                                <li><a href="">Изход</a></li>
-	                            </ul>
-	                        </div><!-- /.user-account -->
-	                                                <div class="basket">
-	                            <a href="/cart/" class="btn btn-tm">
-	                                <i class="icon-basket"></i> -
-	                            </a>
-	                        </div><!-- /.basket -->
-	                    </div><!-- /.user-bar -->                    
-                    </c:if>
+                    
+                    		                    
+                    	<c:if test="${sessionScope.user.admin}">
+                    		<div class="user-bar">
+		                                                <div class="user-account dropdown">
+		                            <button class="btn btn-tm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+		                            	<i class="icon-profile"></i> <span class="hidden-xs"> <c:out value="Admin"/> </span>
+		                            </button>
+		                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+		                                <li><a href="http://localhost:8080/MyProject/user/openProfile">Профил</a></li>
+		                                <li><a href="">Поръчки</a></li>
+		                                <li><a href="">Любими</a></li>
+		                                <li><a href="http://localhost:8080/MyProject/admin/addProductPage">Добави продукт</a></li>
+		                                <li><a href="http://localhost:8080/MyProject/admin/removeProductPage">Премахни продукт</a></li>
+		                                <li><a href="http://localhost:8080/MyProject/admin/editProductPage">Редактирай продукт</a></li>
+		                                <li><a href="http://localhost:8080/MyProject/admin/addPromotionPage">Добави промоция</a></li>
+		                                <li><a href="http://localhost:8080/MyProject/user/logout">Изход</a></li>
+		                            </ul>
+		                        </div>
+		                                                <div class="basket">
+		                            <a href="/cart/" class="btn btn-tm">
+		                                <i class="icon-basket"></i> -
+		                            </a>
+		                        </div>
+		                    </div> 
+                    	</c:if>
+                 
+                    	 
+                    	<c:if test="${!sessionScope.user.admin}">
+                    	 
+
+	                   		 <div class="user-bar">
+		                                                <div class="user-account dropdown">
+		                            <button class="btn btn-tm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+		                            	<i class="icon-profile"></i> <span class="hidden-xs"> <c:out value="${sessionScope.user.name}"/> </span>
+		                            </button>
+		                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+		                                <li><a href="http://localhost:8080/MyProject/user/openProfile">Профил</a></li>
+		                                <li><a href="">Поръчки</a></li>
+		                                <li><a href="">Любими</a></li>
+		                                <li><a href="http://localhost:8080/MyProject/user/logout">Изход</a></li>
+		                            </ul>
+		                        </div><!-- /.user-account -->
+		                                                <div class="basket">
+		                            <a href="/cart/" class="btn btn-tm">
+		                                <i class="icon-basket"></i> -
+		                            </a>
+		                        </div><!-- /.basket -->
+		                    </div><!-- /.user-bar -->   
+	               </c:if> 
+	                    </c:if>
                     
                 </div><!-- /.heading-collapse -->
             </div>
@@ -1343,358 +1355,7 @@
             </div>
         </div>
             </li>
-        <li class=" dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@Home</a>
-        <div class="dropdown-menu">
-            <div class="container">
-                <div class="row">
-                                            <ul>
-                                                                                                                        <li class="has-children">
 
-                                                                                                                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Кухня</a>
-                                                                                                                                                                                                                                                                        
-                                                                                            <ul class="">
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/domakinski-pribori" class="ui-link">Домакински прибори</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li class="has-children">
-                                                                                                                                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Сервизи за хранене</a>
-                                                                    <ul>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/kafe-i-chai" class="ui-link">Кафе и чай</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/servizi" class="ui-link">Сервизи</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/chinii" class="ui-link">Чинии</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/plata" class="ui-link">Плата</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/supnitci" class="ui-link">Супници</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/sosiera" class="ui-link">Сосиери</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/kana-za-mliako" class="ui-link">Канички за мляко</a>
-                                                                                                                                                            </li>
-                                                                                                                                            </ul>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/chashi" class="ui-link">Чаши</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/nozhove-lzhici-i-vilici" class="ui-link">Ножове лъжици и вилици</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li class="has-children">
-                                                                                                                                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Кухненски съдове и аксесоари</a>
-                                                                    <ul>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/aksesoari-za-gotvene" class="ui-link">Аксесоари за готвене</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/dekoracia" class="ui-link">Декорация</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/sushilnia-za-sydove" class="ui-link">Сушилни за съдове</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/kutiq-za-syhranenie" class="ui-link">Kутии за съхранение</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/kutia-za-hliab" class="ui-link">Кутии и кошници за хляб</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/postavki" class="ui-link">Поставки и подложки</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/tendjeri" class="ui-link">Тенджери</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/tigani" class="ui-link">Тигани</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/dyska-za-riazane" class="ui-link">Дъски за рязане</a>
-                                                                                                                                                            </li>
-                                                                                                                                            </ul>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/podnosi" class="ui-link">Подноси</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li class="has-children">
-                                                                                                                                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Кухненски текстил</a>
-                                                                    <ul>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/pokrivki" class="ui-link">Покривки</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/podlojki" class="ui-link">Подложки</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/salfetki" class="ui-link">Салфетки</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/kyrpi" class="ui-link">Кухненски кърпи</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/prestilki" class="ui-link">Престилки</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/rykavitci" class="ui-link">Ръкавици</a>
-                                                                                                                                                            </li>
-                                                                                                                                            </ul>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li class="has-children">
-                                                                                                                                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Продукти за печене</a>
-                                                                    <ul>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/ogneoporno-styklo" class="ui-link">Oгнеупорно стъкло</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/formi-za-hlqb" class="ui-link">Форми за хляб</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/forma-za-sladkishi" class="ui-link">Форми  за  сладкиши</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/tava" class="ui-link">Тави</a>
-                                                                                                                                                            </li>
-                                                                                                                                            </ul>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/kani-za-voda" class="ui-link">Кана с филтър</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                    </ul>
-
-                                                                                                                                
-                                                                    </li>
-                                                                                                                            <li class="has-children">
-
-                                                                                                                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Спалня</a>
-                                                                                                                                                                                                                                                                        
-                                                                                            <ul class="">
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/vyzglavnici" class="ui-link">Възглавници</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/zavivki" class="ui-link">Завивки</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/matraci" class="ui-link">Матраци</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/spalno-belio" class="ui-link">Спално бельо</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                    </ul>
-
-                                                                                                                                
-                                                                    </li>
-                                                                                                                            <li class="has-children">
-
-                                                                                                                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Декорация</a>
-                                                                                                                                                                                                                                                                        
-                                                                                            <ul class="has-2cols">
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/aksesoar-dekoracia" class="ui-link">Аксесоари</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li class="has-children">
-                                                                                                                                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Сезонни стоки</a>
-                                                                    <ul>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/sveti-valentin" class="ui-link">Свети Валентин</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/velikden" class="ui-link">Великден</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/koleda" class="ui-link">Коледа</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/lqto" class="ui-link">Лято</a>
-                                                                                                                                                            </li>
-                                                                                                                                            </ul>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/dekorativni-sydove" class="ui-link">Декоративни съдове</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/vazi" class="ui-link">Вази</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/sveshti" class="ui-link">Свещи</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/sveshtnitci" class="ui-link">Свещници</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/izkustveni-cvetia" class="ui-link">Изкуствени цветя</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/odeala" class="ui-link">Одеяла</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/dekorativni-vyzglavnici" class="ui-link">Възглавници</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/chasovnitzi-home" class="ui-link">Часовници</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/kartini" class="ui-link">Картини</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/stikeri-za-stena" class="ui-link">Стикери за стена</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/ramki" class="ui-link">Рамки</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/ogledala" class="ui-link">Огледала</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/aksesoari-za-bijuta" class="ui-link">Аксесоари за бижута</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                    </ul>
-
-                                                                                                                                
-                                                                    </li>
-                                                                                                                            <li class="has-children">
-
-                                                                                                                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">За Децата</a>
-                                                                                                                                                                                                                                                                        
-                                                                                            <ul class="">
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/detski-chashi" class="ui-link">Детски чаши</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/detska-staia" class="ui-link">Детска стая</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/detski-servizi" class="ui-link">Детски сервизи</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/tekstil-za-detsa" class="ui-link">Текстил</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/school" class="ui-link">Училище</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                    </ul>
-
-                                                                                                                                
-                                                                    </li>
-                                                                                                                            <li class="has-children">
-
-                                                                                                                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Баня</a>
-                                                                                                                                                                                                                                                                        
-                                                                                            <ul class="">
-                                                                                                                                                                        <li class="has-children">
-                                                                                                                                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Пране и почистване</a>
-                                                                    <ul>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/stylbi" class="ui-link">Домакински стълби</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/zakachalki" class="ui-link">Закачалки</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/etajerki-za-obuvki" class="ui-link">Етажерки за обувки</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/kutii-bania" class="ui-link">Кутии и кошове</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/pochistvane" class="ui-link">Почистване</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/gladene" class="ui-link">Гладене</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/zakachalki-za-drehi" class="ui-link">Закачалки за дрехи</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/iztrivalki" class="ui-link">Изтривалки</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/prane" class="ui-link">Пране</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/sushilnici" class="ui-link">Сушилници</a>
-                                                                                                                                                            </li>
-                                                                                                                                            </ul>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/aroma" class="ui-link">Арома терапия</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/zavesi-bania" class="ui-link">Завеси за баня</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li class="has-children">
-                                                                                                                                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Текстил за баня</a>
-                                                                    <ul>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/havlii" class="ui-link">Хавлии</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/halati" class="ui-link">Халати</a>
-                                                                                                                                                            </li>
-                                                                                                                                                    <li>
-                                                                                                                                                                    <a href="/postelki-za-bania" class="ui-link">Постелки за баня</a>
-                                                                                                                                                            </li>
-                                                                                                                                            </ul>
-                                                                                                                            </li>
-                                                        
-                                                                                                                                                                        <li>
-                                                                                                                                    <a href="/aksesoari-za-bania" class="ui-link">Аксесоари</a>
-                                                                                                                            </li>
-                                                        
-                                                                                                    </ul>
-
-                                                                                                                                
-                                                                    </li>
-                                                                                                                            <li class="has-children">
-
-                                                                                                                        <a href="/home-store" class="ui-link">Outlet</a>
-                                        
-                                                                    </li>
-                                                                                    </ul>
                                     </div>
             </div>
         </div>
