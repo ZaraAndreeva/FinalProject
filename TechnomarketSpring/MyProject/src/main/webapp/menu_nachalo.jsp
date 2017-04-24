@@ -133,6 +133,15 @@
                         </form><!-- /.input-group -->                        
                     </div><!-- /.search -->
                     <c:if test="${sessionScope.user == null}">
+                    
+                     	<SCRIPT type="text/javascript">
+						    window.history.forward();
+						    function noBack() { window.history.forward(); }
+						</SCRIPT>
+						</HEAD>
+						<BODY onload="noBack();"
+						    onpageshow="if (event.persisted) noBack();">
+						    
 	                    <div class="user-bar">
 	                                                <div class="user-account dropdown">
 	                            <button class="btn btn-tm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -144,7 +153,7 @@
 	                            </ul>
 	                        </div><!-- /.user-account -->
 	                                                <div class="basket">
-	                            <a href="/cart/" class="btn btn-tm">
+	                            <a href="http://localhost:8080/MyProject/user/cartPage" class="btn btn-tm">
 	                                <i class="icon-basket"></i> -
 	                            </a>
 	                        </div><!-- /.basket -->
@@ -152,7 +161,14 @@
                     </c:if>
                     
                     <c:if test="${sessionScope.user != null}">
-                    
+                    	
+                    	<SCRIPT type="text/javascript">
+						    window.history.forward();
+						    function noBack() { window.history.forward(); }
+						</SCRIPT>
+						</HEAD>
+						<BODY onload="noBack();"
+						    onpageshow="if (event.persisted) noBack();">
                     		                    
                     	<c:if test="${sessionScope.user.admin}">
                     		<div class="user-bar">
@@ -162,8 +178,8 @@
 		                            </button>
 		                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 		                                <li><a href="http://localhost:8080/MyProject/user/openProfile">Профил</a></li>
-		                                <li><a href="">Поръчки</a></li>
-		                                <li><a href="">Любими</a></li>
+		                                <li><a href="http://localhost:8080/MyProject/user/ordersPage">Поръчки</a></li>
+		                                <li><a href="http://localhost:8080/MyProject/user/favProductsPage">Любими</a></li>
 		                                <li><a href="http://localhost:8080/MyProject/admin/addProductPage">Добави продукт</a></li>
 		                                <li><a href="http://localhost:8080/MyProject/admin/removeProductPage">Премахни продукт</a></li>
 		                                <li><a href="http://localhost:8080/MyProject/admin/editProductPage">Редактирай продукт</a></li>
@@ -181,7 +197,14 @@
                  
                     	 
                     	<c:if test="${!sessionScope.user.admin}">
-                    	 
+                    	
+                    	  	<SCRIPT type="text/javascript">
+						    	window.history.forward();
+						    	function noBack() { window.history.forward(); }
+							</SCRIPT>
+							</HEAD>
+							<BODY onload="noBack();"
+						    onpageshow="if (event.persisted) noBack();">
 
 	                   		 <div class="user-bar">
 		                                                <div class="user-account dropdown">
@@ -190,8 +213,8 @@
 		                            </button>
 		                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 		                                <li><a href="http://localhost:8080/MyProject/user/openProfile">Профил</a></li>
-		                                <li><a href="">Поръчки</a></li>
-		                                <li><a href="">Любими</a></li>
+		                                <li><a href="http://localhost:8080/MyProject/user/ordersPage">Поръчки</a></li>
+		                                <li><a href="http://localhost:8080/MyProject/user/favProductsPage">Любими</a></li>
 		                                <li><a href="http://localhost:8080/MyProject/user/logout">Изход</a></li>
 		                            </ul>
 		                        </div><!-- /.user-account -->

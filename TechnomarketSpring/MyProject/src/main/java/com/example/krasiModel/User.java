@@ -17,6 +17,7 @@ public class User {
 	private boolean isAdmin;
 	private LinkedHashSet<Product> cart;
 	private LinkedHashSet<Product> favouriteProducts;
+	private LinkedHashSet<Order> orders;
 	
 	public User(String name, String familyName, String email, String password, String gender, LocalDate birthDate, boolean isAdmin) {
 		this.name = name;
@@ -28,6 +29,7 @@ public class User {
 		this.isAdmin = isAdmin;
 		this.cart = new LinkedHashSet<>();
 		this.favouriteProducts = new LinkedHashSet<>();
+		this.orders = new LinkedHashSet<>();
 	}
 
 	public String getName() {
@@ -86,6 +88,10 @@ public class User {
 
 	public LinkedHashSet<Product> getFavouriteProducts() {
 		return (LinkedHashSet<Product>) Collections.unmodifiableSet(favouriteProducts);
+	}
+	
+	public LinkedHashSet<Order> getOrders() {
+		return (LinkedHashSet<Order>) Collections.unmodifiableSet(orders);
 	}
 
   

@@ -26,10 +26,13 @@ public class UploadUImageController {
 	
 	private String vzemiToqImage;
 
-	private static final String FILE_LOCATION = "C:\\Users\\ZARA_\\Desktop\\UploadPics\\";
+	private static String sep = File.separator;
+	private static final String FILE_LOCATION = "C:" + sep + "Users" + sep +"ZARA_" + sep + "Desktop" + sep + "UploadPics";
+	
 	
 	@RequestMapping(value="/upload", method=RequestMethod.GET)
 	public String prepareForUpload() {
+		
 		return "upload";
 	}
 	
