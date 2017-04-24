@@ -123,9 +123,9 @@
                 <div class="heading-collapse">
                     <div itemscope itemtype="http://schema.org/WebSite" class="search">
                     	<link itemprop="url" href="http://www.technomarket.bg"/>
-                        <form itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction" action="/search/" method="get" class="input-group">
+                        <form itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction" action="http://localhost:8080/MyProject/search/search" method="POST" class="input-group">
                             <meta itemprop="target" content="http://www.technomarket.bg/search/?query={query}"/>	
-                            <input itemprop="query-input" type="text" name="query" placeholder="Търси..." class="form-control">
+                            <input itemprop="query-input" type="text" name="search" placeholder="Търси..." class="form-control">
                             <span class="search-bar"></span>
                             <span class="input-group-btn">
                                 <button class="btn btn-search" type="submit"><i class="icon-search"></i></button>
@@ -149,7 +149,7 @@
 	                            </button>
 	                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 	                                <li><a href="http://localhost:8080/MyProject/user/loginPage">Вход</a></li>
-	                                <li><a href="http://localhost:8080/MyProject/html/technomarket_register.html">Регистрация</a></li>
+	                                <li><a href="http://localhost:8080/MyProject/user/registerPage">Регистрация</a></li>
 	                            </ul>
 	                        </div><!-- /.user-account -->
 	                                                <div class="basket">
@@ -188,7 +188,7 @@
 		                            </ul>
 		                        </div>
 		                                                <div class="basket">
-		                            <a href="/cart/" class="btn btn-tm">
+		                            <a href="http://localhost:8080/MyProject/user/cartPage" class="btn btn-tm">
 		                                <i class="icon-basket"></i> -
 		                            </a>
 		                        </div>
@@ -219,7 +219,7 @@
 		                            </ul>
 		                        </div><!-- /.user-account -->
 		                                                <div class="basket">
-		                            <a href="/cart/" class="btn btn-tm">
+		                            <a href="http://localhost:8080/MyProject/user/cartPage" class="btn btn-tm">
 		                                <i class="icon-basket"></i> -
 		                            </a>
 		                        </div><!-- /.basket -->

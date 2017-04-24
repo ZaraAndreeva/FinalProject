@@ -5,7 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map.Entry;
 
 import com.example.krasiModel.Product;
@@ -175,6 +178,17 @@ public class ProductDAO {
 		}
 		
 		return generatedProducts;
+	}
+	
+	public List<Product> searchProduct(String search){
+		ArrayList<Product> searchResults = new ArrayList<>();
+		getAllProducts();
+		for(Product p : allProducts.values()){
+			if(p.getDescription().contains(search) || p.getSubCategory().contains(search) || p.getCategory().contains(search)){
+				searchResults.add(p);
+			}
+		}
+		return Collections.unmodifiableList(searchResults);
 	}
 	
 }

@@ -7,6 +7,7 @@ import com.example.dao.SubCategoryDAO;
 
 public class Product {
 	
+	private String name;
 	private String category;
 	private String subCategory;
 	private String subSubCategory;
@@ -21,10 +22,14 @@ public class Product {
 	
 	public Product(String subCategory, String subSubCategory, String description, int quantity,
 			double price, double promoPrice, String brand, String pictureUrl) {
-
-		if(category != null && !category.isEmpty()){
-			this.category = category;
-		}
+		
+//		if(name != null && !name.isEmpty()){
+//			this.name = name;
+//		}
+		
+//		if(category != null && !category.isEmpty()){
+//			this.category = category;
+//		}
 		if(subCategory != null && !subCategory.isEmpty()){
 			this.subCategory = subCategory;
 		}
@@ -48,6 +53,10 @@ public class Product {
 			this.pictureUrl = pictureUrl;
 		}
 		this.specifications = new HashMap<>();
+	}
+	
+	public String getName(){
+		return name;
 	}
 
 	public String getCategory() {

@@ -33,7 +33,7 @@
         </div>
         <div class="col-half">
             <h2>Нямаш профил?</h2>
-            <a href="http://localhost:8080/MyProject/html/technomarket_register.html" class="btn btn-tm">Регистрирай се</a>
+            <a href="http://localhost:8080/MyProject/user/registerPage" class="btn btn-tm">Регистрирай се</a>
             <hr>
                                                         </div>
     </div>
