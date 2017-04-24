@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -189,6 +188,107 @@ public class ProductDAO {
 			}
 		}
 		return Collections.unmodifiableList(searchResults);
+	}
+	
+	public void deleteProduct(Product p){
+		String sql = "DELETE from products WHERE product_id = " + p.getProductId();
+		PreparedStatement st = null;
+		ResultSet res = null;
+		try{
+			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			synchronized(this){
+				st.execute();
+			}
+			res = st.getGeneratedKeys();
+			res.next();
+			allProducts.remove(p.getProductId());
+		} catch (SQLException e) {
+				System.out.println("deleteProduct: " + e.getMessage());
+		}
+		finally {
+			if(st != null){
+				try {
+					st.close();
+				} catch (SQLException e) {
+					System.out.println("deleteProduct " + e.getMessage());
+				}
+			}
+			if(res != null){
+				try {
+					res.close();
+				} catch (SQLException e) {
+					System.out.println("deleteProduct " + e.getMessage());
+					
+				}
+			}
+		}
+	}
+	
+	public void addPromotion(double newPrice, long artNomer){
+		String sql = "UPDATE products set promo_price = " + newPrice + " WHERE product_id = " + artNomer;
+		PreparedStatement st = null;
+		ResultSet res = null;
+		try{
+			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			synchronized(this){
+				st.execute();
+			}
+			res = st.getGeneratedKeys();
+			res.next();
+		} catch (SQLException e) {
+				System.out.println("addPromotion: " + e.getMessage());
+		}
+		finally {
+			if(st != null){
+				try {
+					st.close();
+				} catch (SQLException e) {
+					System.out.println("addPromotion: " + e.getMessage());
+				}
+			}
+			if(res != null){
+				try {
+					res.close();
+				} catch (SQLException e) {
+					System.out.println("addPromotion: " + e.getMessage());
+					
+				}
+			}
+		}
+	}
+	
+	public void editProduct(long artikulenNomer, int quantity, double price){
+		//TODO
+		String sql = "UPDATE products set quantity = " + quantity + ", price = " + price + " WHERE product_id = " + artikulenNomer + ";";
+		PreparedStatement st = null;
+		ResultSet res = null;
+		try{
+			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			synchronized(this){
+				st.execute();
+			}
+			res = st.getGeneratedKeys();
+			res.next();
+		} catch (SQLException e) {
+				System.out.println("editProduct: " + e.getMessage());
+		}
+		finally {
+			if(st != null){
+				try {
+					st.close();
+				} catch (SQLException e) {
+					System.out.println("editProduct " + e.getMessage());
+				}
+			}
+			if(res != null){
+				try {
+					res.close();
+				} catch (SQLException e) {
+					System.out.println("editProduct " + e.getMessage());
+					
+				}
+			}
+		}
 	}
 	
 }

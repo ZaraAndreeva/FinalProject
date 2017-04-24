@@ -238,8 +238,12 @@ public class Product {
 	public HashMap<String, String> getSpecifications() {
 		return specifications;
 	}
-	
 
+	public void setPromoPrice(double promoPrice) {
+		this.promoPrice = promoPrice;
+	}
+	
+	
 	
 	
 	
