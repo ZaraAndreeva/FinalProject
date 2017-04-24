@@ -116,14 +116,14 @@
             <div class="row">
                 <div class="logo" itemscope itemtype="http://schema.org/Organization">
                 	<span itemprop="name" class="hidden">Техномаркет</span>
-                    <a itemprop="url" href="http://localhost:8080/MyProject">
+                    <a itemprop="url" href="http://localhost:8080/TechnomarketSpring">
                         <img itemprop="logo" src="//cdn.technomarket.bg/uploads/BG/tm-logo.png" alt="Technomarket" />
                     </a>
                 </div><!-- /.logo -->
                 <div class="heading-collapse">
                     <div itemscope itemtype="http://schema.org/WebSite" class="search">
                     	<link itemprop="url" href="http://www.technomarket.bg"/>
-                        <form itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction" action="http://localhost:8080/MyProject/search/search" method="POST" class="input-group">
+                        <form itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction" action="http://localhost:8080/TechnomarketSpring/search/search" method="POST" class="input-group">
                             <meta itemprop="target" content="http://www.technomarket.bg/search/?query={query}"/>	
                             <input itemprop="query-input" type="text" name="search" placeholder="Търси..." class="form-control">
                             <span class="search-bar"></span>
@@ -148,12 +148,12 @@
 	                            	<i class="icon-profile"></i> <span class="hidden-xs">Вход</span>
 	                            </button>
 	                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-	                                <li><a href="http://localhost:8080/MyProject/user/loginPage">Вход</a></li>
-	                                <li><a href="http://localhost:8080/MyProject/user/registerPage">Регистрация</a></li>
+	                                <li><a href="http://localhost:8080/TechnomarketSpring/user/loginPage">Вход</a></li>
+	                                <li><a href="http://localhost:8080/TechnomarketSpring/user/registerPage">Регистрация</a></li>
 	                            </ul>
 	                        </div><!-- /.user-account -->
 	                                                <div class="basket">
-	                            <a href="http://localhost:8080/MyProject/user/cartPage" class="btn btn-tm">
+	                            <a href="http://localhost:8080/TechnomarketSpring/user/cartPage" class="btn btn-tm">
 	                                <i class="icon-basket"></i> -
 	                            </a>
 	                        </div><!-- /.basket -->
@@ -177,18 +177,18 @@
 		                            	<i class="icon-profile"></i> <span class="hidden-xs"> <c:out value="Admin"/> </span>
 		                            </button>
 		                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-		                                <li><a href="http://localhost:8080/MyProject/user/openProfile">Профил</a></li>
-		                                <li><a href="http://localhost:8080/MyProject/user/ordersPage">Поръчки</a></li>
-		                                <li><a href="http://localhost:8080/MyProject/user/favProductsPage">Любими</a></li>
-		                                <li><a href="http://localhost:8080/MyProject/admin/addProductPage">Добави продукт</a></li>
-		                                <li><a href="http://localhost:8080/MyProject/admin/removeProductPage">Премахни продукт</a></li>
-		                                <li><a href="http://localhost:8080/MyProject/admin/editProductPage">Редактирай продукт</a></li>
-		                                <li><a href="http://localhost:8080/MyProject/admin/addPromotionPage">Добави промоция</a></li>
-		                                <li><a href="http://localhost:8080/MyProject/user/logout">Изход</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/openProfile">Профил</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/ordersPage">Поръчки</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/favProductsPage">Любими</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/addProductPage">Добави продукт</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/removeProductPage">Премахни продукт</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/editProductPage">Редактирай продукт</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/addPromotionPage">Добави промоция</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/logout">Изход</a></li>
 		                            </ul>
 		                        </div>
 		                                                <div class="basket">
-		                            <a href="http://localhost:8080/MyProject/user/cartPage" class="btn btn-tm">
+		                            <a href="http://localhost:8080/TechnomarketSpring/user/cartPage" class="btn btn-tm">
 		                                <i class="icon-basket"></i> -
 		                            </a>
 		                        </div>
@@ -212,14 +212,14 @@
 		                            	<i class="icon-profile"></i> <span class="hidden-xs"> <c:out value="${sessionScope.user.name}"/> </span>
 		                            </button>
 		                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-		                                <li><a href="http://localhost:8080/MyProject/user/openProfile">Профил</a></li>
-		                                <li><a href="http://localhost:8080/MyProject/user/ordersPage">Поръчки</a></li>
-		                                <li><a href="http://localhost:8080/MyProject/user/favProductsPage">Любими</a></li>
-		                                <li><a href="http://localhost:8080/MyProject/user/logout">Изход</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/openProfile">Профил</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/ordersPage">Поръчки</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/favProductsPage">Любими</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/logout">Изход</a></li>
 		                            </ul>
 		                        </div><!-- /.user-account -->
 		                                                <div class="basket">
-		                            <a href="http://localhost:8080/MyProject/user/cartPage" class="btn btn-tm">
+		                            <a href="http://localhost:8080/TechnomarketSpring/user/cartPage" class="btn btn-tm">
 		                                <i class="icon-basket"></i> -
 		                            </a>
 		                        </div><!-- /.basket -->

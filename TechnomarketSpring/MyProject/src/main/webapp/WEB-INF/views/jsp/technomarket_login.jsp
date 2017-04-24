@@ -15,25 +15,26 @@
     <div class="row-split">
         <div class="col-half">
             <h2>Вход</h2>
-            <form action="http://localhost:8080/MyProject/user/login" method="post" class="fos_user_registration_register form-horizontal"><div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_first_name">
+            <form action="http://localhost:8080/TechnomarketSpring/user/login" method="post" class="fos_user_registration_register form-horizontal"><div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_first_name">
                      E-mail
-                                            <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="text" id="fos_user_registration_form_first_name" name="email" required="required" pattern=".{2,}" class="form-control" />
+                                            <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="text" id="email" name="email" required="required" pattern=".{2,}" class="form-control" />
                                             	<span id="myspan" class="help-block"><ul class="list-unstyled"><li><span class="glyphicon glyphicon-exclamation-sign"></span> </li></ul></span>
                                             <span class="bar"></span></div></div>
                 <div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_last_name">
                     Парола
-                                            <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="password" id="fos_user_registration_form_last_name" name="password" required="required" pattern=".{2,}" class="form-control" /><span class="bar"></span></div></div>
+                                            <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="password" id="password" name="password" required="required" pattern=".{2,}" class="form-control" /><span class="bar"></span></div></div>
                 <div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_email">
-        			<a href = "http://localhost:8080/MyProject/forgotPass/forgotPassSend">Забравена парола?</a>
+        			<a href = "http://localhost:8080/TechnomarketSpring/forgotPass/forgotPassSend">Забравена парола?</a>
                     <div class="col-sm-offset-6 col-sm-10">
-                         <input class="btn btn-tm" type="submit" value="Вход" />
+                         <input id = "btn" class="btn btn-tm" type="submit" value="Вход" />
                     </div>
                 </div>      
             </form>
+            
         </div>
         <div class="col-half">
             <h2>Нямаш профил?</h2>
-            <a href="http://localhost:8080/MyProject/user/registerPage" class="btn btn-tm">Регистрирай се</a>
+            <a href="http://localhost:8080/TechnomarketSpring/user/registerPage" class="btn btn-tm">Регистрирай се</a>
             <hr>
                                                         </div>
     </div>
