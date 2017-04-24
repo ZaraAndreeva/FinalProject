@@ -35,17 +35,22 @@
 	
 				<figure itemscope itemtype="http://schema.org/Product" class="product">
 	        		<div class="badges">
-                    	<div class="badge-label badge-red badge-promo" title="Промо цена">Промо цена</div>
-
+	        			<c:if test="${product.promoPrice != 0}">
+                    		<div class="badge-label badge-red badge-promo" title="Промо цена">Промо цена</div>
+						</c:if>
     
                 	</div>
         			<a itemprop="url" href="/microvylnova-furna-za-vgrajdane/electrolux-ems-26204ox-09126068" class="product-thumb">
+                		<!--  
                 		<img itemprop="image" src="//cdn.technomarket.bg/media/cache/my_thumb/uploads/library/product/09126068/560af7c4f4122.jpeg" alt="Technomarket" />
+            			-->
+            			<img itemprop="image" src="image/${product.productId}" alt="Technomarket" />
+            			
             		</a>
     			<figcaption>
         			<div class="product-name">
             		<h3><a itemprop="url" href="/microvylnova-furna-za-vgrajdane/electrolux-ems-26204ox-09126068"><span itemprop="name">${product.brand}</span></a></h3>
-            		<small class="product-model">Арт.№: <span itemprop="productID">	/span></small>
+            		<small class="product-model">Арт.№: ${product.productId}<span itemprop="productID"></small>
             		<ul itemprop="description" class="product-description">
                             <li>- МИКРОВЪЛНОВА ФУРНА ЗА ВГРАЖДАНЕ</li>
                             <li>- ПОЛЕЗЕН ОБЕМ 26 литра</li>
@@ -60,9 +65,12 @@
                 <div class="product-price">
             <var itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="price">
             	<meta itemprop="priceCurrency" content="BGN" />
-                <span itemprop="price" class="new">${product.price}<sup>00</sup>  <small>лв.</small></span>
-                                <span itemprop="price" class="old">${product.price}<sup>00</sup>  <small>лв.</small></span>
-                                <div><link itemprop="itemCondition" href="http://schema.org/NewCondition" /> <span class="hidden">New</span></div>
+                <span itemprop="price" class="new">${product.price}<sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup><small>лв.</small></span>
+                <c:if test="${product.promoPrice != 0}">
+                	<span itemprop="price" class="old">${product.price}<sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup><small>лв.</small></span>
+                </c:if>
+                                
+                <div><link itemprop="itemCondition" href="http://schema.org/NewCondition" /> <span class="hidden">New</span></div>
             </var>
             <form action="/cart/add">
                 <input type="hidden" value="09126068" name="product">

@@ -31,11 +31,6 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/pdfs/**").addResourceLocations("/static/pdf/");
         registry.addResourceHandler("/js/**").addResourceLocations("/static/js/");
     }
-    
-    @Bean(name = "multipartResolver")
-    public StandardServletMultipartResolver resolver(){
-    	return new StandardServletMultipartResolver();
-    }
 	
 	@Bean
 	public InternalResourceViewResolver getInternalResourceViewResolver() {
@@ -69,4 +64,8 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		registry.addInterceptor(changeInterceptor);
 	}
 	
+	@Bean(name = "multipartResolver")
+    public StandardServletMultipartResolver resolver(){
+    	return new StandardServletMultipartResolver();
+    }
 }

@@ -28,8 +28,6 @@ import com.example.krasiModel.User;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-
-
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
@@ -71,11 +69,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	
-
-
-
-public String logout(HttpServletRequest request){
+	public String logout(HttpServletRequest request){
 		HttpSession session = request.getSession(true);
 		session.setAttribute("logged", false);
 		request.getSession().invalidate();

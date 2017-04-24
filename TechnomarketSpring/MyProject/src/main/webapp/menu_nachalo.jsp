@@ -248,7 +248,7 @@
                                                                                                                                                                                                                                                                         
                                                                                                                                         <ul>
                                                     <li>
-                                                        <a href="/televizor" class="ui-link ui-link-all">Всички Телевизори</a>
+                                                        <a href="/TechnomarketSpring/televizori" class="ui-link ui-link-all">Всички Телевизори</a>
                                                     </li>
                                                                                                             <li>
                                                             <a href="/televizor/blaupunkt" class="ui-link">BLAUPUNKT</a>

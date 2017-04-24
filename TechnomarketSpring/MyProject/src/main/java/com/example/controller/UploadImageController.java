@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
@@ -30,24 +31,41 @@ public class UploadImageController {
 	
 	@RequestMapping(value="/upload", method=RequestMethod.GET)
 	public String prepareForUpload() {
-		return "upload";
+//		return "upload";
+		return "technomarket_addProduct";
 	}
 	
 
 	@RequestMapping(value="/image/{fileName}", method=RequestMethod.GET)
 	@ResponseBody
 	public void prepareForUpload(@PathVariable("fileName") String fileName, HttpServletResponse resp, Model model) throws IOException {
-		File file = new File(FILE_LOCATION + vzemiToqImage);
+//		File file = new File(FILE_LOCATION + vzemiToqImage);
+//		File file = new File(FILE_LOCATION + "1");
+		File file = new File(FILE_LOCATION + fileName + ".jpg");
 		Files.copy(file.toPath(), resp.getOutputStream());
 	}
 	
 	@RequestMapping(value="/upload", method=RequestMethod.POST)
-	public String receiveUpload(@RequestParam("failche") MultipartFile multiPartFile, Model model) throws IOException{
+	public String receiveUpload(@RequestParam("failche") MultipartFile multiPartFile, Model model, HttpServletRequest req) throws IOException{
 		
-		File fileOnDisk = new File(FILE_LOCATION + multiPartFile.getOriginalFilename());
+//		File fileOnDisk = new File(FILE_LOCATION + multiPartFile.getOriginalFilename());
+		String productId = req.getParameter("productId");
+		if(multiPartFile.isEmpty() || multiPartFile == null){
+			model.addAttribute("messege", "Трябва да посочите файл за качване!");
+			return "technomarket_addProduct";
+		}
+		if(productId == null || productId.isEmpty()){
+			model.addAttribute("messege", "Трябва да посочите име на файл!");
+			return "technomarket_addProduct";
+		}
+		File fileOnDisk = new File(FILE_LOCATION + productId + ".jpg");
 		Files.copy(multiPartFile.getInputStream(), fileOnDisk.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		vzemiToqImage = multiPartFile.getOriginalFilename();
-		model.addAttribute("filename", multiPartFile.getOriginalFilename());
-		return "upload";
+//		vzemiToqImage = multiPartFile.getOriginalFilename();
+//		model.addAttribute("filename", multiPartFile.getOriginalFilename());
+//		return "technomarket_addProduct";
+		model.addAttribute("messege", "Успешно качихте снимка за продукт с номер " + productId);
+		vzemiToqImage = productId + ".jpg";
+		model.addAttribute("filename", vzemiToqImage);
+		return "technomarket_addProduct";
 	}
 }

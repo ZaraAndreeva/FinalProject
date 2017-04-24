@@ -21,14 +21,11 @@ public class ShowProductController {
 		ArrayList<Product> products = ProductDAO.getInstance().giveProductsByTag("Телевизори");
 		Collection<Product> allProducts = ProductDAO.getInstance().getAllProducts().values();
 		
-		
-		
 		for (Product product : allProducts) {
 			System.out.println(product);
 		}
 		
 		model.addAttribute("products", products);
-		
 		
 		return "new";
 	}
