@@ -214,7 +214,8 @@ public class Product {
 //		String pattern = "(http(s?):/)(/[^/]+)+" + "/.(?:jpg|gif|png)";
 //		return pictureUrl.matches(pattern);
 //		return true;
-		return pictureUrl.matches("http(s?)://([\\w-]+\\.)+[\\w-]+(/[\\w- ./]*)+\\.(?:[gG][iI][fF]|[jJ][pP][gG]|[jJ][pP][eE][gG]|[pP][nN][gG]|[bB][mM][pP])");
+//		return pictureUrl.matches("http(s?)://([\\w-]+\\.)+[\\w-]+(/[\\w- ./]*)+\\.(?:[gG][iI][fF]|[jJ][pP][gG]|[jJ][pP][eE][gG]|[pP][nN][gG]|[bB][mM][pP])");
+		return true;
 	}
 
 	public static boolean validSubCategory(String subCategory) {
@@ -232,7 +233,7 @@ public class Product {
 	
 	public boolean hasThatTag(String tag){
 		//TODO category.contains(tag)?
-		return subCategory.contains(tag) || subSubCategory.contains(tag);						
+		return subCategory.contains(tag);						
 	}
 
 	public HashMap<String, String> getSpecifications() {

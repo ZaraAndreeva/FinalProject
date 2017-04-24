@@ -22,6 +22,7 @@ public class MyController {
 		viewModel.addAttribute("Text","Hello");
 		
 //		return "home";
+//		return "technomarket_addProduct";
 		return "new";
 	}
 	
