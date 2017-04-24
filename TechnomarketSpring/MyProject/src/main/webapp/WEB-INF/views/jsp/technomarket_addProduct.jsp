@@ -15,8 +15,12 @@
     <div class="row-split">
         <div class="col-half">
             <h2>Добавяне на продукт</h2>
+
             <div class="fos_user_registration_register form-horizontal">
             <div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_first_name">
+
+            <form action="http://localhost:8080/TechnomarketSpring/product/addProduct"  method="GET" class="fos_user_registration_register form-horizontal"><div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_first_name">
+
                     Описание
                                             <span class="required" title="This field is required">*</span></label><div class="col-sm-10 control-bar">
                                             <input type="text" id="description" name="fos_user_registration_form[first_name]" required="required" pattern=".{2,}" class="form-control" />

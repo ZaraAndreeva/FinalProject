@@ -15,7 +15,7 @@
     <div class="row-split">
         <div class="col-half">
             <h2>Възстановяване на парола</h2>
-            <form action = "http://localhost:8080/MyProject/forgotPass/forgotPass" method = "POST" class="fos_user_registration_register form-horizontal"><div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_first_name">
+            <form action = "http://localhost:8080/TechnomarketSpring/forgotPass/forgotPass" method = "POST" class="fos_user_registration_register form-horizontal"><div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_first_name">
                      E-mail
                                             <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="text" id="fos_user_registration_form_first_name" name="email" required="required" pattern=".{2,}" class="form-control" />
                                             	<span id="myspan" class="help-block"><ul class="list-unstyled"><li><span class="glyphicon glyphicon-exclamation-sign"></span> </li></ul></span>
