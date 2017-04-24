@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -188,4 +187,9 @@ public String logout(HttpServletRequest request){
 		
 //		User u = new User(name, familyName, email, password, gender, birthDate, isAdmin);
 	}
+	@RequestMapping(value = "/registerPage", method = RequestMethod.GET)
+	public String registerPage(){
+		return("technomarket_register");
+	}
+	
 }
