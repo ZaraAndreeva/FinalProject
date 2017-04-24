@@ -32,8 +32,6 @@ public class UserController {
 			session.setAttribute("user", u);
 			session.setMaxInactiveInterval(3000);
 			session.setAttribute("logged", true);
-			//TODO
-//			response.sendRedirect("index.jsp");
 			return "new";
 		}
 		else{
@@ -49,7 +47,11 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/openProfile", method = RequestMethod.GET)
-	public String openProfile(){
+	public String openProfile(HttpServletRequest request){
+		HttpSession session = request.getSession();
+		if(session.getAttribute("user") == null || !(Boolean)session.getAttribute("logged")){
+			return("technomarket_login");
+		}
 		return("technomarket_profile");
 	}
 	
@@ -58,8 +60,6 @@ public class UserController {
 		HttpSession session = request.getSession(true);
 		session.setAttribute("logged", false);
 		request.getSession().invalidate();
-//		response.sendRedirect("index.jsp");
-	
 		return ("new");
 	}
 	
@@ -82,5 +82,20 @@ public class UserController {
 		return ("redirect:uspeshnaRegistraciya.html");
 	}
 	
+	
+	@RequestMapping(value = "/ordersPage", method = RequestMethod.GET)
+	public String ordersPage(){
+		return("technomarket_orders");
+	}
+	
+	@RequestMapping(value = "/favProductsPage", method = RequestMethod.GET)
+	public String favouriteProductsPage(){
+		return("technomarket_favProducts");
+	}
+	
+	@RequestMapping(value = "/cartPage", method = RequestMethod.GET)
+	public String cartPage(){
+		return("technomarket_cart");
+	}
 
 }
