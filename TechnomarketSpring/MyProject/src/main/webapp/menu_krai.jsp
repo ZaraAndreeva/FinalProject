@@ -5,29 +5,38 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-2">
+                <!-- 
                     <h4><a aria-controls="technomarket" aria-expanded="true" href="#technomarket" data-toggle="collapse" role="button" class="tm-collapse">Техномаркет</a></h4>
                     <ul id="technomarket" class="footer-menu collapse in">
+                    
                         <li><a href="/loyalni-klienti">Лоялни клиенти</a></li>
                         <li><a href="/magazini">Магазини</a></li>
                         <li><a href="/kontakti">Контакти</a></li>
+                         -->
                     </ul>
                 </div>
                 <div class="col-md-5">
+                <!--
                     <h4><a aria-controls="easy-shopping" aria-expanded="true" href="#easy-shopping" data-toggle="collapse" role="button" class="tm-collapse">Лесно пазаруване</a></h4>
                     <ul id="easy-shopping" class="footer-menu collapse in">
+                     
                         <li><a href="/uslovia-za-online-pazaruvane">Условия за Online пазаруване</a></li>
                         <li><a href="/byrza-i-bezplatna-dostavka">Бърза и безплатна доставка до дома Ви</a></li>
                         <li><a href="/online-razplashtane">Сигурно Online разплащане</a></li>
                         <li><a href="/tbi-credit">Условия за TBI Bank кредитиране</a></li>
                         <li><a href="/unicredit-izplashtane">Условия за UniCredit кредитиране</a></li>
+                         -->
                     </ul>
                 </div>
                 <div class="col-md-4">
+                <!--
                     <h4><a aria-controls="contacts" aria-expanded="true" href="#contacts" data-toggle="collapse" role="button" class="tm-collapse">Контакти</a></h4>
                     <div id="contacts" class="footer-menu collapse in">
+                     
                         <p><strong>Национален телефон на клиента</strong></p>
                         <h3><strong>0700 10 800</strong></h3>
                         <p><small>на цената на един градски разговор</small></p>
+                         -->
                         <br>
                         <ul itemscope itemtype="http://schema.org/Organization" class="social-icons">
                         	<link itemprop="url" href="http://www.technomarket.bg">
@@ -44,6 +53,7 @@
             	</div>
         </div>
     </div><!-- /.inner -->
+    <!-- 
     <div class="copyrights">
         <div class="container">
            
@@ -51,7 +61,9 @@
                             <img src="//cdn.technomarket.bg/images/3e561a8.png" alt="Technomarket" />
                         </span>
         </div>
-    </div><!-- /.copyrights -->
+    </div>
+     -->
+    
 </footer>
         <script type="text/javascript">
             require(['app', 'jquery'], function(app, $){
@@ -172,7 +184,7 @@
                         
         <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
         <script type="text/javascript">
-            window.cookieconsent_options = {"message":'Technomarket.bg използва &quot;бисквитки&quot;.',"dismiss":'Ок',"learnMore":'Виж повече',"link":'/cookie',"theme":false};
+              //     window.cookieconsent_options = {"message":'Technomarket.bg използва &quot;бисквитки&quot;.',"dismiss":'Ок',"learnMore":'Виж повече',"link":'/cookie',"theme":false};
         </script>
 
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>

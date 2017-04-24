@@ -30,7 +30,7 @@ import com.google.gson.JsonParser;
 
 
 
-@RestController
+@Controller
 @RequestMapping(value = "/user")
 public class UserController {
 
