@@ -185,9 +185,6 @@
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/editProductPage">Редактирай продукт</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/addPromotionPage">Добави промоция</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/removePromotionPage">Премахни промоция</a></li>
-
-		                                
-
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/logout">Изход</a></li>
 		                            </ul>
 		                        </div>

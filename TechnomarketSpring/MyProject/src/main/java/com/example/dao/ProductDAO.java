@@ -192,12 +192,12 @@ public class ProductDAO {
 	}
 	
 	public void deleteProduct(Product p){
-		//TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		String sql = "DELETE from products WHERE product_id = " + p.getProductId();
+		String sql = "DELETE from products WHERE product_id = ?";
 		PreparedStatement st = null;
 		ResultSet res = null;
 		try{
 			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			st.setLong(1, p.getProductId());
 			synchronized(this){
 				st.execute();
 			}
@@ -227,12 +227,13 @@ public class ProductDAO {
 	}
 	
 	public void addPromotion(double newPrice, long artNomer){
-		//TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		String sql = "UPDATE products set promo_price = " + newPrice + " WHERE product_id = " + artNomer;
+		String sql = "UPDATE products set promo_price = ? WHERE product_id = ?";
 		PreparedStatement st = null;
 		ResultSet res = null;
 		try{
 			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			st.setDouble(1, newPrice);
+			st.setLong(1, artNomer);
 			synchronized(this){
 				st.execute();
 			}
@@ -261,12 +262,13 @@ public class ProductDAO {
 	}
 	
 	public void removePromotion(double price, long artNomer){
-		//TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		String sql = "UPDATE products set price = " + price + ", promo_price = 0 WHERE product_id = " + artNomer;
+		String sql = "UPDATE products set price = ?, promo_price = 0 WHERE product_id = ?";
 		PreparedStatement st = null;
 		ResultSet res = null;
 		try{
 			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			st.setDouble(1, price);
+			st.setLong(2, artNomer);
 			synchronized(this){
 				st.execute();
 			}
@@ -297,12 +299,14 @@ public class ProductDAO {
 	}
 	
 	public void editProduct(long artikulenNomer, int quantity, double price){
-		//TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		String sql = "UPDATE products set quantity = " + quantity + ", price = " + price + " WHERE product_id = " + artikulenNomer + ";";
+		String sql = "UPDATE products set quantity = ?, price = ? WHERE product_id = ?";
 		PreparedStatement st = null;
 		ResultSet res = null;
 		try{
 			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			st.setInt(1, quantity);
+			st.setDouble(2, price);
+			st.setLong(3, artikulenNomer);
 			synchronized(this){
 				st.execute();
 			}
@@ -329,5 +333,5 @@ public class ProductDAO {
 			}
 		}
 	}
-	
+
 }

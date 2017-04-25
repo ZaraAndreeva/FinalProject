@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -42,7 +43,7 @@ public class UserController {
 	
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request){
+	public String login(HttpServletRequest request, Model model){
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		
@@ -57,9 +58,8 @@ public class UserController {
 			return "new";
 		}
 		else{
-			//TODO
-//			response.sendRedirect("errorLogin.html");
-			return ("redirect:errorLogin.html");
+			model.addAttribute("message", "Въвели сте грешно потребителско име или парола.");
+			return "technomarket_login";
 		}
 	}
 	
