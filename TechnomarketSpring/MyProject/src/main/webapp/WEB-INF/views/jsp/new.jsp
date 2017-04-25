@@ -44,7 +44,7 @@
                 		<!--  
                 		<img itemprop="image" src="//cdn.technomarket.bg/media/cache/my_thumb/uploads/library/product/09126068/560af7c4f4122.jpeg" alt="Technomarket" />
             			-->
-            			<img itemprop="image" src="image/${product.productId}" alt="Technomarket" />
+            			<img itemprop="image" src="/TechnomarketSpring/image/${product.productId}" alt="Technomarket" />
             			
             		</a>
     			<figcaption>
@@ -65,9 +65,12 @@
                 <div class="product-price">
             <var itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="price">
             	<meta itemprop="priceCurrency" content="BGN" />
-                <span itemprop="price" class="new">${product.price}<sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup><small>лв.</small></span>
                 <c:if test="${product.promoPrice != 0}">
+                	<span itemprop="price" class="new">${product.promoPrice}<sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup><small>лв.</small></span>
                 	<span itemprop="price" class="old">${product.price}<sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup><small>лв.</small></span>
+                </c:if>
+                <c:if test="${product.promoPrice == 0}">
+                	<span itemprop="price" class="new">${product.price}<sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup><small>лв.</small></span>
                 </c:if>
                                 
                 <div><link itemprop="itemCondition" href="http://schema.org/NewCondition" /> <span class="hidden">New</span></div>

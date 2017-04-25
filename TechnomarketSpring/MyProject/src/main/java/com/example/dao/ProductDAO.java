@@ -183,7 +183,8 @@ public class ProductDAO {
 		ArrayList<Product> searchResults = new ArrayList<>();
 		getAllProducts();
 		for(Product p : allProducts.values()){
-			if(p.getDescription().contains(search) || p.getSubCategory().contains(search) || p.getCategory().contains(search)){
+			//TODO
+			if(p.getDescription().contains(search) || p.getSubCategory().contains(search) || p.getBrand().contains(search)){
 				searchResults.add(p);
 			}
 		}
@@ -191,6 +192,7 @@ public class ProductDAO {
 	}
 	
 	public void deleteProduct(Product p){
+		//TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		String sql = "DELETE from products WHERE product_id = " + p.getProductId();
 		PreparedStatement st = null;
 		ResultSet res = null;
@@ -225,6 +227,7 @@ public class ProductDAO {
 	}
 	
 	public void addPromotion(double newPrice, long artNomer){
+		//TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		String sql = "UPDATE products set promo_price = " + newPrice + " WHERE product_id = " + artNomer;
 		PreparedStatement st = null;
 		ResultSet res = null;
@@ -257,8 +260,44 @@ public class ProductDAO {
 		}
 	}
 	
+	public void removePromotion(double price, long artNomer){
+		//TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		String sql = "UPDATE products set price = " + price + ", promo_price = 0 WHERE product_id = " + artNomer;
+		PreparedStatement st = null;
+		ResultSet res = null;
+		try{
+			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			synchronized(this){
+				st.execute();
+			}
+			res = st.getGeneratedKeys();
+			res.next();
+			allProducts.get(artNomer).setPromoPrice(0.0);
+			allProducts.get(artNomer).setPrice(price);
+		} catch (SQLException e) {
+				System.out.println("addPromotion: " + e.getMessage());
+		}
+		finally {
+			if(st != null){
+				try {
+					st.close();
+				} catch (SQLException e) {
+					System.out.println("addPromotion: " + e.getMessage());
+				}
+			}
+			if(res != null){
+				try {
+					res.close();
+				} catch (SQLException e) {
+					System.out.println("addPromotion: " + e.getMessage());
+					
+				}
+			}
+		}
+	}
+	
 	public void editProduct(long artikulenNomer, int quantity, double price){
-		//TODO
+		//TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		String sql = "UPDATE products set quantity = " + quantity + ", price = " + price + " WHERE product_id = " + artikulenNomer + ";";
 		PreparedStatement st = null;
 		ResultSet res = null;

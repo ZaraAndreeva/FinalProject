@@ -25,15 +25,19 @@ public class SearchController {
 		String search = request.getParameter("search");
 		
 		Collection<Product> searchProd = ProductDAO.getInstance().searchProduct(search);
-
-		for (Product product : searchProd) {
-			System.out.println(product);
+		
+		if(!searchProd.isEmpty()){
+			for (Product product : searchProd) {
+				System.out.println(product);
+			}
+			
+			model.addAttribute("products", searchProd);
 		}
+		else{
+			
+		}
+			return "new";
 		
-		model.addAttribute("products", searchProd);
-		
-		return "new";
-
 	}
 	
 }
