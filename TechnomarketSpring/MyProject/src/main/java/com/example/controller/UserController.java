@@ -13,9 +13,11 @@ import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.example.dao.ProductDAO;
 import com.example.dao.UserDAO;
 import com.example.krasiModel.Product;
 import com.example.krasiModel.User;
@@ -280,6 +282,40 @@ public class UserController {
 	@RequestMapping(value = "/registerPage", method = RequestMethod.GET)
 	public String registerPage(){
 		return("technomarket_register");
+	}
+	
+	@RequestMapping(value = "/abonirane/{productId}", method = RequestMethod.GET)
+	public String sendMail(@PathVariable("productId") String productId, Model model, HttpServletRequest request){
+		//TODO da vzemem artikulniya nomer na suotvetniya produkt
+		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
+		model.addAttribute("product", product);
+		HttpSession session = request.getSession();
+		if(session.getAttribute("user") != null){
+			User u = (User) session.getAttribute("user");
+			new MailSender(u.getEmail() ,"Абониране", "Вие се абонирахте за продукт с артикулен номер: " + productId + ".");
+			model.addAttribute("message", "Успешно се абонирахте за този продукт.");
+		}
+		else{
+			model.addAttribute("message", "Трябва да влезете в профила си, за да се абонирате.");
+		}
+		return "technomarket_viewProduct";
+	}
+	
+	@RequestMapping(value = "/addFavProd/{productId}", method = RequestMethod.GET)
+	public String addFavProd(@PathVariable("productId") String productId, Model model, HttpServletRequest request){
+		
+		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
+		model.addAttribute("product", product);
+		HttpSession session = request.getSession();
+		if(session.getAttribute("user") != null){
+			User u = (User) session.getAttribute("user");
+			
+			model.addAttribute("message", "Успешно добавихте този продукт в любими.");
+		}
+		else{
+			model.addAttribute("message", "Трябва да влезете в профила си, за да добавяте в любими.");
+		}
+		return "technomarket_viewProduct";
 	}
 	
 }

@@ -40,7 +40,7 @@
 						</c:if>
     
                 	</div>
-        			<a itemprop="url" href="/microvylnova-furna-za-vgrajdane/electrolux-ems-26204ox-09126068" class="product-thumb">
+        			<a itemprop="url" href="http://localhost:8080/TechnomarketSpring/product/viewProductPage/${product.productId}" class="product-thumb">
                 		<!--  
                 		<img itemprop="image" src="//cdn.technomarket.bg/media/cache/my_thumb/uploads/library/product/09126068/560af7c4f4122.jpeg" alt="Technomarket" />
             			-->
@@ -49,7 +49,7 @@
             		</a>
     			<figcaption>
         			<div class="product-name">
-            		<h3><a itemprop="url" href="/microvylnova-furna-za-vgrajdane/electrolux-ems-26204ox-09126068"><span itemprop="name">${product.brand}</span></a></h3>
+            		<h3><a itemprop="url" href="http://localhost:8080/TechnomarketSpring/product/viewProductPage/${product.productId}"><span itemprop="name">${product.brand}</span></a></h3>
             		<small class="product-model">Арт.№: ${product.productId}<span itemprop="productID"></small>
             		<ul itemprop="description" class="product-description">
                             <li>- МИКРОВЪЛНОВА ФУРНА ЗА ВГРАЖДАНЕ</li>
