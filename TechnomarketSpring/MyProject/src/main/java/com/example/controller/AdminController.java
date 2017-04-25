@@ -62,5 +62,19 @@ public class AdminController {
 
 		return "new";
 	}
+	
+	@RequestMapping(value = "/removePromotionPage", method = RequestMethod.GET)
+	public String removePromotionPage(){
+		return("technomarket_removePromotion");
+	}
+	
+	@RequestMapping(value = "/removePromotion", method = RequestMethod.POST)
+	public String removePromotion(HttpServletRequest request){
+		long artikulenNomer = Long.valueOf(request.getParameter("artikulenNomer"));
+		double price = Double.valueOf(request.getParameter("price"));	
+		ProductDAO.getInstance().removePromotion(price, artikulenNomer);
+		
+		return "new";
+	}
 
 }

@@ -102,6 +102,10 @@ public class Product {
 	public void setProductId(long productId) {
 		this.productId = productId;
 	}
+	
+	public void setPrice(double price) {
+		this.price = price;
+	}
 
 	@Override
 	public int hashCode() {

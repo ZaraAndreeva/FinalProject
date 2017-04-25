@@ -180,10 +180,11 @@
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/openProfile">Профил</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/ordersPage">Поръчки</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/favProductsPage">Любими</a></li>
-		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/addProductPage">Добави продукт</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/upload">Добави продукт</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/removeProductPage">Премахни продукт</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/editProductPage">Редактирай продукт</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/addPromotionPage">Добави промоция</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/removePromotionPage">Премахни промоция</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/logout">Изход</a></li>
 		                            </ul>
 		                        </div>
