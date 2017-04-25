@@ -24,13 +24,12 @@
             <figure itemscope="" itemtype="http://schema.org/Product" class="product product-details clearfix">
                 <div class="product-thumb photoswipe">
                     <div class="product-heading">
-                                                <div class="product-category"><a href="/laptopi"><i class="icon-arrow-long-left"></i> Лаптопи</a></div>
+                                                <div class="product-category"><a href=""><i class="icon-arrow-long-left"></i> ${product.subCategory}</a></div>
                                                 <h1><a href="/laptopi/asus-x541sc-xx005d-09153700"><span itemprop="name">Лаптоп ASUS X541SC-XX005D</span></a></h1>
-                        <div class="product-model">Арт.№: <span itemprop="productID">09153700</span></div>
+                        <div class="product-model">Арт.№: <span itemprop="productID">${product.productId}</span></div>
                     </div>                                
-                    <a href="" class="product-image" data-photoswipe="//cdn.technomarket.bg/uploads/library/product/09153700/5893465ab03a2.png">
-                    	                        <img itemprop="image" src="//cdn.technomarket.bg/../media/cache/my_thumb/uploads/library/product/09153700/5893465ab03a2.png" alt="Technomarket" data-pswp-uid="0">
-                    	                    </a>  
+                    
+                    	                    <img itemprop="image" src="/TechnomarketSpring/image/${product.productId}" alt="Technomarket" />
                     <div class="product-gallery">
                                         </div><!--/.product-gallery-->
 
@@ -42,10 +41,10 @@
                         <div class="product-share">                                      
                             <ul>
                                 <li>
-                                                                            <a href="/product/addToFavorites/09153700" class="favorites favorites-add"><i class="icon-heart"></i> Любими</a>
+                                                                            <a href="http://localhost:8080/TechnomarketSpring/user/addFavProd/${product.productId}" class="favorites favorites-add"><i class="icon-heart"></i> Любими</a>
                                                                     </li>
                                 <li>
-                                                                                                                <a href="/product/addToCompare/09153700" class="compare compare-add"><i class="icon-compare"></i> Абонирай се</a>
+                                                                                                                <a href="http://localhost:8080/TechnomarketSpring/user/abonirane/${product.productId}" class="compare compare-add"><i class="icon-compare"></i> Абонирай се</a>
                                                                     </li>                       	
                             </ul>
                             
@@ -55,22 +54,11 @@
 
 
                                                                                                 <ul itemprop="description" class="product-description moreLines">
-                                                            <li>DISPLAY: 39.6 СМ (15.6 ИНЧА), HD 1366x768 GLARE</li>
-                                                            <li>CPU:	CPU INTEL® PENTIUM™ N3710 UP TO 2.56 GHZ, 2MB, 4C</li>
-                                                            <li>RAM:	4GB DDR3L-1600 MHZ SDRAM</li>
-                                                            <li>HDD 1:	1 TB SATA
-</li>
-                                                            <li> SUPERMULTI DVD-RW</li>
-                                                            <li>VIDEO:	NVIDIA GEFORCE 810M 1GB</li>
-                                                            <li>PORTS:   10/100 LAN, 802.11 BGN, BLUETOOTH 4.0</li>
-                                                       
-                                                            <li class="view_more_item">                1XHDMI, 1XUSB 2.0, 1XUSB 3.0, 1XUSB T-C, 1XRJ-45</li>
-                                                            <li class="view_more_item">                VGA PORT, CARD READER</li>
-                                                            <li class="view_more_item">                BUILT-IN SPEAKERS, MICROPHONE, VGA WEB CAMERA</li>
-                                                            <li class="view_more_item">OS:	DOS</li>
-                                                            <li class="view_more_item">БАТЕРИЯ: 3-КЛЕТЪЧНА LI-ION 3S1P, 36 WHS</li>
-                                                            <li class="view_more_item">ТЕГЛО:   2.0 КГ</li>
-                                                            <li class="view_more_item">ЦВЯТ:     СРЕБРИСТ</li>
+                                                            <li><b>Количество: </b>${product.quantity}</li>
+                                                            <li><b>Марка: </b>${product.brand}</li>
+                                                            <li><b>Описание: </b>${product.description}</li>
+                                                          
+                                                     
                                                      </ul>
                                                        </div>
                                         <div itemprop="offers" itemscope="" itemtype="http://schema.org/Offer" class="product-price">
@@ -79,17 +67,23 @@
                         	<div class="price-title">Купи сега</div>
                                                         <var class="price">
 
-                                <span itemprop="price" class="new">659.<sup>00</sup>  <small>лв.</small></span>
+                                <c:if test="${product.promoPrice != 0}">
+				                	<span itemprop="price" class="new">${product.promoPrice}<sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup><small>лв.</small></span>
+				                	<span itemprop="price" class="old">${product.price}<sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup><small>лв.</small></span>
+                				</c:if>
+                				<c:if test="${product.promoPrice == 0}">
+                					<span itemprop="price" class="new">${product.price}<sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup><small>лв.</small></span>
+                				</c:if>
                             </var>
 
                         </div>      
                                                 
-                        <form action="/cart/add" novalidate="1">
+                        <form action="" novalidate="1">
  
                                                                                     <div class="buy-now">
                                 <input type="hidden" value="09153700" name="product">
                                                                 <button type="submit" class="btn btn-tm flix_cart_click_check">
-                                    <i class="icon-basket"></i> Купи онлайн
+                                    <i class="icon-basket"></i> Добави в количка
                                 </button>
                                                             </div>
                         </form>                     
@@ -110,7 +104,7 @@
 
 
 
-
+	<h1>${message}</h1>
         
        
     <div class="row row-brp">            
@@ -136,6 +130,7 @@
                     <section class="product-specifications">                      
                         <table class="table tm-table">
                             <tbody>
+                            <!-- 
                                         <tr>
         <th><i class="icon-arrow-right"></i>Размер на екрана, inch:</th>
         <td>
@@ -195,7 +190,7 @@
                                                 <div class="specs-value" title="Да"><i class="icon-check"></i> </div>
                                     </td>
     </tr>
-    
+    -->
                             </tbody>
                         </table>
                     </section>                         
@@ -204,19 +199,9 @@
                     <section class="product-stock">               
                         <div class="stock-legend">
 	<ul>
-   		<li class="stock-max">
-        	<i class="icon-check"></i>
-            Продуктът е наличен 
-        </li>
-   		<li class="stock-mid">
-        	<i class="icon-check"></i>
-            Ограничена наличност 
-        </li>
-   		<li class="stock-min">
-        	<i class="icon-check"></i>
-            Побързай, може да свърши 
-        </li>                
+   		 
     </ul>
+    
 </div>
 <hr>
 <ul>

@@ -14,7 +14,7 @@ import com.example.dao.UserDAO;
 public class ForgotPasswordController {
 	
 	@RequestMapping(value = "/forgotPass", method = RequestMethod.POST)
-	protected String sendMail(HttpServletRequest request, Model model){
+	public String sendMail(HttpServletRequest request, Model model){
 		String email = request.getParameter("email");
 		if(!email.isEmpty()){
 			if(!UserDAO.getInstance().getAllUsers().containsKey(email)) {
@@ -33,7 +33,7 @@ public class ForgotPasswordController {
 	}
 	
 	@RequestMapping(value = "/forgotPassSend", method = RequestMethod.GET)
-	protected String sendEmail(){
+	public String sendEmail(){
 		return("technomarket_forgotPass");
 	}
 

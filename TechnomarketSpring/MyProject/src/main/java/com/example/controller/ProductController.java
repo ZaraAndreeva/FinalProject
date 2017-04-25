@@ -10,6 +10,7 @@ import javax.swing.plaf.synth.SynthSpinnerUI;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,7 +23,7 @@ import com.google.gson.JsonParser;
 import com.example.dao.ProductDAO;
 import com.example.krasiModel.Product;
 
-@RestController
+@Controller
 @RequestMapping(value="/product")
 public class ProductController {
 	
@@ -145,6 +146,12 @@ public class ProductController {
 		return respJSON.toString();
 	}
 	
-	
+	@RequestMapping(value = "/viewProductPage/{productId}", method = RequestMethod.GET)
+	public String viewProduct(@PathVariable("productId") String productId, Model model){
+		//TODO validating if productId is Integer
+		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
+		model.addAttribute("product", product);
+		return "technomarket_viewProduct";
+	}
 	
 }
