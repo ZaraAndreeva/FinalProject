@@ -247,6 +247,8 @@ public class Product {
 	public void setPromoPrice(double promoPrice) {
 		this.promoPrice = promoPrice;
 	}
+
+	
 	
 	
 	

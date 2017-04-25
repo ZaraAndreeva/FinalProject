@@ -136,8 +136,8 @@
 					  var errors = responseData.errors;
 					  
 					  for(var i = 0; i < errors.length; i++){
-						  //document.getElementById(errors[i]).innerHTML="Error";
-						  document.getElementById(errors[i].errorPlace).innerHTML = errors[i].errorMessege;
+							document.getElementById(errors[i]).innerHTML="Error";
+						  	document.getElementById(errors[i].errorPlace).innerHTML = errors[i].errorMessege;
 					  }
 				  }
 				  

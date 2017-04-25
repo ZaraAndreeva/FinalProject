@@ -9,12 +9,14 @@ import java.util.Scanner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.dao.UserDAO;
+import com.example.krasiModel.Product;
 import com.example.krasiModel.User;
 
 
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.dao.UserDAO;
 import com.example.krasiModel.User;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -32,6 +35,12 @@ import com.google.gson.JsonParser;
 @RequestMapping(value = "/user")
 public class UserController {
 
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	public String showRegister(){
+		return "technomarket_register";
+	}
+	
+	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(HttpServletRequest request){
 		String email = request.getParameter("email");
@@ -117,7 +126,7 @@ public class UserController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public void register(HttpServletRequest req){
+	public String register(HttpServletRequest req){
 //		String name = request.getParameter("name");
 //		String familyName = request.getParameter("family_name");
 //		String password = request.getParameter("password");
@@ -177,6 +186,93 @@ public class UserController {
 		System.out.println(passwordSecond);
 		System.out.println(sex);
 		System.out.println("***********");
+		
+		
+		if(!User.validUser(name, familyName, email, passwordFirst, passwordSecond, sex)){
+			respJSON.addProperty("error", true);
+			JsonArray errorsArray = new JsonArray();
+			if(!User.validText(name)){
+//				errorsArray.add(new JsonPrimitive("descriptionError"));
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "nameError");
+				error.addProperty("errorMessege", "Моля, въведете име!");
+				errorsArray.add(error);
+				
+			}
+			if(!User.validText(familyName)){
+//				errorsArray.add(new JsonPrimitive("quantityError"));
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "familyNameError");
+				error.addProperty("errorMessege", "Моля, въведете фамилно име!");
+				errorsArray.add(error);
+				
+			}
+			if(!User.validEmail(email)){
+//				errorsArray.add(new JsonPrimitive("priceError"));
+				if(UserDAO.getInstance().getAllUsers().containsKey(email)){
+					JsonObject error = new JsonObject();
+					error.addProperty("errorPlace", "emailError");
+					error.addProperty("errorMessege", "Въведеният email вече е зает!");
+					errorsArray.add(error);	
+				}
+				else{
+					JsonObject error = new JsonObject();
+					error.addProperty("errorPlace", "emailError");
+					error.addProperty("errorMessege", "Моля, въведете валиден email!");
+					errorsArray.add(error);
+				}
+				
+			}
+			if(!User.validPassword(passwordFirst)){
+//				errorsArray.add(new JsonPrimitive("brandError"));	
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "passwordFirstError");
+				error.addProperty("errorMessege", "Моля, въведете парола!");
+				errorsArray.add(error);
+			}
+			else{
+				if(passwordSecond == null || passwordSecond.isEmpty()){
+					JsonObject error = new JsonObject();
+					error.addProperty("errorPlace", "passwordSecondError");
+					error.addProperty("errorMessege", "Моля, въведете паролата отново!");
+					errorsArray.add(error);
+				}
+				else if (!passwordFirst.equals(passwordSecond)){
+					JsonObject error = new JsonObject();
+					error.addProperty("errorPlace", "passwordSecondError");
+					error.addProperty("errorMessege", "Паролите не съвпадат!");
+					errorsArray.add(error);
+				}
+			}
+			if(Integer.parseInt(sex) == 0){
+//				errorsArray.add(new JsonPrimitive("urlError"));
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "sexError");
+				error.addProperty("errorMessege", "Моля, въведете пол!");
+				errorsArray.add(error);
+				
+			}
+			
+			respJSON.add("errors", errorsArray);
+			
+			return respJSON.toString();
+		}
+		else{
+			respJSON.addProperty("error", false);
+//			try {
+//				resp.getWriter().append(respJSON.toString());
+//			} catch (IOException e) {
+//				System.out.println("oops " + e.getMessage());
+//			}
+		}
+		
+		
+		User user = new User(name, familyName, email, passwordFirst, sex, LocalDate.now(), false);
+		System.out.println(user);
+		
+		UserDAO.getInstance().addUser(user);
+		
+		return respJSON.toString();
 		
 		
 //		User u = new User(name, familyName, email, password, gender, birthDate, isAdmin);
