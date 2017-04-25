@@ -85,6 +85,7 @@ public class AdminController {
 		}
 		return "technomarket_removeProduct";
 	}
+
 	
 	@RequestMapping(value = "/editProduct", method = RequestMethod.POST)
 	public String editProduct(HttpServletRequest request){

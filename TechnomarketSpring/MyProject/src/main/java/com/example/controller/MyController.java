@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.example.dao.CategoryDAO;
+
 @Controller
 public class MyController {
 	
@@ -23,6 +25,8 @@ public class MyController {
 		
 //		return "home";
 //		return "technomarket_addProduct";
+		
+		CategoryDAO.getInstance().getAllCategories();
 		return "new";
 	}
 	
