@@ -14,7 +14,7 @@
         <div class="security">
     <div class="row-split">
         <div class="col-half">
-            <h2>Добавяне на промоция</h2>
+            <h2>Премахване на промоция</h2>
             <form action="http://localhost:8080/TechnomarketSpring/admin/removePromotion"  method="POST" class="fos_user_registration_register form-horizontal"><div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_first_name">
                     Артикулен номер
                                             <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="number" min = "0" id="fos_user_registration_form_first_name" name="artikulenNomer" required="required" pattern=".{2,}" class="form-control" />
@@ -24,10 +24,11 @@
                      Въведи цена
                                             <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="number" min = "0" id="fos_user_registration_form_email" name="price" required="required" class="form-control" /><span class="bar"></span></div></div><div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_plainPassword_first">
                        <div class="col-sm-offset-6 col-sm-10">
-                         <input class="btn btn-tm" type="submit" value="Добави" />
+                         <input class="btn btn-tm" type="submit" value="Премахни" />
                     </div>
                 </div>      
             </form>
+            <h1>${message}</h1>
         </div>
                 <div class="col-half">
 

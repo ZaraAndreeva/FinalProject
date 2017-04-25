@@ -30,6 +30,7 @@
                     </div>
                 </div>      
             </form>
+            <h3>${message}</h3>
             
         </div>
         <div class="col-half">

@@ -87,7 +87,7 @@
 
 	</div>
 		</c:forEach>
-			
+		<h3>${message}</h3>
 		<!--End of product div-->
 		
 <div class="clear filter_load_more" data-from="20" data-size="20"></div>

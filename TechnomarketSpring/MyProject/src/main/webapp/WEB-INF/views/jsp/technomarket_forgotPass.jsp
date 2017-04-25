@@ -27,6 +27,7 @@
                     </div>
                 </div>      
             </form>
+            <h1>${message}</h1>
         </div>
          <div class="col-half">
             

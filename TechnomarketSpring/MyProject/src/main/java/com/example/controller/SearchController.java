@@ -34,7 +34,7 @@ public class SearchController {
 			model.addAttribute("products", searchProd);
 		}
 		else{
-			
+			model.addAttribute("message", "Няма намерени продукти.");
 		}
 			return "new";
 		
