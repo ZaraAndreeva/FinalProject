@@ -29,7 +29,6 @@ public class SubCategoryDAO {
 		return instance;
 	}
 	
-	
 	public synchronized HashMap<String, Integer> getAllSubCategories(){
 		if(allSubCategories.isEmpty()){
 			String sql = "SELECT sub_category_id, name FROM sub_categories";
@@ -47,11 +46,10 @@ public class SubCategoryDAO {
 					allSubCategories.put(subCategory, subCategoryId);
 				}
 			} catch(SQLException e){
-				System.out.println("getAllProducts: " + e.getMessage());
+				System.out.println("getAllSubCategories: " + e.getMessage());
 			}
 		}  
 		
-
 		return allSubCategories;
 	}
 
