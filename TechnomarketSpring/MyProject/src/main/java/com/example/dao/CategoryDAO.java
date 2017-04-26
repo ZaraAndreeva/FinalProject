@@ -61,6 +61,11 @@ public class CategoryDAO {
 			}
 		}
 		
+		for (Entry<String, ArrayList<String>> e : allCategories.entrySet()) {
+			for (String str : e.getValue()) {
+				
+			}
+		}
 		
 		return allCategories;
 	}

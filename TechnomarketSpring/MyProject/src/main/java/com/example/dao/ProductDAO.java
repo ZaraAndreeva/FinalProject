@@ -166,17 +166,22 @@ public class ProductDAO {
 		return allProducts;
 	}
 	
-	public synchronized ArrayList<Product> giveProductsByTag(String tag){
+	public synchronized ArrayList<Product> giveProductsBySubCategory(String subCategory){
 		ArrayList<Product> generatedProducts = new ArrayList<>();
 		
 		getAllProducts();
 		
 		for (Product product : allProducts.values()) {
-			if(product.hasThatTag(tag)){
+			if(product.sameSubCategory(subCategory)){
 				generatedProducts.add(product);
 			}
 		}
 		
+		if(generatedProducts.isEmpty()){
+			return null;
+		}
+		
+//		return generatedProducts;
 		return generatedProducts;
 	}
 	
