@@ -1,5 +1,8 @@
 package com.example.controller;
 
+import java.util.ArrayList;
+import java.util.Map.Entry;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -8,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.dao.ProductDAO;
+import com.example.dao.UserDAO;
+import com.example.krasiModel.Product;
+import com.example.krasiModel.User;
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -55,6 +61,16 @@ public class AdminController {
 					if(dao.getAllProducts().get(artikulenNomer).getPromoPrice() == 0){
 						dao.getAllProducts().get(artikulenNomer).setPromoPrice(newPrice);		
 						dao.addPromotion(newPrice, artikulenNomer);
+						
+						Product p = ProductDAO.getInstance().getAllProducts().get(artikulenNomer);
+						ArrayList<Integer> users = dao.checkForFavProducts(p);
+						for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
+							for (Integer i : users) {	
+								if(e.getValue().getUserId() == i){
+									new MailSender(e.getValue().getEmail() ,"Промяна на артикул", "Продукт с артикулен номер: " + p.getProductId() + " е на цена " + newPrice + " лв.");
+								}
+							}
+						}
 						model.addAttribute("message", "Успешно добавихте промоция на продукт с артикулен номер: " + artikulenNomer);
 					}
 					else{
@@ -79,6 +95,17 @@ public class AdminController {
 			artikulenNomer = Long.valueOf(request.getParameter("artikulenNomer"));
 			if(dao.getAllProducts().containsKey(artikulenNomer)){
 				dao.deleteProduct(dao.getAllProducts().get(artikulenNomer));
+				
+				Product p = ProductDAO.getInstance().getAllProducts().get(artikulenNomer);
+				ArrayList<Integer> users = dao.checkForFavProducts(p);
+				for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
+					for (Integer i : users) {	
+						if(e.getValue().getUserId() == i){
+							new MailSender(e.getValue().getEmail() ,"Няма наличност", "Продукт с артикулен номер: " + p.getProductId() + " вече не е наличен.");
+						}
+					}
+				}
+				
 				model.addAttribute("message", "Успешно премахнахте продукт с артикулен номер: " + artikulenNomer);
 			}
 			else{
@@ -93,15 +120,61 @@ public class AdminController {
 
 	
 	@RequestMapping(value = "/editProduct", method = RequestMethod.POST)
-	public String editProduct(HttpServletRequest request){
-		//TODO
-		long artikulenNomer = Long.valueOf(request.getParameter("artikulenNomer"));
-		int quantity = Integer.valueOf(request.getParameter("quantity"));
-		double price = Double.valueOf(request.getParameter("price"));
-		String description = request.getParameter("description");
+	public String editProduct(HttpServletRequest request, Model model){
+		long artikulenNomer = 0;
+		int quantity = -1;
+		double price = 0;
+		String description = "";
+		String name = "";
 		
-		dao.editProduct(artikulenNomer, quantity, price);
+		if(!request.getParameter("artikulenNomer").isEmpty()){
+			artikulenNomer = Long.valueOf(request.getParameter("artikulenNomer"));
+			if(dao.getAllProducts().containsKey(artikulenNomer)){
 
+				try {
+					quantity = Integer.valueOf(request.getParameter("quantity"));
+			   }catch (NumberFormatException e){
+				   quantity = dao.getAllProducts().get(artikulenNomer).getQuantity();   
+			   } 
+				try {
+					price = Double.valueOf(request.getParameter("price"));
+				 }catch (NumberFormatException e){
+					 price = dao.getAllProducts().get(artikulenNomer).getPrice();
+				 }
+				try {
+					//TODO ne razchita kirilica
+					description = request.getParameter("description");
+				 }catch (NumberFormatException e){
+					 description = dao.getAllProducts().get(artikulenNomer).getDescription();
+				 }
+				try {
+					//TODO ne razchita kirilica
+					name = request.getParameter("name");
+				 }catch (NumberFormatException e){
+					 name = dao.getAllProducts().get(artikulenNomer).getName();
+				 }
+				
+				Product p = ProductDAO.getInstance().getAllProducts().get(artikulenNomer);
+				ArrayList<Integer> users = dao.checkForFavProducts(p);
+				for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
+					for (Integer i : users) {	
+						if(e.getValue().getUserId() == i){
+							new MailSender(e.getValue().getEmail() ,"Промяна на артикул", "Продукт с артикулен номер: " + p.getProductId() + " е променен.");
+						}
+					}
+				}
+				
+				dao.editProduct(artikulenNomer, quantity, price, name, description);
+				model.addAttribute("message", "Успешно променихте продукт с артикулен номер: " + artikulenNomer);
+			}
+			else{
+				model.addAttribute("message", "Не съществува продукт с този артикулен номер.");
+			}
+		}
+		else{
+			model.addAttribute("message", "Не сте въвели артикулен номер.");
+		}
+		
 		return "technomarket_editProduct";
 	}
 	
@@ -116,6 +189,17 @@ public class AdminController {
 			if(dao.getAllProducts().containsKey(artikulenNomer)){
 				if(dao.getAllProducts().get(artikulenNomer).getPromoPrice() != 0){
 					dao.removePromotion(price, artikulenNomer);
+					
+					Product p = ProductDAO.getInstance().getAllProducts().get(artikulenNomer);
+					ArrayList<Integer> users = dao.checkForFavProducts(p);
+					for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
+						for (Integer i : users) {	
+							if(e.getValue().getUserId() == i){
+								new MailSender(e.getValue().getEmail() ,"Премахване на промоция", "Продукт с артикулен номер: " + p.getProductId() + " вече не е в промоция и е на цена от " + price + " лв.");
+							}
+						}
+					}
+					
 					model.addAttribute("message", "Успешно премахнахте промоцията от продукт с артикулен номер: " + artikulenNomer);
 				}
 				else{

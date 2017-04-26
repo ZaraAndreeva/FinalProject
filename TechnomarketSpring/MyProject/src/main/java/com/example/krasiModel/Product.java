@@ -21,11 +21,7 @@ public class Product {
 	
 	public Product(String subCategory, String subSubCategory, String description, int quantity,
 			double price, double promoPrice, String brand, String name) {
-		
-//		if(name != null && !name.isEmpty()){
-//			this.name = name;
-//		}
-		
+
 //		if(category != null && !category.isEmpty()){
 //			this.category = category;
 //		}
@@ -100,6 +96,18 @@ public class Product {
 	
 	public void setPrice(double price) {
 		this.price = price;
+	}
+	
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override

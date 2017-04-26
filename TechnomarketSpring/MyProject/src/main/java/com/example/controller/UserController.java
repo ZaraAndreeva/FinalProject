@@ -289,9 +289,13 @@ public class UserController {
 		HttpSession session = request.getSession();
 		if(session.getAttribute("user") != null){
 			User u = (User) session.getAttribute("user");
-			//TODO ako veche e aboniran
-			new MailSender(u.getEmail() ,"Абониране", "Вие се абонирахте за продукт с артикулен номер: " + productId + ".");
-			model.addAttribute("message", "Успешно се абонирахте за този продукт.");
+			if(u.getFavouriteProducts().contains(product)){
+//				new MailSender(u.getEmail() ,"Абониране", "Успешно се абонирахте за продукт с артикулен номер: + productId +.");
+				model.addAttribute("message", "Вие вече сте абонирани за този продукт.");
+			}
+			else{
+				model.addAttribute("message", "Първо трябва да добавите този продукт в любими.");
+			}
 		}
 		else{
 			model.addAttribute("message", "Трябва да влезете в профила си, за да се абонирате.");
@@ -307,13 +311,13 @@ public class UserController {
 		if(session.getAttribute("user") != null){
 			User u = (User) session.getAttribute("user");
 			if(u.getFavouriteProducts().contains(product)){
-				//TODO ne vliza v if-a
 				model.addAttribute("message", "Този продукт вече е добавен в любими.");
 			}
 			else{
 				UserDAO.getInstance().addFavProducts(u, product);
-				
-				model.addAttribute("message", "Успешно добавихте този продукт в любими.");
+				new MailSender(u.getEmail() ,"Абониране", "Вие се абонирахте за продукт с артикулен номер: " + productId + ".");
+//				model.addAttribute("message", "Успешно добавихте този продукт в любими.");
+				model.addAttribute("message", "Успешно добавихте този продукт в любими и се абонирахте за него.");
 			}
 		}
 		else{
