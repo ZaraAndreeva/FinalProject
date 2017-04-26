@@ -37,8 +37,8 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
  
 	private static final String sep = File.separator;
-	private static final String LOCATION = "C:"+sep+"Users"+sep+"Ivan"+sep+"Desktop"+sep+"PictureUpload" + sep; // Temporary location where files will be stored
-//	private static final String LOCATION = "C:"+sep+"Users"+sep+"ZARA_"+sep+"Desktop"+sep+"UploadPics" + sep; // Temporary location where files will be stored
+//	private static final String LOCATION = "C:"+sep+"Users"+sep+"Ivan"+sep+"Desktop"+sep+"PictureUpload" + sep; // Temporary location where files will be stored
+	private static final String LOCATION = "C:"+sep+"Users"+sep+"ZARA_"+sep+"Desktop"+sep+"UploadPics" + sep; // Temporary location where files will be stored
     
     private static final long MAX_FILE_SIZE = 5242880; // 5MB : Max file size.
                                                         // Beyond that size spring will throw exception.

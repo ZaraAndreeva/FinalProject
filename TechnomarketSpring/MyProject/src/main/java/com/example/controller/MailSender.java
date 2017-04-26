@@ -10,7 +10,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class MailSender {
+public class MailSender extends Thread{
 	
 	final String senderEmailID = "zarra.smil3@gmail.com";
 	final String senderPassword = "summertime11";
@@ -19,12 +19,9 @@ public class MailSender {
 	String receiverEmailID = null;
 	static String emailSubject=null;
 	static String emailBody=null;
-
-	public MailSender(String receiverEmailID, String emailSubject, String emailBody) {
-		this.receiverEmailID= receiverEmailID;
-		this.emailSubject=emailSubject;
-		this.emailBody=emailBody;
 	
+	@Override
+	public void run() {
 		Properties props = new Properties();
 		props.put("mail.smtp.user",senderEmailID);
 		props.put("mail.smtp.host", emailSMTPserver);
@@ -56,6 +53,12 @@ public class MailSender {
 		} catch (Exception mex) {
 			mex.printStackTrace();
 		}
+	}
+
+	public MailSender(String receiverEmailID, String emailSubject, String emailBody) {
+		this.receiverEmailID= receiverEmailID;
+		this.emailSubject=emailSubject;
+		this.emailBody=emailBody;	
 	}
 	
 	public class SMTPAuthenticator extends javax.mail.Authenticator {

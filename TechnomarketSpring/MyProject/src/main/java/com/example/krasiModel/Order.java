@@ -26,22 +26,58 @@ public class Order {
 			String phone, String town, String street, int block, String entrance, int floor, int apartment,
 			String descriptionAddress, LinkedHashSet<Product> products) {
 		//TODO validate
-		this.date = date;
-		this.status = status;
-		this.userId = userId;
-		this.price = price;
-		this.name = name;
-		this.familyName = familyName;
-		this.phone = phone;
-		this.town = town;
-		this.street = street;
-		this.block = block;
-		this.entrance = entrance;
-		this.floor = floor;
-		this.apartment = apartment;
-		this.descriptionAddress = descriptionAddress;
-		this.products = products;
-		
+		if(date != null){
+			this.date = date;
+		}
+		if(validate(status)){
+			this.status = status;
+		}
+		if(userId > 0){
+			this.userId = userId;
+		}
+		if(price > 0){
+			this.price = price;
+		}
+		if(validate(name)){
+			this.name = name;
+		}
+		if(validate(familyName)){
+			this.familyName = familyName;
+		}
+		if(validate(phone)){
+			this.phone = phone;
+		}
+		if(validate(town)){
+			this.town = town;
+		}
+		if(validate(street)){
+			this.street = street;
+		}
+		if(block > 0){
+			this.block = block;
+		}
+		if(validate(entrance)){
+			this.entrance = entrance;
+		}
+		if(floor > 0){
+			this.floor = floor;
+		}
+		if(apartment > 0){
+			this.apartment = apartment;
+		}
+		if(validate(descriptionAddress)){
+			this.descriptionAddress = descriptionAddress;
+		}
+		if(!products.isEmpty()){
+			this.products = products;
+		}
+	}
+	
+	private boolean validate(String word){
+		if(word == null){
+			return false;
+		}
+		return !word.trim().isEmpty();
 	}
 
 	public long getOrderId() {
@@ -49,7 +85,9 @@ public class Order {
 	}
 
 	public void setOrderId(long orderId) {
-		this.orderId = orderId;
+		if(orderId > 0){
+			this.orderId = orderId;
+		}
 	}
 
 	public LocalDate getDate() {

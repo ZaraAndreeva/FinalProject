@@ -22,7 +22,8 @@ public class ForgotPasswordController {
 			} 
 			else{
 				String password = UserDAO.getInstance().getAllUsers().get(email).getPassword();
-				new MailSender(email, "Забравена парола", "Вашата парола е " + password + ".");
+				MailSender mailSender = new MailSender(email, "Забравена парола", "Вашата парола е " + password + ".");
+				mailSender.start();
 				model.addAttribute("message", "Паролата Ви беше изпратена на email.");
 			}
 		}

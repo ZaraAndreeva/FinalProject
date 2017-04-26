@@ -19,21 +19,36 @@ public class User {
 	private LinkedHashSet<Product> favouriteProducts;
 	private LinkedHashSet<Order> orders;
 	
-	public void setOrders(LinkedHashSet<Order> orders) {
-		this.orders = orders;
-	}
-
 	public User(String name, String familyName, String email, String password, String gender, LocalDate birthDate, boolean isAdmin) {
-		this.name = name;
-		this.familyName = familyName;
-		this.email = email;
-		this.password = password;
-		this.gender = gender;
-		this.birthDate = birthDate;
+		if(validate(name)){
+			this.name = name;
+		}
+		if(validate(familyName)){
+			this.familyName = familyName;
+		}
+		if(validate(email)){
+			this.email = email;
+		}
+		if(validate(password)){
+			this.password = password;
+		}
+		if(validate(gender)){
+			this.gender = gender;
+		}
+		if(birthDate != null){
+			this.birthDate = birthDate;
+		}
 		this.isAdmin = isAdmin;
 		this.cart = new LinkedHashSet<>();
 		this.favouriteProducts = new LinkedHashSet<>();
 		this.orders = new LinkedHashSet<>();
+	}
+	
+	private boolean validate(String word){
+		if(word == null){
+			return false;
+		}
+		return !word.trim().isEmpty();
 	}
 
 	public String getName() {
@@ -60,7 +75,10 @@ public class User {
 		return birthDate;
 	}
 
-	
+	public LinkedHashSet<Order> getOrders() {
+		return orders;
+	}
+
 	public boolean isAdmin() {
 		return isAdmin;
 	}
@@ -89,11 +107,7 @@ public class User {
 	public LinkedHashSet<Product> getCart() {
 		return (LinkedHashSet<Product>) Collections.unmodifiableSet(cart);
 	}
-
-//	public LinkedHashSet<Product> getFavouriteProducts() {
-//		return (LinkedHashSet<Product>) Collections.unmodifiableSet(favouriteProducts);
-//	}
-
+	
 	public LinkedHashSet<Product> getFavouriteProducts() {
 		return favouriteProducts;
 	}
@@ -141,6 +155,12 @@ public class User {
 		return validText(name) && validText(familyName) && validEmail(email) && validPassword(passwordFirst)
 				&& validPassword(passwordSecond) && validPasswords(passwordFirst, passwordSecond)
 				&& validSex(sex);
+	}
+
+	public void setOrders(LinkedHashSet<Order> orders) {
+		if(orders != null && !orders.isEmpty()){
+			this.orders = orders;
+		}
 	}
 
 	

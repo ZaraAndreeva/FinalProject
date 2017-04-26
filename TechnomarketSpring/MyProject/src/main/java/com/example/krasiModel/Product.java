@@ -91,23 +91,33 @@ public class Product {
 	}
 
 	public void setProductId(long productId) {
-		this.productId = productId;
+		if(productId > 0){
+			this.productId = productId;
+		}
 	}
 	
 	public void setPrice(double price) {
-		this.price = price;
+		if(price > 0){
+			this.price = price;
+		}
 	}
 	
 	public void setQuantity(int quantity) {
-		this.quantity = quantity;
+		if(quantity > 0){
+			this.quantity = quantity;
+		}
 	}
 	
 	public void setName(String name) {
-		this.name = name;
+		if(name != null && !name.trim().isEmpty()){
+			this.name = name;
+		}
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
+		if(description != null && !description.trim().isEmpty()){
+			this.description = description;
+		}
 	}
 
 	@Override
@@ -246,11 +256,5 @@ public class Product {
 		this.promoPrice = promoPrice;
 	}
 
-	
-	
-	
-	
-	
-	
 	
 }
