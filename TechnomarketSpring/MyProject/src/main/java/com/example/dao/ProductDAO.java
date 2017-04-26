@@ -34,7 +34,7 @@ public class ProductDAO {
 		//TODO if is admin
 
 		int subCategoryId = SubCategoryDAO.getInstance().getAllSubCategories().get(p.getSubCategory());
-		String sql = "INSERT INTO products (description, quantity, price, promo_price, brand, picture_url, sub_category, sub_sub_category) "
+		String sql = "INSERT INTO products (description, quantity, price, promo_price, brand, name, sub_category, sub_sub_category) "
 				+ "values (?, ?, ?, ?, ?, ?, "
 				+ "(SELECT sub_category_id from sub_categories where sub_category_id = " + subCategoryId + "), "
 				+ "(SELECT sub_sub_category_id from  sub_sub_categories where sub_sub_category_id = 2))";
@@ -48,7 +48,7 @@ public class ProductDAO {
 			st.setDouble(3, p.getPrice());
 			st.setDouble(4, p.getPromoPrice());
 			st.setString(5, p.getBrand());
-			st.setString(6, p.getPictureUrl());
+			st.setString(6, p.getName());
 
 //			st.setString(7, p.getSubCategory());
 //			st.setString(8, p.getSubSubCategory());
@@ -70,14 +70,14 @@ public class ProductDAO {
 				try {
 					st.close();
 				} catch (SQLException e) {
-					System.out.println("oops " + e.getMessage());
+					System.out.println("addProduct " + e.getMessage());
 				}
 			}
 			if(res != null){
 				try {
 					res.close();
 				} catch (SQLException e) {
-					System.out.println("oops " + e.getMessage());
+					System.out.println("addProduct " + e.getMessage());
 					
 				}
 			}
@@ -96,21 +96,21 @@ public class ProductDAO {
  			res.next();
  			u.addFavouriteProduct(p);
  		} catch (SQLException e) {
- 			System.out.println("addProduct: " + e.getMessage());
+ 			System.out.println("addFavouriteProduct: " + e.getMessage());
  		}
  		finally {
 			if(st != null){
 				try {
 					st.close();
 				} catch (SQLException e) {
-					System.out.println("oops " + e.getMessage());
+					System.out.println("addFavouriteProduct " + e.getMessage());
 				}
 			}
 			if(res != null){
 				try {
 					res.close();
 				} catch (SQLException e) {
-					System.out.println("oops " + e.getMessage());
+					System.out.println("addFavouriteProduct " + e.getMessage());
 					
 				}
 			}
@@ -119,7 +119,7 @@ public class ProductDAO {
 	
 	public HashMap<Long, Product> getAllProducts(){
 		if(allProducts.isEmpty()){
-			String sql = "SELECT product_id, description, quantity, price, promo_price, brand, picture_url, sub_category, sub_sub_category FROM products";
+			String sql = "SELECT product_id, description, quantity, price, promo_price, brand, name, sub_category, sub_sub_category FROM products";
 			PreparedStatement st = null;
 			ResultSet set = null;
 			try {
@@ -135,7 +135,7 @@ public class ProductDAO {
 					double price = set.getDouble("price");
 					double promoPrice = set.getDouble("promo_price");
 					String brand = set.getString("brand");
-					String pictureUrl = set.getString("picture_url");	
+					String name = set.getString("name");	
 					
 					String subCategoryString = new String();
 					for (Entry<String, Integer> e : SubCategoryDAO.getInstance().getAllSubCategories().entrySet()) {
@@ -144,7 +144,7 @@ public class ProductDAO {
 						}
 					}
 					
-					Product p = new Product(subCategoryString, subSubCategory, description, quantity, price, promoPrice, brand, pictureUrl);
+					Product p = new Product(subCategoryString, subSubCategory, description, quantity, price, promoPrice, brand, name);
 					p.setProductId(productId);
 					
 					allProducts.put(productId, p);	
@@ -157,7 +157,7 @@ public class ProductDAO {
 					try {
 						st.close();
 					} catch (SQLException e) {
-						System.out.println("oops " + e.getMessage());
+						System.out.println("getAllProducts " + e.getMessage());
 					}
 				}
 			}
