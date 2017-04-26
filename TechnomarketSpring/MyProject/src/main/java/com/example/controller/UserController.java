@@ -108,11 +108,6 @@ public class UserController {
 		return("technomarket_orders");
 	}
 	
-	@RequestMapping(value = "/favProductsPage", method = RequestMethod.GET)
-	public String favouriteProductsPage(){
-		return("technomarket_favProducts");
-	}
-	
 	@RequestMapping(value = "/cartPage", method = RequestMethod.GET)
 	public String cartPage(){
 		return("technomarket_cart");
@@ -332,11 +327,25 @@ public class UserController {
 		HttpSession session = request.getSession();
 		if(session.getAttribute("user") != null){
 			User u = (User) session.getAttribute("user");
-//			LinkedHashSet<Product> favProducts = UserDAO.getInstance().getFavProducts(u);
 			LinkedHashSet<Product> favProducts = u.getFavouriteProducts();
 			model.addAttribute("products", favProducts);
-			System.out.println(favProducts.isEmpty());
-			System.out.println(favProducts);
+			model.addAttribute("favPr", true);
+		}
+		return "new";
+	}
+	
+	@RequestMapping(value = "/removeFavProd/{productId}", method = RequestMethod.GET)
+	public String removeFavProd(@PathVariable("productId") String productId, Model model, HttpServletRequest request){
+		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
+		HttpSession session = request.getSession();
+		if(session.getAttribute("user") != null){
+			User u = (User) session.getAttribute("user");
+			if(u.getFavouriteProducts().contains(product)){
+				UserDAO.getInstance().removeFavProducts(u, product);
+				LinkedHashSet<Product> favProducts = u.getFavouriteProducts();
+				model.addAttribute("products", favProducts);
+				model.addAttribute("favPr", true);
+			}
 		}
 		return "new";
 	}

@@ -42,8 +42,8 @@
 						</c:if>
     
                 	</div>
-                	<c:if test = ""> <!-- TODO ako gledame liubimi produkti -->
-                		 <a href="" class="btn-remove" title="Премахни от любими"><i class="icon-remove"></i></a>
+                	<c:if test = "${favPr}">
+                		 <a href="http://localhost:8080/TechnomarketSpring/user/removeFavProd/${product.productId}" class="btn-remove" title="Премахни от любими"><i class="icon-remove"></i></a>
      				</c:if>
         			<a itemprop="url" href="http://localhost:8080/TechnomarketSpring/product/viewProductPage/${product.productId}" class="product-thumb">
                 		<!--  
