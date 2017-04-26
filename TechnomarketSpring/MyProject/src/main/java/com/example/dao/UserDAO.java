@@ -99,6 +99,7 @@ public class UserDAO {
 					
 					
 					fillFavProducts(u);
+					u.setOrders(OrderDAO.getInstance().getAllOrders().get(u.getUserId()));
 					
 					allUsers.put(u.getEmail(), u);
 				}

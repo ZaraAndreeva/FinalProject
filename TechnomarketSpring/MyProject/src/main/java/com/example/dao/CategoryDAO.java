@@ -31,7 +31,7 @@ public class CategoryDAO {
 				st = DBManager.getInstance().getConnection().prepareStatement(sql);
 				res = st.executeQuery();
 				
-				int x = 1;
+//				int x = 1;
 				while(res.next()){
 					String category = res.getString("name");
 					int categoryId = res.getInt("category_id");
@@ -60,13 +60,7 @@ public class CategoryDAO {
 				System.out.println("    " + subCategoryName);
 			}
 		}
-		
-		for (Entry<String, ArrayList<String>> e : allCategories.entrySet()) {
-			for (String str : e.getValue()) {
-				
-			}
-		}
-		
+
 		return allCategories;
 	}
 }

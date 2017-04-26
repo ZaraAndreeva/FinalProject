@@ -39,13 +39,13 @@
                                             <input type="text" id="brand" name="fos_user_registration_form[plainPassword][first]" required="required" class="form-control" />
                                             	<span id="brandError" class="help-block"><ul class="list-unstyled"><li><span class="glyphicon glyphicon-exclamation-sign"></span> </li></ul></span>
                                             <span class="bar"></span></div></div><div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_plainPassword_second">
-                    <!--  
-                    Категория
+                      
+                    Име
                                             <span class="required" title="This field is required">*</span></label><div class="col-sm-10 control-bar">
-                                            <input type="text" id="fos_user_registration_form_plainPassword_second" name="fos_user_registration_form[plainPassword][second]" required="required" class="form-control" />
-                                            	
+                                            <input type="text" id="name" name="name" required="required" class="form-control" />
+                                            	<span id="nameError" class="help-block"><ul class="list-unstyled"><li><span class="glyphicon glyphicon-exclamation-sign"></span> </li></ul></span>
                       		                  <span class="bar"></span></div></div><div class="form-group"><label  class="col-sm-6 control-label required">
-                    -->
+                    
                     Подкатегория
                    							 <span class="required" title="This field is required">*</span></label><div class="col-sm-10 control-bar">
                    							 <input type="text" id="sub_category" name="fos_user_registration_form[plainPassword][second]" required="required" class="form-control" />
@@ -107,7 +107,7 @@
 							quantity: document.getElementById("quantity").value,
 							price: document.getElementById("price").value,
 							brand: document.getElementById("brand").value,
-							//pictureUrl: document.getElementById("picture_url").value,
+							name: document.getElementById("name").value,
 							subCategory: document.getElementById("sub_category").value,
 							//subSubCategory: document.getElementById("sub_sub_category").value
 					  	}			  
@@ -118,7 +118,7 @@
 					document.getElementById("quantityError").innerHTML="";
 					document.getElementById("priceError").innerHTML="";
 					document.getElementById("brandError").innerHTML="";
-					//document.getElementById("urlError").innerHTML="";
+					document.getElementById("nameError").innerHTML="";
 					document.getElementById("subCategoryError").innerHTML="";
 					document.getElementById("status").innerHTML="";
 				  	
@@ -128,7 +128,7 @@
 						document.getElementById("quantity").value="";
 						document.getElementById("price").value="";
 						document.getElementById("brand").value="";
-						//document.getElementById("picture_url").value="";
+						document.getElementById("name").value="";
 						document.getElementById("sub_category").value="";
 						//document.getElementById("sub_sub_category").value="";
 				  }

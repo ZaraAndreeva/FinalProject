@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
-import com.example.dao.SubCategoryDAO;
 import com.example.dao.UserDAO;
 
 public class User {
@@ -20,6 +19,10 @@ public class User {
 	private LinkedHashSet<Product> favouriteProducts;
 	private LinkedHashSet<Order> orders;
 	
+	public void setOrders(LinkedHashSet<Order> orders) {
+		this.orders = orders;
+	}
+
 	public User(String name, String familyName, String email, String password, String gender, LocalDate birthDate, boolean isAdmin) {
 		this.name = name;
 		this.familyName = familyName;

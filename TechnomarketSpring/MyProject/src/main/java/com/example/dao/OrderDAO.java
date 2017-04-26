@@ -10,7 +10,6 @@ import java.util.HashMap;
 
 import com.example.krasiModel.Order;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import com.example.krasiModel.Product;
@@ -34,7 +33,8 @@ public class OrderDAO {
 	}
 	
 	public synchronized void addOrder(Order o, User u){
-		String sql = "INSERT INTO orders (date, status, user_id, price, name, family_name, phone, town, street, block, entrance, floor, apartment, description_address) values (?, ?, (select user_id from users where user_id = user_id), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO orders (date, status, user_id, price, name, family_name, phone, town, street, block, entrance, floor, apartment, description_address) "
+				+ "values (?, ?, (select user_id from users where user_id = user_id), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		PreparedStatement st = null;
 		ResultSet res = null;
@@ -109,8 +109,9 @@ public class OrderDAO {
 					long orderId = res.getInt("order_id");
 					LocalDate date = res.getDate("date").toLocalDate();
 					String status = res.getString("status");
-					
-					long userId = res.getInt("user_id");
+
+					String email = res.getString("email");
+					User user = UserDAO.getInstance().getAllUsers().get(email);
 					
 					double price = res.getDouble("price");
 					String name = res.getString("name");
@@ -138,32 +139,32 @@ public class OrderDAO {
 						productsForThisOrder.add(p);
 					}
 					
-					Order o = new Order(date, status, userId, price, name, familyName,
+					Order o = new Order(date, status, user.getUserId(), price, name, familyName,
 							phone, town, street, block, entrance, floor, apartment,
 							descriptionAddress, productsForThisOrder);
 					
-					if(!allOrders.containsKey(userId)){
-						allOrders.put(userId, new LinkedHashSet<>());
+					if(!allOrders.containsKey(user.getUserId())){
+						allOrders.put(user.getUserId(), new LinkedHashSet<>());
 					}
 					
-					allOrders.get(userId).add(o);
+					allOrders.get(user.getUserId()).add(o);
 				}
 			} catch(SQLException e){
-				System.out.println("getAllProducts: " + e.getMessage());
+				System.out.println("getAllOrders: " + e.getMessage());
 			}
 			finally {
 				if(st != null){
 					try {
 						st.close();
 					} catch (SQLException e) {
-						System.out.println("oops " + e.getMessage());
+						System.out.println("getAllOrders " + e.getMessage());
 					}
 				}
 				if(res != null){
 					try {
 						res.close();
 					} catch (SQLException e) {
-						System.out.println("oops " + e.getMessage());
+						System.out.println("getAllOrders " + e.getMessage());
 						
 					}
 				}

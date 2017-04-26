@@ -1,17 +1,10 @@
 package com.example.dao;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 
-import com.example.krasiModel.Order;
-import com.example.krasiModel.Product;
-import com.example.krasiModel.User;
 
 public class SubCategoryDAO {
 
@@ -38,7 +31,7 @@ public class SubCategoryDAO {
 				st = DBManager.getInstance().getConnection().prepareStatement(sql);
 				res = st.executeQuery();
 				
-				int x = 1;
+//				int x = 1;
 				while(res.next()){
 					String subCategory = res.getString("name");
 					int subCategoryId = res.getInt("sub_category_id");

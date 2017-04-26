@@ -25,7 +25,7 @@
                 <div class="product-thumb photoswipe">
                     <div class="product-heading">
                                                 <div class="product-category"><a href=""><i class="icon-arrow-long-left"></i> ${product.subCategory}</a></div>
-                                                <h1><a href="/laptopi/asus-x541sc-xx005d-09153700"><span itemprop="name">Лаптоп ASUS X541SC-XX005D</span></a></h1>
+                                                <h1><a href=""><span itemprop="name">${product.name}</span></a></h1>
                         <div class="product-model">Арт.№: <span itemprop="productID">${product.productId}</span></div>
                     </div>                                
                     

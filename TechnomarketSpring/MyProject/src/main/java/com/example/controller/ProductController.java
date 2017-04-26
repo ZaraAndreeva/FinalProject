@@ -54,7 +54,7 @@ public class ProductController {
 		String quantity = obj.get("quantity").getAsString();
 		String price = obj.get("price").getAsString();
 		String brand = obj.get("brand").getAsString();
-//		String pictureUrl = obj.get("pictureUrl").getAsString();
+		String name = obj.get("name").getAsString();
 		String subCategory = obj.get("subCategory").getAsString();
 //		String subSubCategory = obj.get("subSubCategory").getAsString();
 		
@@ -95,14 +95,14 @@ public class ProductController {
 				errorsArray.add(error);
 				
 			}
-//			if(!Product.validPictureUrl(pictureUrl)){
-////				errorsArray.add(new JsonPrimitive("urlError"));
-//				JsonObject error = new JsonObject();
-//				error.addProperty("errorPlace", "urlError");
-//				error.addProperty("errorMessege", "Please, add a valid picture url!");
-//				errorsArray.add(error);
-//				
-//			}
+			if(!Product.validName(name)){
+//				errorsArray.add(new JsonPrimitive("urlError"));
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "nameError");
+				error.addProperty("errorMessege", "Моля, въведете име!");
+				errorsArray.add(error);
+				
+			}
 			if(!Product.validSubCategory(subCategory)){
 //				errorsArray.add(new JsonPrimitive("subCategoryError"));
 				JsonObject error = new JsonObject();
@@ -134,7 +134,7 @@ public class ProductController {
 //		}
 		
 		Product p = new Product(subCategory, "ddd", description, 
-				Integer.parseInt(quantity), Double.parseDouble(price), 0, brand, "ddd");
+				Integer.parseInt(quantity), Double.parseDouble(price), 0, brand, name);
 		System.out.println(p);
 		
 		ProductDAO.getInstance().addProduct(p);

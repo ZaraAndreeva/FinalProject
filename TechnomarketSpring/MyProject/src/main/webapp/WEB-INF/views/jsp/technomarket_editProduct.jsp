@@ -21,8 +21,11 @@
                                             	<span id="myspan" class="help-block"><ul class="list-unstyled"><li><span class="glyphicon glyphicon-exclamation-sign"></span> </li></ul></span>
                                             <span class="bar"></span></div></div>
                 <div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_last_name">
+                    Име
+                                            <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="text" id="fos_user_registration_form_plainPassword_first" name="name" required="required" class="form-control" /><span class="bar"></span></div></div><div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_plainPassword_second">
+                  
                     Количество
-                                            <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="number" min = "0" id="fos_user_registration_form_last_name" name="quantity" required="required" pattern=".{2,}" class="form-control" /><span class="bar"></span></div></div>
+                                            <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="number" min = "0" id="fos_user_registration_form_last_name" name="quantity" required="required" class="form-control" /><span class="bar"></span></div></div>
                 <div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_email">
                     Цена
                                             <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="number" min = "0" id="fos_user_registration_form_email" name="price" required="required" class="form-control" /><span class="bar"></span></div></div><div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_plainPassword_first">
@@ -33,6 +36,7 @@
                     </div>
                 </div>      
             </form>
+            <h1>${message}</h1>
              </div>
          <div class="col-half">
             
