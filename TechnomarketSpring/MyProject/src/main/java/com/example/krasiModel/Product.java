@@ -17,11 +17,10 @@ public class Product {
 	private double price;
 	private double promoPrice;
 	private String brand;
-	private String pictureUrl;
 	private HashMap<String, String> specifications;
 	
 	public Product(String subCategory, String subSubCategory, String description, int quantity,
-			double price, double promoPrice, String brand, String pictureUrl) {
+			double price, double promoPrice, String brand, String name) {
 		
 //		if(name != null && !name.isEmpty()){
 //			this.name = name;
@@ -49,8 +48,8 @@ public class Product {
 		if(brand != null && !brand.isEmpty()){
 			this.brand = brand;
 		}
-		if(pictureUrl != null && !pictureUrl.isEmpty()){
-			this.pictureUrl = pictureUrl;
+		if(name != null && !name.isEmpty()){
+			this.name = name;
 		}
 		this.specifications = new HashMap<>();
 	}
@@ -95,10 +94,6 @@ public class Product {
 		return brand;
 	}
 
-	public String getPictureUrl() {
-		return pictureUrl;
-	}
-
 	public void setProductId(long productId) {
 		this.productId = productId;
 	}
@@ -114,7 +109,7 @@ public class Product {
 		result = prime * result + ((brand == null) ? 0 : brand.hashCode());
 		result = prime * result + ((category == null) ? 0 : category.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((pictureUrl == null) ? 0 : pictureUrl.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(price);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -151,10 +146,10 @@ public class Product {
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
-		if (pictureUrl == null) {
-			if (other.pictureUrl != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!pictureUrl.equals(other.pictureUrl))
+		} else if (!name.equals(other.name))
 			return false;
 		if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
 			return false;
@@ -182,14 +177,14 @@ public class Product {
 	public String toString() {
 		return "Product [category=" + category + ", subCategory=" + subCategory + ", subSubCategory=" + subSubCategory
 				+ ", productId=" + productId + ", description=" + description + ", quantity=" + quantity + ", price="
-				+ price + ", promoPrice=" + promoPrice + ", brand=" + brand + ", pictureUrl=" + pictureUrl + "]";
+				+ price + ", promoPrice=" + promoPrice + ", brand=" + brand + ", name=" + name + "]";
 	}
 
 	public static boolean validProduct(String description, String quantity, String price, String brand,
-			String pictureUrl, String subCategory, String subSubCategory) {
+			String name, String subCategory, String subSubCategory) {
 		//TODO validSubSubCategory()
 		return validText(description) && validQuantity(quantity) && validPrice(price)
-				&& validText(brand) && validPictureUrl(pictureUrl) && validSubCategory(subCategory);
+				&& validText(brand) && validName(name) && validSubCategory(subCategory);
 		
 	}
 	
@@ -213,13 +208,8 @@ public class Product {
 		return false;
 	}
 
-	public static boolean validPictureUrl(String pictureUrl) {
-		//TODO regex
-//		String pattern = "(http(s?):/)(/[^/]+)+" + "/.(?:jpg|gif|png)";
-//		return pictureUrl.matches(pattern);
-//		return true;
-//		return pictureUrl.matches("http(s?)://([\\w-]+\\.)+[\\w-]+(/[\\w- ./]*)+\\.(?:[gG][iI][fF]|[jJ][pP][gG]|[jJ][pP][eE][gG]|[pP][nN][gG]|[bB][mM][pP])");
-		return true;
+	public static boolean validName(String name) {
+		return !name.trim().isEmpty() && name != null;
 	}
 
 	public static boolean validSubCategory(String subCategory) {
