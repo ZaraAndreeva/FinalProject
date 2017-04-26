@@ -345,9 +345,6 @@ public class UserController {
 	@RequestMapping(value = "/addToCart/{productId}", method = RequestMethod.POST)
 	public String addToCart(Model model, HttpServletRequest request, @PathVariable("productId") String productId){
 		HttpSession session = request.getSession();
-//		String name = request.getParameter("product");
-		//TODO
-//		session.setAttribute("product", name);
 		
 		if(session.getAttribute("cartProducts") == null){
 			session.setAttribute("cartProducts", new LinkedHashMap<Product, Integer>());
@@ -355,7 +352,6 @@ public class UserController {
 		
 		LinkedHashMap<Product, Integer> cartProducts = (LinkedHashMap<Product, Integer>) session.getAttribute("cartProducts");
 		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
-//		cartProducts.add(product);
 		
 		if(!cartProducts.containsKey(product)){
 			cartProducts.put(product, 0);
@@ -366,6 +362,15 @@ public class UserController {
 		for (Entry<Product, Integer> e : cartProducts.entrySet()) {
 			e.getValue();
 		}
+		return "technomarket_cart";
+	}
+	
+	@RequestMapping(value = "/removeFromCart/{productId}", method = RequestMethod.POST)
+	public String removeFromCart(HttpServletRequest request, @PathVariable("productId") String productId){
+		HttpSession session = request.getSession();
+		LinkedHashMap<Product, Integer> cartProducts = (LinkedHashMap<Product, Integer>) session.getAttribute("cartProducts");
+		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
+		cartProducts.remove(product);
 		return "technomarket_cart";
 	}
 	
@@ -394,5 +399,7 @@ public class UserController {
 			return "technomarket_cart";
 		}
 	}
+	
+	
 	
 }

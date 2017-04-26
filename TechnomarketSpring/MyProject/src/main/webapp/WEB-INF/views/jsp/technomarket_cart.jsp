@@ -60,7 +60,18 @@
 			        }).fail(function() {
 			            //console.log('Failed');
 			        });
-                }  
+                }
+                
+                function removeProduct(productId) {
+                	$.ajax({ 
+			            url: "/TechnomarketSpring/user/removeFromCart/" + productId,
+			            type: "POST"
+			        }).done(function(responseData) {
+			            //console.log('Done: ', responseData);
+			        }).fail(function() {
+			            //console.log('Failed');
+			        });
+                }
             </script>
 	 
 	 <div id="contentholder" class="contentholder">
@@ -101,7 +112,7 @@
 	                    <td class="cart-price"><var class="price"><span class="color-inherit">${entry.key.price}<sup>00</sup>  <small>лв.</small></span></var></td>                                        
 	                    <td class="cart-quantity"><input onchange="changeQuantity(${entry.key.productId}, this.value)" type="number" id="quantity" name="cart[items][09154100][quantity]" required="required" min="0" class="input-quantity form-control" value="${entry.value}"></td>
 	                    <td class="cart-price-total"><var class="price"><span>${entry.key.price * entry.value}<sup>00</sup>  <small>лв.</small></span></var></td>
-	                    <td class="cart-remove"><a href="/cart/remove?p=09154100" class="cart-product-remove" title="Премахни продукт"><i class="icon-minus"></i></a></td>                    
+	                    <td class="cart-remove"><a href="/TechnomarketSpring/user/cartPage" onclick="removeProduct(${entry.key.productId})" class="cart-product-remove" title="Премахни продукт"><i class="icon-minus"></i></a></td>                    
 	                </tr>
 	                
 				</c:forEach>
