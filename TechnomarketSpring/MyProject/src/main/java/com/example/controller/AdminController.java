@@ -67,7 +67,8 @@ public class AdminController {
 						for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
 							for (Integer i : users) {	
 								if(e.getValue().getUserId() == i){
-									new MailSender(e.getValue().getEmail() ,"Промяна на артикул", "Продукт с артикулен номер: " + p.getProductId() + " е на цена " + newPrice + " лв.");
+									MailSender mailSender = new MailSender(e.getValue().getEmail() ,"Промяна на артикул", "Продукт с артикулен номер " + p.getProductId() + " и име " + p.getName() + " е на цена " + newPrice + " лв.");
+									mailSender.start();
 								}
 							}
 						}
@@ -101,7 +102,8 @@ public class AdminController {
 				for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
 					for (Integer i : users) {	
 						if(e.getValue().getUserId() == i){
-							new MailSender(e.getValue().getEmail() ,"Няма наличност", "Продукт с артикулен номер: " + p.getProductId() + " вече не е наличен.");
+							MailSender mailSender = new MailSender(e.getValue().getEmail() ,"Няма наличност", "Продукт с артикулен номер " + p.getProductId() + " и име " + p.getName() + " вече не е наличен.");
+							mailSender.start();
 						}
 					}
 				}
@@ -159,7 +161,8 @@ public class AdminController {
 				for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
 					for (Integer i : users) {	
 						if(e.getValue().getUserId() == i){
-							new MailSender(e.getValue().getEmail() ,"Промяна на артикул", "Продукт с артикулен номер: " + p.getProductId() + " е променен.");
+							MailSender mailSender = new MailSender(e.getValue().getEmail() ,"Промяна на артикул", "Продукт с артикулен номер " + p.getProductId()  + " и име " + p.getName() +  " е променен.");
+							mailSender.start();
 						}
 					}
 				}
@@ -195,7 +198,8 @@ public class AdminController {
 					for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
 						for (Integer i : users) {	
 							if(e.getValue().getUserId() == i){
-								new MailSender(e.getValue().getEmail() ,"Премахване на промоция", "Продукт с артикулен номер: " + p.getProductId() + " вече не е в промоция и е на цена от " + price + " лв.");
+								MailSender mailSender = new MailSender(e.getValue().getEmail() ,"Премахване на промоция", "Продукт с артикулен номер " + p.getProductId() + " и име " + p.getName() + " вече не е в промоция и е на цена от " + price + " лв.");
+								mailSender.start();
 							}
 						}
 					}
