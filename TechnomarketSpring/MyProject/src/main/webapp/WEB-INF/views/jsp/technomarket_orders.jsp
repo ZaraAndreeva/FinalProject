@@ -42,14 +42,14 @@
                         <td>26 април 2017 г., 3:32:51</td>
                         <td>Непотвърдена поръчка</td>
                         <td><var class="price xs"><span class="color-inherit">1739.<sup>00</sup>  <small>лв.</small></span></var></td>
-                        <td align="right"><a href="/order/1158433" class="btn btn-tm btn-xs">Виж поръчката <i class="icon-arrow-long-right"></i></a></td>
+                        <td align="right"><a href="http://localhost:8080/TechnomarketSpring/user/orderPage" class="btn btn-tm btn-xs">Виж поръчката <i class="icon-arrow-long-right"></i></a></td>
                     </tr>
                                         <tr>
                         <td>1154382</td>
                         <td>6 април 2017 г., 9:30:21</td>
                         <td>Непотвърдена поръчка</td>
                         <td><var class="price xs"><span class="color-inherit">698.<sup>00</sup>  <small>лв.</small></span></var></td>
-                        <td align="right"><a href="/order/1154382" class="btn btn-tm btn-xs">Виж поръчката <i class="icon-arrow-long-right"></i></a></td>
+                        <td align="right"><a href="http://localhost:8080/TechnomarketSpring/user/orderPage" class="btn btn-tm btn-xs">Виж поръчката <i class="icon-arrow-long-right"></i></a></td>
                     </tr>
                                     </tbody>
             </table>

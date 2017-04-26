@@ -111,6 +111,12 @@ public class User {
 	public LinkedHashSet<Product> getFavouriteProducts() {
 		return favouriteProducts;
 	}
+	
+	public void removeFavProduct(Product p){
+		if(p != null){
+			favouriteProducts.remove(p);
+		}
+	}
 
 	public long getUserId() {
 		return userId;

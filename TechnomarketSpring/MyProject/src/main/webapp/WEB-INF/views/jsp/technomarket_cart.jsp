@@ -12,8 +12,8 @@
         <section>
     <div class="container">
         <div class="security">
-  <!-- 
-	  <c:if test="${UserDAO.getInstance().getAllUsers().get(sessionScope.user.email).getCart() == null}">
+  
+	  <c:if test="${empty sessionScope.cartProducts}">
 	 	
 	 	
  		<div id="contentholder" class="contentholder">
@@ -29,51 +29,41 @@
         </div>	 	
 	 	
 	 </c:if>
-	 <c:if test="${UserDAO.getInstance().getAllUsers().get(sessionScope.user.email).getCart() != null}">
-	 	<h3>Продукти в количката</h3>
-	 	<c:forEach items="${list}" var="item">
-	 	
-
-	 	
-	 	
-   			
-		</c:forEach>
-	 </c:if>
-	  -->
 	  
 	  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-            <script type="text/javascript">
+      <script type="text/javascript">
 
-                require(['jquery'], function ($) {
+          require(['jquery'], function ($) {
 
-                    $('#cart_form input').change(function() {
-                        $('#cart_save_button').show();
-                    });
-                });
-               
-                function changeQuantity(productId, value) {
-                	$.ajax({ 
-			            url: "/TechnomarketSpring/user/setNewQuantity/" + productId + "/" + value,
-			            type: "POST"
-			        }).done(function(responseData) {
-			            //console.log('Done: ', responseData);
-			        }).fail(function() {
-			            //console.log('Failed');
-			        });
-                }
-                
-                function removeProduct(productId) {
-                	$.ajax({ 
-			            url: "/TechnomarketSpring/user/removeFromCart/" + productId,
-			            type: "POST"
-			        }).done(function(responseData) {
-			            //console.log('Done: ', responseData);
-			        }).fail(function() {
-			            //console.log('Failed');
-			        });
-                }
-            </script>
-	 
+              $('#cart_form input').change(function() {
+                  $('#cart_save_button').show();
+              });
+          });
+         
+          function changeQuantity(productId, value) {
+          	$.ajax({ 
+         url: "/TechnomarketSpring/user/setNewQuantity/" + productId + "/" + value,
+         type: "POST"
+     }).done(function(responseData) {
+         //console.log('Done: ', responseData);
+     }).fail(function() {
+         //console.log('Failed');
+     });
+          }
+          
+          function removeProduct(productId) {
+          	$.ajax({ 
+         url: "/TechnomarketSpring/user/removeFromCart/" + productId,
+         type: "POST"
+     }).done(function(responseData) {
+         //console.log('Done: ', responseData);
+     }).fail(function() {
+         //console.log('Failed');
+     });
+          }
+      </script>
+      
+	 <c:if test="${not empty sessionScope.cartProducts}">
 	 <div id="contentholder" class="contentholder">
             	<div class="container cart">
     	<div class="sh-heading">
@@ -94,6 +84,7 @@
                 </tr>
             </thead>
             <tbody>
+                
                 <c:set var="cnt" scope="page" value="1"/>
                 <c:set var="money" scope="page" value="0"/>
                 <c:forEach items="${sessionScope.cartProducts}" var="entry">
@@ -154,7 +145,7 @@
         	
             </div>
         </div>
-	 
+	  </c:if>
 	 
 	 
 </div>    </div>

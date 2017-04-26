@@ -195,4 +195,35 @@ public class UserDAO {
 		}
 	}
 	
+	public void removeFavProducts(User u, Product p){
+		String sql = "delete from favourite_products where product_id = ? and user_id = ?;";
+		PreparedStatement st = null;
+		try {
+			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			st.setInt(1, (int)p.getProductId());
+			st.setInt(2, (int)u.getUserId());
+
+			synchronized (this) {
+				st.execute();
+			}
+			
+			ResultSet res = st.getGeneratedKeys();
+			res.next();
+			
+			u.removeFavProduct(p);
+
+		} catch (SQLException e) {
+			System.out.println("addFavProducts " + e.getMessage());
+		}
+		finally {
+			if(st != null){
+				try {
+					st.close();
+				} catch (SQLException e) {
+					System.out.println("addFavProducts " + e.getMessage());
+				}
+			}
+		}
+	}
+	
 }
