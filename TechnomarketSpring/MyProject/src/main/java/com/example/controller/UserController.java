@@ -2,7 +2,10 @@ package com.example.controller;
 
 import java.time.LocalDate;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import javax.servlet.http.HttpServletRequest;
@@ -335,14 +338,46 @@ public class UserController {
 		return "new";
 	}
 	
-	@RequestMapping(value = "/addToCart", method = RequestMethod.POST)
-	public String addToCart(Model model, HttpServletRequest request){
+	@RequestMapping(value = "/addToCart/{productId}", method = RequestMethod.POST)
+	public String addToCart(Model model, HttpServletRequest request, @PathVariable("productId") String productId){
 		HttpSession session = request.getSession();
-		String name = request.getParameter("product");
+//		String name = request.getParameter("product");
 		//TODO
-		session.setAttribute("product", name);
+//		session.setAttribute("product", name);
+		
+		if(session.getAttribute("cartProducts") == null){
+			session.setAttribute("cartProducts", new LinkedHashMap<Product, Integer>());
+		}
+		
+		LinkedHashMap<Product, Integer> cartProducts = (LinkedHashMap<Product, Integer>) session.getAttribute("cartProducts");
+		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
+//		cartProducts.add(product);
+		
+		if(!cartProducts.containsKey(product)){
+			cartProducts.put(product, 0);
+		}
+		int oldCntProduct = cartProducts.get(product);
+		cartProducts.put(product, oldCntProduct+1);
+		
+		for (Entry<Product, Integer> e : cartProducts.entrySet()) {
+			e.getValue();
+		}
 		return "technomarket_cart";
 	}
+	
+	@RequestMapping(value = "/setNewQuantity/{productId}/{quantity}", method = RequestMethod.POST)
+	public void setNewQuantity(Model model, HttpServletRequest request, 
+								@PathVariable("productId") String productId,
+								@PathVariable("quantity") String quantity
+								){
+		
+		int newQuantity = Integer.parseInt(quantity);
+		HttpSession session = request.getSession();	
+		LinkedHashMap<Product, Integer> cartProducts = (LinkedHashMap<Product, Integer>) session.getAttribute("cartProducts");
+		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
+		cartProducts.put(product, newQuantity);
+	}
+	
 	
 	@RequestMapping(value = "/orderPage", method = RequestMethod.GET)
 	public String orderPage(Model model, HttpServletRequest request){
