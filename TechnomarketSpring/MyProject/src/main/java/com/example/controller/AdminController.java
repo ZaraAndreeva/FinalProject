@@ -52,9 +52,14 @@ public class AdminController {
 					model.addAttribute("message", "Цената трябва да е положително число.");
 				}
 				else{
-					dao.getAllProducts().get(artikulenNomer).setPromoPrice(newPrice);		
-					dao.addPromotion(newPrice, artikulenNomer);
-					model.addAttribute("message", "Успешно добавихте промоция на продукт с артикулен номер: " + artikulenNomer);
+					if(dao.getAllProducts().get(artikulenNomer).getPromoPrice() == 0){
+						dao.getAllProducts().get(artikulenNomer).setPromoPrice(newPrice);		
+						dao.addPromotion(newPrice, artikulenNomer);
+						model.addAttribute("message", "Успешно добавихте промоция на продукт с артикулен номер: " + artikulenNomer);
+					}
+					else{
+						model.addAttribute("message", "Този продукт вече е в промоция.");
+					}
 				}
 			}
 			else{

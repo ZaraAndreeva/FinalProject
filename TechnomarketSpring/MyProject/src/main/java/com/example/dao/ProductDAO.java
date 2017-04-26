@@ -234,7 +234,7 @@ public class ProductDAO {
 		try{
 			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			st.setDouble(1, newPrice);
-			st.setLong(1, artNomer);
+			st.setLong(2, artNomer);
 			synchronized(this){
 				st.execute();
 			}

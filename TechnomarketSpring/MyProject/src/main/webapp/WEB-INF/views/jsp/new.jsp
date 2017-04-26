@@ -32,7 +32,7 @@
 	
 		<c:forEach items="${products}" var="product">
     		<div class="col-md-4">
-	
+	                       
 				<figure itemscope itemtype="http://schema.org/Product" class="product">
 	        		<div class="badges">
 	        			<c:if test="${product.promoPrice != 0}">
@@ -40,6 +40,9 @@
 						</c:if>
     
                 	</div>
+                	<c:if test = ""> <!-- TODO ako gledame liubimi produkti -->
+                		 <a href="" class="btn-remove" title="Премахни от любими"><i class="icon-remove"></i></a>
+     				</c:if>
         			<a itemprop="url" href="http://localhost:8080/TechnomarketSpring/product/viewProductPage/${product.productId}" class="product-thumb">
                 		<!--  
                 		<img itemprop="image" src="//cdn.technomarket.bg/media/cache/my_thumb/uploads/library/product/09126068/560af7c4f4122.jpeg" alt="Technomarket" />
@@ -47,6 +50,7 @@
             			<img itemprop="image" src="/TechnomarketSpring/image/${product.productId}" alt="Technomarket" />
             			
             		</a>
+            			 
     			<figcaption>
         			<div class="product-name">
             		<h3><a itemprop="url" href="http://localhost:8080/TechnomarketSpring/product/viewProductPage/${product.productId}"><span itemprop="name">${product.brand}</span></a></h3>
@@ -62,6 +66,7 @@
                             <li>- ЗАПАМЕТЯВАНЕ НА РЕЦЕПТИ</li>
                      </ul>            
        	 </div>
+       
                 <div class="product-price">
             <var itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="price">
             	<meta itemprop="priceCurrency" content="BGN" />
