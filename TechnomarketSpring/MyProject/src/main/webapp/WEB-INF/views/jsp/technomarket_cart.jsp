@@ -12,21 +12,34 @@
         <section>
     <div class="container">
         <div class="security">
-<!--  
+  <!-- 
 	  <c:if test="${UserDAO.getInstance().getAllUsers().get(sessionScope.user.email).getCart() == null}">
-	 	<h1>Количката е празна.</h1>
+	 	
+	 	
+ 		<div id="contentholder" class="contentholder">
+         	<div class="container cart">
+    	<div class="sh-heading">
+           <h1>Количката е празна.</h1>
+        </div>
+         
+            <p><a href="http://localhost:8080/TechnomarketSpring" class="btn btn-tm"><i class="icon-arrow-long-left"></i> Избери продукт</a></p>
+            <hr>
+            
+            </div>
+        </div>	 	
+	 	
 	 </c:if>
 	 <c:if test="${UserDAO.getInstance().getAllUsers().get(sessionScope.user.email).getCart() != null}">
 	 	<h3>Продукти в количката</h3>
 	 	<c:forEach items="${list}" var="item">
 	 	
-	 	
+
 	 	
 	 	
    			
 		</c:forEach>
 	 </c:if>
-	 -->
+	  -->
 	 
 	 <div id="contentholder" class="contentholder">
             	<div class="container cart">

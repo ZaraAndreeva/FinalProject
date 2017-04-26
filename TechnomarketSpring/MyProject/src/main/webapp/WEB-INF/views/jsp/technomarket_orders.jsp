@@ -13,15 +13,55 @@
     <div class="container">
         <div class="security">
 
-	  <c:if test="${UserDAO.getInstance().getAllUsers().get(sessionScope.user.email).getOrders() == null}">
-	 	<h1>Няма налични поръчки.</h1>
-	 </c:if>
-	 <c:if test="${UserDAO.getInstance().getAllUsers().get(sessionScope.user.email).getOrders() != null}">
 	 	<h3>Поръчки</h3>
-	 	<c:forEach items="${list}" var="item">
+	 	
+	  	
+
+	 	<div id="contentholder" class="contentholder">
+        <section>
+    <div class="container">
+        <div class="page-title sh-heading">
+        
+        </div>
+        <div class="row">
+
+            <div class="col-md-13">
+                    <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Дата</th>
+                        <th>Статус</th>
+                        <th>Сума</th>
+                        <th align="right" class="text-right"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                                        <tr>
+                        <td>1158433</td>
+                        <td>26 април 2017 г., 3:32:51</td>
+                        <td>Непотвърдена поръчка</td>
+                        <td><var class="price xs"><span class="color-inherit">1739.<sup>00</sup>  <small>лв.</small></span></var></td>
+                        <td align="right"><a href="/order/1158433" class="btn btn-tm btn-xs">Виж поръчката <i class="icon-arrow-long-right"></i></a></td>
+                    </tr>
+                                        <tr>
+                        <td>1154382</td>
+                        <td>6 април 2017 г., 9:30:21</td>
+                        <td>Непотвърдена поръчка</td>
+                        <td><var class="price xs"><span class="color-inherit">698.<sup>00</sup>  <small>лв.</small></span></var></td>
+                        <td align="right"><a href="/order/1154382" class="btn btn-tm btn-xs">Виж поръчката <i class="icon-arrow-long-right"></i></a></td>
+                    </tr>
+                                    </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</section>
+        </div>
+	 	
    			
-		</c:forEach>
-	 </c:if>
+	
+	 
 </div>    </div>
 </section>    
         </div>

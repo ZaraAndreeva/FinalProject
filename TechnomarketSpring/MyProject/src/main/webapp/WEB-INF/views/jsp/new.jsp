@@ -56,14 +56,7 @@
             		<h3><a itemprop="url" href="http://localhost:8080/TechnomarketSpring/product/viewProductPage/${product.productId}"><span itemprop="name">${product.brand}</span></a></h3>
             		<small class="product-model">Арт.№: ${product.productId}<span itemprop="productID"></small>
             		<ul itemprop="description" class="product-description">
-                            <li>- МИКРОВЪЛНОВА ФУРНА ЗА ВГРАЖДАНЕ</li>
-                            <li>- ПОЛЕЗЕН ОБЕМ 26 литра</li>
-                            <li>- МОЩНОСТ МИКРОВЪЛНИ - 900W</li>
-                            <li>- МОЩНОСТ ГРИЛ - 1000W</li>
-                            <li>- ДИАМЕТЪР НА ЧИНИЯТА - 32.5 см.</li>
-                            <li>- ЦИФРОВ ДИСПЛЕЙ</li>
-                            <li>- 5 НИВА НА РЕГУЛАЦИЯ НА МОЩНОСТТА</li>
-                            <li>- ЗАПАМЕТЯВАНЕ НА РЕЦЕПТИ</li>
+
                      </ul>            
        	 </div>
        
