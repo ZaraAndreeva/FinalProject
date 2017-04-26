@@ -40,6 +40,28 @@
 		</c:forEach>
 	 </c:if>
 	  -->
+	  
+	  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+            <script type="text/javascript">
+
+                require(['jquery'], function ($) {
+
+                    $('#cart_form input').change(function() {
+                        $('#cart_save_button').show();
+                    });
+                });
+               
+                function changeQuantity(productId, value) {
+                	$.ajax({ 
+			            url: "/TechnomarketSpring/user/setNewQuantity/" + productId + "/" + value,
+			            type: "POST"
+			        }).done(function(responseData) {
+			            //console.log('Done: ', responseData);
+			        }).fail(function() {
+			            //console.log('Failed');
+			        });
+                }  
+            </script>
 	 
 	 <div id="contentholder" class="contentholder">
             	<div class="container cart">
@@ -61,25 +83,29 @@
                 </tr>
             </thead>
             <tbody>
-                                    
-                                            <tr>
-                    <td class="cart-id">1</td>
-                    <td class="cart-product">
-                        <div class="cart-product-thumb">
-                                                        <img src="//cdn.technomarket.bg/../media/cache/my_thumb/uploads/library/product/09154100/58edc3cbc5dee.jpg" alt="Technomarket">
-                                                                           
-                        </div>
-                        <div class="cart-product-info">
-                            APPLE IPHONE 7 128GB RED SPECIAL EDITION
-                            <small>МОБИЛЕН ТЕЛЕФОН</small>
-                                                                                </div>                      
-                    </td>
-                    <td class="cart-price"><var class="price"><span class="color-inherit">1739.<sup>00</sup>  <small>лв.</small></span></var></td>                                        
-                    <td class="cart-quantity"><input type="number" id="cart_items_09154100_quantity" name="cart[items][09154100][quantity]" required="required" min="0" class="input-quantity form-control" value="1"></td>
-                    <td class="cart-price-total"><var class="price"><span>1739.<sup>00</sup>  <small>лв.</small></span></var></td>
-                    <td class="cart-remove"><a href="/cart/remove?p=09154100" class="cart-product-remove" title="Премахни продукт"><i class="icon-minus"></i></a></td>                    
-                </tr>
-                                                                                    <tr>
+                <c:set var="cnt" scope="page" value="1"/>
+                <c:set var="money" scope="page" value="0"/>
+                <c:forEach items="${sessionScope.cartProducts}" var="entry">
+                	<c:set var="money" scope="page" value="${money+ (entry.key.price * entry.value)}"/>
+                	<tr>
+	                    <td class="cart-id">${cnt}</td>
+	                    	<c:set var="cnt" value="${cnt+1}"/>
+	                    <td class="cart-product">
+	                    	<div class="cart-product-thumb">
+	                        	<img src="/TechnomarketSpring/image/${entry.key.productId}" alt="Technomarket">
+	                        </div>
+	                        <div class="cart-product-info">
+	                            ${entry.key.name}
+	                        </div>                      
+	                    </td>
+	                    <td class="cart-price"><var class="price"><span class="color-inherit">${entry.key.price}<sup>00</sup>  <small>лв.</small></span></var></td>                                        
+	                    <td class="cart-quantity"><input onchange="changeQuantity(${entry.key.productId}, this.value)" type="number" id="quantity" name="cart[items][09154100][quantity]" required="required" min="0" class="input-quantity form-control" value="${entry.value}"></td>
+	                    <td class="cart-price-total"><var class="price"><span>${entry.key.price * entry.value}<sup>00</sup>  <small>лв.</small></span></var></td>
+	                    <td class="cart-remove"><a href="/cart/remove?p=09154100" class="cart-product-remove" title="Премахни продукт"><i class="icon-minus"></i></a></td>                    
+	                </tr>
+	                
+				</c:forEach>
+                <tr>
                     <td colspan="3"></td>
                     <td align="right"><strong>Доставка:</strong></td>
                     <td align="right">Безплатна доставка</td>
@@ -89,7 +115,7 @@
                         <tr class="cart-total">
                 <td colspan="3"></td>
                 <td align="right"><strong>Общо за плащане:</strong></td>
-                <td align="right"><var class="price"><span>1739.<sup>00</sup>  <small>лв.</small></span></var></td>
+                <td align="right"><var class="price"><span>${money}<sup>00</sup>  <small>лв.</small></span></var></td>
                 <td></td>
             </tr>
             </tbody>
@@ -114,15 +140,7 @@
         </div>
         </form>
         <h1>${message}</h1>
-            <script type="text/javascript">
-
-                require(['jquery'], function ($) {
-
-                    $('#cart_form input').change(function() {
-                        $('#cart_save_button').show();
-                    });
-                });
-            </script>
+        	
             </div>
         </div>
 	 
