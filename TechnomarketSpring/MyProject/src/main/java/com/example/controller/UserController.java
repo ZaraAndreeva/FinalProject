@@ -1,15 +1,12 @@
 package com.example.controller;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashSet;
 import java.util.Scanner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,10 +23,7 @@ import com.example.krasiModel.User;
 
 
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
-import com.example.dao.UserDAO;
-import com.example.krasiModel.User;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -292,6 +286,7 @@ public class UserController {
 		HttpSession session = request.getSession();
 		if(session.getAttribute("user") != null){
 			User u = (User) session.getAttribute("user");
+			//TODO ako veche e aboniran
 			new MailSender(u.getEmail() ,"Абониране", "Вие се абонирахте за продукт с артикулен номер: " + productId + ".");
 			model.addAttribute("message", "Успешно се абонирахте за този продукт.");
 		}
@@ -305,17 +300,60 @@ public class UserController {
 	public String addFavProd(@PathVariable("productId") String productId, Model model, HttpServletRequest request){
 		
 		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
-		model.addAttribute("product", product);
 		HttpSession session = request.getSession();
 		if(session.getAttribute("user") != null){
 			User u = (User) session.getAttribute("user");
-			
-			model.addAttribute("message", "Успешно добавихте този продукт в любими.");
+			if(u.getFavouriteProducts().contains(product)){
+				//TODO ne vliza v if-a
+				model.addAttribute("message", "Този продукт вече е добавен в любими.");
+			}
+			else{
+				UserDAO.getInstance().addFavProducts(u, product);
+				
+				model.addAttribute("message", "Успешно добавихте този продукт в любими.");
+			}
 		}
 		else{
 			model.addAttribute("message", "Трябва да влезете в профила си, за да добавяте в любими.");
 		}
+		
+		model.addAttribute("product", product);
 		return "technomarket_viewProduct";
+	}
+	
+	@RequestMapping(value = "/viewFavProd", method = RequestMethod.GET)
+	public String viewFavProd(Model model, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		if(session.getAttribute("user") != null){
+			User u = (User) session.getAttribute("user");
+//			LinkedHashSet<Product> favProducts = UserDAO.getInstance().getFavProducts(u);
+			LinkedHashSet<Product> favProducts = u.getFavouriteProducts();
+			model.addAttribute("products", favProducts);
+			System.out.println(favProducts.isEmpty());
+			System.out.println(favProducts);
+		}
+		return "new";
+	}
+	
+	@RequestMapping(value = "/addToCart", method = RequestMethod.POST)
+	public String addToCart(Model model, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		String name = request.getParameter("product");
+		//TODO
+		session.setAttribute("product", name);
+		return "technomarket_cart";
+	}
+	
+	@RequestMapping(value = "/orderPage", method = RequestMethod.GET)
+	public String orderPage(Model model, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		if(session.getAttribute("user") != null){
+			return "technomarket_order";
+		}
+		else{
+			model.addAttribute("message", "Моля, влезте в профила си, за да завършите поръчката.");
+			return "technomarket_cart";
+		}
 	}
 	
 }

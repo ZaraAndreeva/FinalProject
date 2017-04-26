@@ -179,7 +179,7 @@
 		                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/openProfile">Профил</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/ordersPage">Поръчки</a></li>
-		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/favProductsPage">Любими</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/viewFavProd">Любими</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/upload">Добави продукт</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/removeProductPage">Премахни продукт</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/editProductPage">Редактирай продукт</a></li>
@@ -215,7 +215,7 @@
 		                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/openProfile">Профил</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/ordersPage">Поръчки</a></li>
-		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/favProductsPage">Любими</a></li>
+		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/viewFavProd">Любими</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/logout">Изход</a></li>
 		                            </ul>
 		                        </div><!-- /.user-account -->

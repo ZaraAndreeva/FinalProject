@@ -78,10 +78,10 @@
 
                         </div>      
                                                 
-                        <form action="" novalidate="1">
+                        <form action="http://localhost:8080/TechnomarketSpring/user/addToCart" method = "POST" novalidate="1">
  
                                                                                     <div class="buy-now">
-                                <input type="hidden" value="09153700" name="product">
+                                <input type="hidden" value="${product.productId}" name="product">
                                                                 <button type="submit" class="btn btn-tm flix_cart_click_check">
                                     <i class="icon-basket"></i> Добави в количка
                                 </button>

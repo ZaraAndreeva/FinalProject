@@ -87,15 +87,14 @@ public class User {
 		return (LinkedHashSet<Product>) Collections.unmodifiableSet(cart);
 	}
 
+//	public LinkedHashSet<Product> getFavouriteProducts() {
+//		return (LinkedHashSet<Product>) Collections.unmodifiableSet(favouriteProducts);
+//	}
+
 	public LinkedHashSet<Product> getFavouriteProducts() {
-		return (LinkedHashSet<Product>) Collections.unmodifiableSet(favouriteProducts);
-	}
-	
-	public LinkedHashSet<Order> getOrders() {
-		return (LinkedHashSet<Order>) Collections.unmodifiableSet(orders);
+		return favouriteProducts;
 	}
 
-  
 	public long getUserId() {
 		return userId;
 	}
@@ -133,7 +132,7 @@ public class User {
 		}
 		return Integer.parseInt(sex) == 1 || Integer.parseInt(sex) == 2;
 	}
-	
+
 	public static boolean validUser(String name, String familyName, String email, String passwordFirst,
 			String passwordSecond, String sex) {
 		return validText(name) && validText(familyName) && validEmail(email) && validPassword(passwordFirst)
