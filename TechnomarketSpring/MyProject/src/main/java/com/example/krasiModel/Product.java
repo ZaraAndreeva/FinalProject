@@ -235,7 +235,7 @@ public class Product {
 	}
 
 	
-	public boolean hasThatTag(String tag){
+	public boolean sameSubCategory(String tag){
 		//TODO category.contains(tag)?
 		return subCategory.contains(tag);						
 	}

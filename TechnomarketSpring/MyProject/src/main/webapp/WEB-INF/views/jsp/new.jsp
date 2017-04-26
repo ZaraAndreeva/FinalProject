@@ -29,7 +29,8 @@
 
 <main class="col-md-13 filter-container">
     <div class="row">
-	
+		<h2>${error}</h2>
+		
 		<c:forEach items="${products}" var="product">
     		<div class="col-md-4">
 	                       
