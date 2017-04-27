@@ -18,6 +18,7 @@ public class MyController implements ServletContextAware {
 	@Autowired
     private ServletContext servletContext;
 	
+	
 	@RequestMapping(value="/index", method=RequestMethod.GET)
 	public String sayHi(Model viewModel) {
 		// talk with model
@@ -35,6 +36,7 @@ public class MyController implements ServletContextAware {
 	@RequestMapping(value="/test", method=RequestMethod.GET)
 	public String showTest(Model viewModel	) {
 		servletContext.setAttribute("entriesForAllCategories", CategoryDAO.getInstance().getAllCategories().entrySet());
+	
 		servletContext.setAttribute("mama", "Mamaaaa");
 		return "test";
 	}

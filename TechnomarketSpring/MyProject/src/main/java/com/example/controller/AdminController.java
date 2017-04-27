@@ -46,41 +46,52 @@ public class AdminController {
 		return("technomarket_removePromotion");
 	}
 	
+	@RequestMapping(value = "/viewProductByArtN", method = RequestMethod.POST)
+	public String viewProductByArtN(Model model){
+		return("");
+	}
+	
 	@RequestMapping(value = "/addPromotion", method = RequestMethod.POST)
 	public String addPromotion(HttpServletRequest request, Model model){
 		long artikulenNomer = 0;
 		double newPrice = 0;
 		if(!request.getParameter("artikulenNomer").isEmpty() && !request.getParameter("newPrice").isEmpty()){
 			artikulenNomer = Long.valueOf(request.getParameter("artikulenNomer"));
-			newPrice = Double.valueOf(request.getParameter("newPrice"));
-			if(dao.getAllProducts().containsKey(artikulenNomer)){
-				if(newPrice <= 0){
-					model.addAttribute("message", "Цената трябва да е положително число.");
-				}
-				else{
-					if(dao.getAllProducts().get(artikulenNomer).getPromoPrice() == 0){
-						dao.getAllProducts().get(artikulenNomer).setPromoPrice(newPrice);		
-						dao.addPromotion(newPrice, artikulenNomer);
-						
-						Product p = ProductDAO.getInstance().getAllProducts().get(artikulenNomer);
-						ArrayList<Integer> users = dao.checkForFavProducts(p);
-						for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
-							for (Integer i : users) {	
-								if(e.getValue().getUserId() == i){
-									MailSender mailSender = new MailSender(e.getValue().getEmail() ,"Промяна на артикул", "Продукт с артикулен номер " + p.getProductId() + " и име " + p.getName() + " е на цена " + newPrice + " лв.");
-									mailSender.start();
-								}
-							}
-						}
-						model.addAttribute("message", "Успешно добавихте промоция на продукт с артикулен номер: " + artikulenNomer);
+			if(Double.valueOf(request.getParameter("newPrice")) < ProductDAO.getInstance().getAllProducts().get(artikulenNomer).getPrice()){
+				
+				newPrice = Double.valueOf(request.getParameter("newPrice"));
+				if(dao.getAllProducts().containsKey(artikulenNomer)){
+					if(newPrice <= 0){
+						model.addAttribute("message", "Цената трябва да е положително число.");
 					}
 					else{
-						model.addAttribute("message", "Този продукт вече е в промоция.");
+						if(dao.getAllProducts().get(artikulenNomer).getPromoPrice() == 0){
+							dao.getAllProducts().get(artikulenNomer).setPromoPrice(newPrice);		
+							dao.addPromotion(newPrice, artikulenNomer);
+							
+							Product p = ProductDAO.getInstance().getAllProducts().get(artikulenNomer);
+							ArrayList<Integer> users = dao.checkForFavProducts(p);
+							for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
+								for (Integer i : users) {	
+									if(e.getValue().getUserId() == i){
+										MailSender mailSender = new MailSender(e.getValue().getEmail() ,"Промяна на артикул", "Продукт с артикулен номер " + p.getProductId() + " и име " + p.getName() + " е на цена " + newPrice + " лв.");
+										mailSender.start();
+									}
+								}
+							}
+							model.addAttribute("message", "Успешно добавихте промоция на продукт с артикулен номер: " + artikulenNomer);
+						}
+						else{
+							model.addAttribute("message", "Този продукт вече е в промоция.");
+						}
 					}
+				}
+				else{
+					model.addAttribute("message", "Не съществува продукт с този артикулен номер.");
 				}
 			}
 			else{
-				model.addAttribute("message", "Не съществува продукт с този артикулен номер.");
+				model.addAttribute("message", "Цената, която сте въвели е по-висока от текущата цена на продукта.");
 			}
 		}
 		else{

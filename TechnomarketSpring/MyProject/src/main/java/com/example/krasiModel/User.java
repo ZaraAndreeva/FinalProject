@@ -18,10 +18,6 @@ public class User {
 	private LinkedHashSet<Product> cart;
 	private LinkedHashSet<Product> favouriteProducts;
 	private LinkedHashSet<Order> orders;
-	
-	
-
-	
 
 	public User(String name, String familyName, String email, String password, String gender, LocalDate birthDate, boolean isAdmin) {
 		if(validate(name)){
