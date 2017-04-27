@@ -102,6 +102,7 @@ public class ProductController {
 			}
 			if(!Product.validSubCategory(subCategory)){
 //				errorsArray.add(new JsonPrimitive("subCategoryError"));
+				System.out.println(subCategory);
 				JsonObject error = new JsonObject();
 				error.addProperty("errorPlace", "subCategoryError");
 				error.addProperty("errorMessege", "Такава подкатегория не съществува!");
@@ -130,8 +131,9 @@ public class ProductController {
 //			
 //		}
 		
-		Product p = new Product(subCategory, "ddd", description, 
+		Product p = new Product(subCategory, description, 
 				Integer.parseInt(quantity), Double.parseDouble(price), 0, brand, name);
+		
 		System.out.println(p);
 		
 		ProductDAO.getInstance().addProduct(p);

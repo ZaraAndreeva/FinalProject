@@ -34,14 +34,12 @@ public class ProductDAO {
 		//TODO if is admin
 
 		int subCategoryId = SubCategoryDAO.getInstance().getAllSubCategories().get(p.getSubCategory());
-		String sql = "INSERT INTO products (description, quantity, price, promo_price, brand, name, sub_category, sub_sub_category) "
-				+ "values (?, ?, ?, ?, ?, ?, "
-				+ "(SELECT sub_category_id from sub_categories where sub_category_id = ?), "
-				+ "(SELECT sub_sub_category_id from  sub_sub_categories where sub_sub_category_id = 2))";
+		String sql = "INSERT INTO products (description, quantity, price, promo_price, brand, name, sub_category) values (?, ?, ?, ?, ?, ?,(SELECT sub_category_id from sub_categories where sub_category_id = ?))";
 
 		PreparedStatement st = null;
 		ResultSet res = null;
 		try{
+			System.out.println(p.getDescription());
 			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			st.setString(1, p.getDescription());
 			st.setInt(2, p.getQuantity());
@@ -51,7 +49,6 @@ public class ProductDAO {
 			st.setString(6, p.getName());
 			st.setInt(7, subCategoryId);
 //			st.setString(7, p.getSubCategory());
-//			st.setString(8, p.getSubSubCategory());
 			
 			synchronized(this){
 				st.execute();
@@ -120,7 +117,7 @@ public class ProductDAO {
 	
 	public HashMap<Long, Product> getAllProducts(){
 		if(allProducts.isEmpty()){
-			String sql = "SELECT product_id, description, quantity, price, promo_price, brand, name, sub_category, sub_sub_category FROM products";
+			String sql = "SELECT product_id, description, quantity, price, promo_price, brand, name, sub_category FROM products";
 			PreparedStatement st = null;
 			ResultSet set = null;
 			try {
@@ -130,7 +127,6 @@ public class ProductDAO {
 				while(set.next()){
 					long productId = set.getInt("product_id");
 					String subCategory = set.getString("sub_category");
-					String subSubCategory = set.getString("sub_sub_category");
 					String description = set.getString("description");
 					int quantity = set.getInt("quantity");
 					double price = set.getDouble("price");
@@ -145,7 +141,7 @@ public class ProductDAO {
 						}
 					}
 					
-					Product p = new Product(subCategoryString, subSubCategory, description, quantity, price, promoPrice, brand, name);
+					Product p = new Product(subCategoryString, description, quantity, price, promoPrice, brand, name);
 					p.setProductId(productId);
 					
 					allProducts.put(productId, p);	

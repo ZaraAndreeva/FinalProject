@@ -10,7 +10,6 @@ public class Product {
 	private String name;
 	private String category;
 	private String subCategory;
-	private String subSubCategory;
 	private long productId;
 	private String description;
 	private int quantity;
@@ -19,7 +18,7 @@ public class Product {
 	private String brand;
 	private HashMap<String, String> specifications;
 	
-	public Product(String subCategory, String subSubCategory, String description, int quantity,
+	public Product(String subCategory, String description, int quantity,
 			double price, double promoPrice, String brand, String name) {
 
 //		if(category != null && !category.isEmpty()){
@@ -28,10 +27,7 @@ public class Product {
 		if(subCategory != null && !subCategory.isEmpty()){
 			this.subCategory = subCategory;
 		}
-		this.subSubCategory = subSubCategory;
-		if(description != null && !description.isEmpty()){
-			this.description = description;
-		}
+
 		if(quantity > 0){
 			this.quantity = quantity;
 		}
@@ -47,6 +43,9 @@ public class Product {
 		if(name != null && !name.isEmpty()){
 			this.name = name;
 		}
+		if(description != null && !description.isEmpty()){
+			this.description = description;
+		}
 		this.specifications = new HashMap<>();
 	}
 	
@@ -60,10 +59,6 @@ public class Product {
 
 	public String getSubCategory() {
 		return subCategory;
-	}
-
-	public String getSubSubCategory() {
-		return subSubCategory;
 	}
 
 	public long getProductId() {
@@ -136,7 +131,6 @@ public class Product {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + quantity;
 		result = prime * result + ((subCategory == null) ? 0 : subCategory.hashCode());
-		result = prime * result + ((subSubCategory == null) ? 0 : subSubCategory.hashCode());
 		return result;
 	}
 
@@ -182,19 +176,13 @@ public class Product {
 				return false;
 		} else if (!subCategory.equals(other.subCategory))
 			return false;
-		if (subSubCategory == null) {
-			if (other.subSubCategory != null)
-				return false;
-		} else if (!subSubCategory.equals(other.subSubCategory))
-			return false;
 		return true;
 	}
 
 
 	@Override
 	public String toString() {
-		return "Product [category=" + category + ", subCategory=" + subCategory + ", subSubCategory=" + subSubCategory
-				+ ", productId=" + productId + ", description=" + description + ", quantity=" + quantity + ", price="
+		return "Product [category=" + category + ", subCategory=" + subCategory + ", productId=" + productId + ", description=" + description + ", quantity=" + quantity + ", price="
 				+ price + ", promoPrice=" + promoPrice + ", brand=" + brand + ", name=" + name + "]";
 	}
 
