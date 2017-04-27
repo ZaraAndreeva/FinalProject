@@ -4,6 +4,8 @@
 <%@ taglib prefix="msg" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" 
            uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+           
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
  <%@ include file="/menu_nachalo.jsp" %>
@@ -41,14 +43,25 @@
           });
          
           function changeQuantity(productId, value) {
-		    $.ajax({ 
-		         url: "/TechnomarketSpring/user/setNewQuantity/" + productId + "/" + value,
-		         type: "POST"
-			     }).done(function(responseData) {
-			         //console.log('Done: ', responseData);
-			     }).fail(function() {
-		         //console.log('Failed');
-     		});
+        	  	$.ajax({
+	    			  url: "/TechnomarketSpring/user/setNewQuantity/" + productId + "/" + value,
+	    			  type: "POST", //send it through get method
+	    			  contentType : 'application/json; charset=utf-8',
+	    			  dataType : 'json',
+	    			  success: function(response) {
+	    				  var changes = response.changes;
+	    				  for(i = 0; i < changes.length; i++){
+	    					  var price = (changes[i].messege).toFixed(2);
+		    				  document.getElementById(changes[i].place).innerHTML = price + " лв.";
+	    				  }	  
+	    			  },
+	    			  error: function(xhr) {
+	    				  document.getElementById("status").innerHTML="Грешката е при нас... Моля, опитайте по-късно.";
+	    			  }
+	    		});    
+	    	
+		    
+		    
           }
           
           function removeProduct(productId) {
@@ -101,6 +114,7 @@
                 <c:set var="cnt" scope="page" value="1"/>
                 <c:set var="money" scope="page" value="0"/>
                 <c:forEach items="${sessionScope.cartProducts}" var="entry">
+                	
                 	<c:set var="money" scope="page" value="${money+ (entry.key.price * entry.value)}"/>
                 	<tr>
 	                    <td class="cart-id">${cnt}</td>
@@ -110,12 +124,14 @@
 	                        	<img src="/TechnomarketSpring/image/${entry.key.productId}" alt="Technomarket">
 	                        </div>
 	                        <div class="cart-product-info">
-	                            ${entry.key.name}
+	                        	<a href="/TechnomarketSpring/product/viewProductPage/${entry.key.productId}">
+	                            	${entry.key.name}
+	                            </a>
 	                        </div>                      
 	                    </td>
-	                    <td class="cart-price"><var class="price"><span class="color-inherit">${entry.key.price}<sup>00</sup>  <small>лв.</small></span></var></td>                                        
+	                    <td class="cart-price"><var class="price"><span class="color-inherit"><fmt:formatNumber pattern="0.00" value="${entry.key.price}"/><sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup>  <small>лв.</small></span></var></td>                                        
 	                    <td class="cart-quantity"><input onchange="changeQuantity(${entry.key.productId}, this.value)" type="number" id="quantity" name="cart[items][09154100][quantity]" required="required" min="0" class="input-quantity form-control" value="${entry.value}"></td>
-	                    <td class="cart-price-total"><var class="price"><span>${entry.key.price * entry.value}<sup>00</sup>  <small>лв.</small></span></var></td>
+	                    <td class="cart-price-total"><var class="price"><span id="total_product_price_${entry.key.productId}"><fmt:formatNumber pattern="0.00" value="${entry.key.price * entry.value}"/><sup>&nbsp;&nbsp;</sup>лв.</span></var></td>
 	                    <td class="cart-remove"><a href="/TechnomarketSpring/user/cartPage" onclick="removeProduct(${entry.key.productId})" class="cart-product-remove" title="Премахни продукт"><i class="icon-minus"></i></a></td>                    
 	                </tr>
 	                
@@ -130,7 +146,7 @@
                         <tr class="cart-total">
                 <td colspan="3"></td>
                 <td align="right"><strong>Общо за плащане:</strong></td>
-                <td align="right"><var class="price"><span>${money}<sup>00</sup>  <small>лв.</small></span></var></td>
+                <td align="right"><var class="price"><span id="total_cart_price"><fmt:formatNumber pattern="0.00" value="${money}"/><sup>&nbsp;&nbsp;</sup>лв.</span></var></td>
                 <td></td>
             </tr>
             </tbody>
@@ -138,10 +154,13 @@
                         <tr>
             	<td colspan="2" align="left"><a href="http://localhost:8080/TechnomarketSpring" class="btn btn-tm-dark"><i class="icon-arrow-long-left"></i> Добави още продукти</a></td>
             	<td colspan="3" align="right">
+											<!--  	            	
                                             <span id="cart_save_button" style="display: none">
 
                         Имате незапазени промени! <a href="/TechnomarketSpring/user/cartPage" type="submit" id="cart_save" name="cart[save]" class="btn-default btn">Запиши</a>
                         </span>
+                        -->
+                        
                         	<c:if test = "${sessionScope.user != null}">
                        				                              <a onclick="makeOrder()" href="/TechnomarketSpring/user/ordersPage" id="cart_checkout" name="cart[checkout]" class="btn-default btn">Поръчай</a>
                                                       </c:if>
@@ -153,6 +172,7 @@
             </tr>            	
             </tfoot>
         </table>
+        <h2 id="status"></h2>
         <div style="display:none;">
         <div class="form-group"><label class="col-sm-6 control-label required">
                     Packs
