@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -170,6 +171,9 @@ public class UserController {
 		String passwordFirst = obj.get("passwordFirst").getAsString();
 		String passwordSecond = obj.get("passwordSecond").getAsString();
 		String sex = (obj.get("sex")!= null)?  obj.get("sex").getAsString() : "0";
+//		String birthDate = obj.get("birthDate").getAsString();
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+//        LocalDate date = LocalDate.parse(birthDate, formatter);
 		
 		System.out.println("************");
 		System.out.println(name);
@@ -178,6 +182,7 @@ public class UserController {
 		System.out.println(passwordFirst);
 		System.out.println(passwordSecond);
 		System.out.println(sex);
+//		System.out.println(birthDate);
 		System.out.println("***********");
 		
 		
@@ -245,6 +250,13 @@ public class UserController {
 				errorsArray.add(error);
 				
 			}
+			
+//			if(birthDate == null){
+//				JsonObject error = new JsonObject();
+//				error.addProperty("errorPlace", "dateError");
+//				error.addProperty("errorMessege", "Моля, въведете дата на раждане!");
+//				errorsArray.add(error);
+//			}
 			
 			respJSON.add("errors", errorsArray);
 			
