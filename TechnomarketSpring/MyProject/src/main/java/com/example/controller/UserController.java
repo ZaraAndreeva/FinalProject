@@ -423,6 +423,7 @@ public class UserController {
 		}
 		
 		Order order = new Order(LocalDate.now(), "Непотвърдена", userEmail, cartPrice, "", "", "", "", "", 0, "", 0, 0, "", productsForOrder);
+		System.out.println(order);
 		OrderDAO.getInstance().addOrder(order, user);
 		session.removeAttribute("cartProducts");
 		return("technomarket_register");

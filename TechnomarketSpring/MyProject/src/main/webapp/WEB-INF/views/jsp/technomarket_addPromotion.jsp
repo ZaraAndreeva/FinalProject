@@ -16,11 +16,6 @@
         <div class="col-half">
             <h2>Добавяне на промоция</h2>
             <form action="http://localhost:8080/TechnomarketSpring/admin/addPromotion"  method="POST" class="fos_user_registration_register form-horizontal"><div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_first_name">
-                    Артикулен номер
-                                            <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="number" min = "0" id="fos_user_registration_form_first_name" name="artikulenNomer" required="required" pattern=".{2,}" class="form-control" />
-                                            	<span id="myspan" class="help-block"><ul class="list-unstyled"><li><span class="glyphicon glyphicon-exclamation-sign"></span> </li></ul></span>
-                                            <span class="bar"></span></div></div>
-                <div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_last_name">
                      Нова цена
                                             <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="number" min = "0" id="fos_user_registration_form_email" name="newPrice" required="required" class="form-control" /><span class="bar"></span></div></div><div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_plainPassword_first">
                        <div class="col-sm-offset-6 col-sm-10">
@@ -31,11 +26,14 @@
             <h1>${message}</h1>
         </div>
                 <div class="col-half">
+                <c:if test ="">
+                <h2>Информация за продукт</h2>
+            		
+            	</c:if>	
+            <hr>
 
-                                                        </div>
-         <div class="col-half">
-            
-                                                        </div>
+           </div>
+
 
     </div>
 </div>    </div>

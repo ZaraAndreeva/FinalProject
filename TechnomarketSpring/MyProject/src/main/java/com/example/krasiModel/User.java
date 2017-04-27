@@ -18,18 +18,7 @@ public class User {
 	private LinkedHashSet<Product> cart;
 	private LinkedHashSet<Product> favouriteProducts;
 	private LinkedHashSet<Order> orders;
-	
-<<<<<<< HEAD
-=======
-	public void setOrders(LinkedHashSet<Order> orders) {
-		this.orders = orders;
-	}
 
-	public LinkedHashSet<Order> getOrders() {
-		return orders;
-	}
-
->>>>>>> added making order and viewing orders
 	public User(String name, String familyName, String email, String password, String gender, LocalDate birthDate, boolean isAdmin) {
 		if(validate(name)){
 			this.name = name;
@@ -174,7 +163,6 @@ public class User {
 				&& validSex(sex);
 	}
 
-<<<<<<< HEAD
 	public void setOrders(LinkedHashSet<Order> orders) {
 		if(orders != null && !orders.isEmpty()){
 			this.orders = orders;
@@ -182,12 +170,10 @@ public class User {
 	}
 
 	
-=======
 	public void addOrder(Order o){
 		if(o == null){
 			return;
 		}
 		this.orders.add(o);
 	}
->>>>>>> added making order and viewing orders
 }

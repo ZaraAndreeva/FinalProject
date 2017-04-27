@@ -41,26 +41,38 @@
           });
          
           function changeQuantity(productId, value) {
-          	$.ajax({ 
-         url: "/TechnomarketSpring/user/setNewQuantity/" + productId + "/" + value,
-         type: "POST"
-     }).done(function(responseData) {
-         //console.log('Done: ', responseData);
-     }).fail(function() {
-         //console.log('Failed');
-     });
+		    $.ajax({ 
+		         url: "/TechnomarketSpring/user/setNewQuantity/" + productId + "/" + value,
+		         type: "POST"
+			     }).done(function(responseData) {
+			         //console.log('Done: ', responseData);
+			     }).fail(function() {
+		         //console.log('Failed');
+     		});
           }
           
           function removeProduct(productId) {
-          	$.ajax({ 
-         url: "/TechnomarketSpring/user/removeFromCart/" + productId,
-         type: "POST"
-     }).done(function(responseData) {
-         //console.log('Done: ', responseData);
-     }).fail(function() {
-         //console.log('Failed');
-     });
+	          	$.ajax({ 
+			         url: "/TechnomarketSpring/user/removeFromCart/" + productId,
+			         type: "POST"
+				     }).done(function(responseData) {
+				         //console.log('Done: ', responseData);
+				     }).fail(function() {
+			         //console.log('Failed');
+			   });
           }
+          
+          function makeOrder() {
+	          	$.ajax({ 
+			         url: "/TechnomarketSpring/user/makeOrder",
+			         type: "POST"
+				     }).done(function(responseData) {
+				         //console.log('Done: ', responseData);
+				     }).fail(function() {
+			         //console.log('Failed');
+			   });
+        }
+          
       </script>
       
 	 <c:if test="${not empty sessionScope.cartProducts}">
@@ -130,7 +142,12 @@
 
                         Имате незапазени промени! <a href="/TechnomarketSpring/user/cartPage" type="submit" id="cart_save" name="cart[save]" class="btn-default btn">Запиши</a>
                         </span>
+                        	<c:if test = "${sessionScope.user != null}">
                        				                              <a onclick="makeOrder()" href="/TechnomarketSpring/user/ordersPage" id="cart_checkout" name="cart[checkout]" class="btn-default btn">Поръчай</a>
+                                                      </c:if>
+                                                      <c:if test = "${sessionScope.user == null}">
+                                                      <a onclick="makeOrder()" href="/TechnomarketSpring/user/loginPage" id="cart_checkout" name="cart[checkout]" class="btn-default btn">Поръчай</a>
+                                                      </c:if>
                                                       </td>
                <td></td> 
             </tr>            	

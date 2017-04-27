@@ -47,7 +47,6 @@ public class MailSender extends Thread{
 				
 			        Transport.send(msg);
 			        System.out.println("---Done---");
-				Transport.send(msg);
 				
 				System.out.println("Message send Successfully:)");
 		} catch (Exception mex) {

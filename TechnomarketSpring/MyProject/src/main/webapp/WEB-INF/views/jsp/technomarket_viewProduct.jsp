@@ -84,7 +84,17 @@
                                 <input type="hidden" value="${product.productId}" name="product">
                                                                 <button type="submit" class="btn btn-tm flix_cart_click_check">
                                     <i class="icon-basket"></i> Добави в количка
-                                </button>
+                                    
+                                </button> <br>
+                                <br>
+                                <c:if test="${user.admin}">
+                                	<c:if test = "${product.promoPrice == 0}">
+                                  		<a href="http://localhost:8080/TechnomarketSpring/admin/addPromotionPage" class="btn btn-tm">Добави в промоция.</a>
+                                  	</c:if>
+                                  	<c:if test = "${product.promoPrice != 0}">
+                                  		<a href="http://localhost:8080/TechnomarketSpring/admin/removePromotionPage" class="btn btn-tm">Премахни от промоция.</a>
+                                  	</c:if>
+                                </c:if>
                                                             </div>
                         </form>                     
                         

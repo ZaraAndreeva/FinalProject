@@ -78,7 +78,8 @@ public class Order {
 		if(word == null){
 			return false;
 		}
-		return !word.trim().isEmpty();
+//		return !word.trim().isEmpty();
+		return true;
 //		this.date = date;
 //		this.status = status;
 //		this.email = email;

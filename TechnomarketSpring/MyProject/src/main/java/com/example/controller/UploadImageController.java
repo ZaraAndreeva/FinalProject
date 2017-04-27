@@ -55,6 +55,8 @@ public class UploadImageController {
 			return "technomarket_addProduct";
 		}
 		if(productId == null || productId.isEmpty()){
+			//TODO validaciq
+			
 			model.addAttribute("messege", "Трябва да посочите име на файл!");
 			return "technomarket_addProduct";
 		}
