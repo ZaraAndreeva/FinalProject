@@ -64,13 +64,14 @@
       </script>
       
 	 <c:if test="${not empty sessionScope.cartProducts}">
+
 	 <div id="contentholder" class="contentholder">
             	<div class="container cart">
     	<div class="sh-heading">
             <h2>Количка</h2>
         </div>
         
-                <form name="cart" method="get" action="http://localhost:8080/TechnomarketSpring/user/orderPage" id="cart_form" class="form-horizontal" novalidate="1">
+                <div name="cart" id="cart_form" class="form-horizontal" novalidate="1">
         
         <table class="table cart-table">
             <thead>
@@ -127,9 +128,9 @@
             	<td colspan="3" align="right">
                                             <span id="cart_save_button" style="display: none">
 
-                        Имате незапазени промени! <button type="submit" id="cart_save" name="cart[save]" class="btn-default btn">Запиши</button>
+                        Имате незапазени промени! <a href="/TechnomarketSpring/user/cartPage" type="submit" id="cart_save" name="cart[save]" class="btn-default btn">Запиши</a>
                         </span>
-                       				                              <button type="submit" id="cart_checkout" name="cart[checkout]" class="btn-default btn">Поръчай</button>
+                       				                              <a onclick="makeOrder()" href="/TechnomarketSpring/user/ordersPage" id="cart_checkout" name="cart[checkout]" class="btn-default btn">Поръчай</a>
                                                       </td>
                <td></td> 
             </tr>            	
@@ -140,7 +141,7 @@
                     Packs
                                             <span class="required" title="This field is required">*</span></label><div class="col-sm-10 control-bar"><div id="cart_packs"></div><span class="bar"></span></div></div><input type="hidden" id="cart__token" name="cart[_token]" class="form-control" value="4pklpq7uuwcJq21A8bW0ReeEdtKlsvE-oXOi9UuNGPM">
         </div>
-        </form>
+        </div>
         <h1>${message}</h1>
         	
             </div>

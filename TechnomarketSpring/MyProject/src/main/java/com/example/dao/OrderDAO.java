@@ -7,10 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import com.example.krasiModel.Order;
 
 import java.util.LinkedHashSet;
+import java.util.Map.Entry;
 
 import com.example.krasiModel.Product;
 import com.example.krasiModel.User;
@@ -33,8 +35,8 @@ public class OrderDAO {
 	}
 	
 	public synchronized void addOrder(Order o, User u){
-		String sql = "INSERT INTO orders (date, status, user_id, price, name, family_name, phone, town, street, block, entrance, floor, apartment, description_address) "
-				+ "values (?, ?, (select user_id from users where user_id = user_id), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO orders (date, status, email, price, name, family_name, phone, town, street, block, entrance, floor, apartment, description_address) "
+				+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		PreparedStatement st = null;
 		ResultSet res = null;
@@ -42,9 +44,9 @@ public class OrderDAO {
 			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			st.setDate(1,  Date.valueOf(o.getDate()));
 			st.setString(2, o.getStatus());
-			st.setInt(3, (int) u.getUserId());
-
+			st.setString(3, u.getEmail());	
 			st.setDouble(4, o.getPrice());
+			
 			st.setString(5, o.getName());
 			st.setString(6, o.getFamilyName());
 			st.setString(7, o.getPhone());
@@ -62,12 +64,10 @@ public class OrderDAO {
 			res.next();
 			long orderId = res.getLong(1);
 			o.setOrderId(orderId);
-			//TODO
 			
-			
+			addToOrderedProducts(o);
 		} catch(SQLException e){
 			System.out.println("addOrder: " + e.getMessage());
-
 		}
 		finally {
 			if(st != null){
@@ -88,6 +88,8 @@ public class OrderDAO {
 
 		}
 		
+		u.addOrder(o);
+		
 		if(!allOrders.containsKey(u.getUserId())){
 			allOrders.put(u.getUserId(), new LinkedHashSet<>());
 		}
@@ -95,82 +97,123 @@ public class OrderDAO {
 		allOrders.get(u.getUserId()).add(o);
 	}
 
-
-	public synchronized HashMap<Long, LinkedHashSet<Order>> getAllOrders(){
-		if(allOrders.isEmpty()){
-			String sql = "SELECT order_id, date, status, email, price, name, family_name, phone, town, street, block, entrance, floor, apartment, description_address FROM orders";
+	private void addToOrderedProducts(Order o){
+		LinkedHashMap<Product, Integer> productsInThisOrder = o.getProducts();
+		for (Entry<Product, Integer> entry : productsInThisOrder.entrySet()) {
+			String sql = "INSERT INTO ordered_products (product_id, order_id, quantity) values (?, ?, ?)";
 			PreparedStatement st = null;
 			ResultSet res = null;
-			try {
+			try{
 				st = DBManager.getInstance().getConnection().prepareStatement(sql);
-				res = st.executeQuery();
+				st.setInt(1,  (int) entry.getKey().getProductId());
+				st.setInt(2, (int) o.getOrderId());
+				st.setInt(3, entry.getValue());
 				
-				while(res.next()){
-					long orderId = res.getInt("order_id");
-					LocalDate date = res.getDate("date").toLocalDate();
-					String status = res.getString("status");
-
-					String email = res.getString("email");
-					User user = UserDAO.getInstance().getAllUsers().get(email);
-					
-					double price = res.getDouble("price");
-					String name = res.getString("name");
-					String familyName = res.getString("family_name");
-					String phone = res.getString("phone");
-					String town = res.getString("town");
-					String street = res.getString("street");
-					int block = res.getInt("block");
-					String entrance = res.getString("entrance");
-					int floor = res.getInt("floor");
-					int apartment = res.getInt("apartment");
-					String descriptionAddress = res.getString("description_address");
-					
-					String sql2 = "SELECT product_id "
-								+ "FROM products p"
-								+ "JOIN ordered_products op ON (p.product_id = op.product_id)"
-								+ "WHERE op.order_id = " + orderId;
-					PreparedStatement st2 = DBManager.getInstance().getConnection().prepareStatement(sql2);
-					ResultSet res2 = st2.executeQuery();
-					HashMap<Long, Product> allProducts = ProductDAO.getInstance().getAllProducts();
-					LinkedHashSet<Product> productsForThisOrder = new LinkedHashSet<>();
-					while(res2.next()){
-						long productId = res2.getInt("product_id");
-						Product p = allProducts.get(productId);
-						productsForThisOrder.add(p);
-					}
-					
-					Order o = new Order(date, status, user.getUserId(), price, name, familyName,
-							phone, town, street, block, entrance, floor, apartment,
-							descriptionAddress, productsForThisOrder);
-					
-					if(!allOrders.containsKey(user.getUserId())){
-						allOrders.put(user.getUserId(), new LinkedHashSet<>());
-					}
-					
-					allOrders.get(user.getUserId()).add(o);
-				}
+				st.execute();
+			
 			} catch(SQLException e){
-				System.out.println("getAllOrders: " + e.getMessage());
+				System.out.println("addOrder: " + e.getMessage());
 			}
 			finally {
 				if(st != null){
 					try {
 						st.close();
-					} catch (SQLException e) {
-						System.out.println("getAllOrders " + e.getMessage());
+					} catch (SQLException e2) {
+						System.out.println("oops " + e2.getMessage());
 					}
 				}
 				if(res != null){
 					try {
 						res.close();
-					} catch (SQLException e) {
-						System.out.println("getAllOrders " + e.getMessage());
+					} catch (SQLException e2) {
+						System.out.println("oops " + e2.getMessage());
 						
 					}
 				}
 			}
 		}
-		return allOrders;
 	}
-
+	
+//	public synchronized HashMap<Long, LinkedHashSet<Order>> getAllOrders(){
+//		if(allOrders.isEmpty()){
+//			String sql = "SELECT order_id, date, status, email, price, name, family_name, phone, town, street, block, entrance, floor, apartment, description_address FROM orders";
+//			PreparedStatement st = null;
+//			ResultSet res = null;
+//			try {
+//				st = DBManager.getInstance().getConnection().prepareStatement(sql);
+//				res = st.executeQuery();
+//				
+//				while(res.next()){
+//					long orderId = res.getInt("order_id");
+//					LocalDate date = res.getDate("date").toLocalDate();
+//					String status = res.getString("status");
+//
+//					String email = res.getString("email");
+//					//User user = UserDAO.getInstance().getAllUsers().get(email);
+//					
+//					double price = res.getDouble("price");
+//					String name = res.getString("name");
+//					String familyName = res.getString("family_name");
+//					String phone = res.getString("phone");
+//					String town = res.getString("town");
+//					String street = res.getString("street");
+//					int block = res.getInt("block");
+//					String entrance = res.getString("entrance");
+//					int floor = res.getInt("floor");
+//					int apartment = res.getInt("apartment");
+//					String descriptionAddress = res.getString("description_address");
+//					
+//					String sql2 = "SELECT product_id "
+//								+ "FROM products p"
+//								+ "JOIN ordered_products op ON (p.product_id = op.product_id)"
+//								+ "WHERE op.order_id = ?";
+//					PreparedStatement st2 = DBManager.getInstance().getConnection().prepareStatement(sql2);
+//					st2.setInt(1, (int) orderId);
+//					ResultSet res2 = st2.executeQuery();
+//					HashMap<Long, Product> allProducts = ProductDAO.getInstance().getAllProducts();
+//					LinkedHashSet<Product> productsForThisOrder = new LinkedHashSet<>();
+//					while(res2.next()){
+//						long productId = res2.getInt("product_id");
+//						Product p = allProducts.get(productId);
+//						productsForThisOrder.add(p);
+//					}
+//					
+//					Order o = new Order(date, status, email, price, name, familyName,
+//							phone, town, street, block, entrance, floor, apartment,
+//							descriptionAddress, productsForThisOrder);
+//					
+//					if(!allOrders.containsKey(user.getUserId())){
+//						allOrders.put(user.getUserId(), new LinkedHashSet<>());
+//					}
+//					
+//					allOrders.get(user.getUserId()).add(o);
+//				}
+//			} catch(SQLException e){
+//				System.out.println("getAllOrders: " + e.getMessage());
+//			}
+//			finally {
+//				if(st != null){
+//					try {
+//						st.close();
+//					} catch (SQLException e) {
+//						System.out.println("getAllOrders " + e.getMessage());
+//					}
+//				}
+//				if(res != null){
+//					try {
+//						res.close();
+//					} catch (SQLException e) {
+//						System.out.println("getAllOrders " + e.getMessage());
+//						
+//					}
+//				}
+//			}
+//		}
+//		return allOrders;
+//	}
+	
+	public void addToAllOrders(Order o){
+		
+	}
+	
 }
