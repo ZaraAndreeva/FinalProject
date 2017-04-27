@@ -7,9 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map.Entry;
 
-
+import com.example.krasiModel.Order;
 import com.example.krasiModel.Product;
 import com.example.krasiModel.User;
 
@@ -99,8 +101,8 @@ public class UserDAO {
 					
 					
 					fillFavProducts(u);
-					u.setOrders(OrderDAO.getInstance().getAllOrders().get(u.getUserId()));
-					
+					//u.setOrders(OrderDAO.getInstance().getAllOrders().get(u.getUserId()));
+					fillOrders(u);
 					allUsers.put(u.getEmail(), u);
 				}
 			} catch (SQLException e) {
@@ -137,6 +139,7 @@ public class UserDAO {
 			
 			u.addFavouriteProduct(p);
 
+			
 			
 			System.out.println("*****************************************************************");
 			System.out.println(p);
@@ -215,15 +218,82 @@ public class UserDAO {
 		} catch (SQLException e) {
 			System.out.println("addFavProducts " + e.getMessage());
 		}
+	}
+	
+	private void fillOrders(User user){
+		String sql = "SELECT order_id, date, status, email, price, name, family_name, phone, town, street, block, entrance, floor, apartment, description_address FROM orders";
+		PreparedStatement st = null;
+		ResultSet res = null;
+		try {
+			st = DBManager.getInstance().getConnection().prepareStatement(sql);
+			res = st.executeQuery();
+			
+			while(res.next()){
+				long orderId = res.getInt("order_id");
+				LocalDate date = res.getDate("date").toLocalDate();
+				String status = res.getString("status");
+
+				String email = res.getString("email");
+				//User user = UserDAO.getInstance().getAllUsers().get(email);
+				
+				double price = res.getDouble("price");
+				String name = res.getString("name");
+				String familyName = res.getString("family_name");
+				String phone = res.getString("phone");
+				String town = res.getString("town");
+				String street = res.getString("street");
+				int block = res.getInt("block");
+				String entrance = res.getString("entrance");
+				int floor = res.getInt("floor");
+				int apartment = res.getInt("apartment");
+				String descriptionAddress = res.getString("description_address");
+				
+				String sql2 = "SELECT product_id, quantity FROM ordered_products WHERE order_id = ?";
+				PreparedStatement st2 = DBManager.getInstance().getConnection().prepareStatement(sql2);
+				st2.setInt(1, (int) orderId);
+				ResultSet res2 = st2.executeQuery();
+				HashMap<Long, Product> allProducts = ProductDAO.getInstance().getAllProducts();
+//				LinkedHashSet<Product> productsForThisOrder = new LinkedHashSet<>();
+				LinkedHashMap<Product, Integer> productsForThisOrder = new LinkedHashMap<>();
+				while(res2.next()){
+					long productId = res2.getInt("product_id");
+					int quantity = res2.getInt("quantity");
+					Product p = allProducts.get(productId);
+					productsForThisOrder.put(p, quantity);
+				}
+				
+				Order o = new Order(date, status, email, price, name, familyName,
+						phone, town, street, block, entrance, floor, apartment,
+						descriptionAddress, productsForThisOrder);
+				
+				o.setOrderId(orderId);	
+				
+				user.addOrder(o);
+			}
+		} catch(SQLException e){
+			System.out.println("getAllOrders: " + e.getMessage());
+		
+		}
 		finally {
+			
 			if(st != null){
 				try {
 					st.close();
 				} catch (SQLException e) {
-					System.out.println("addFavProducts " + e.getMessage());
+
+					System.out.println("getAllOrders " + e.getMessage());
+				}
+			}
+			
+			if(res != null){
+				try {
+					res.close();
+				} catch (SQLException e) {
+					System.out.println("getAllOrders " + e.getMessage());
+					
 				}
 			}
 		}
-	}
 	
+	}
 }

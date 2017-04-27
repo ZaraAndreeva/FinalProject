@@ -190,7 +190,7 @@ public class Product {
 			String name, String subCategory, String subSubCategory) {
 		//TODO validSubSubCategory()
 		return validText(description) && validQuantity(quantity) && validPrice(price)
-				&& validText(brand) && validName(name) && validSubCategory(subCategory);
+				&& validText(brand) && validText(name) && validSubCategory(subCategory);
 		
 	}
 	
@@ -214,9 +214,7 @@ public class Product {
 		return false;
 	}
 
-	public static boolean validName(String name) {
-		return !name.trim().isEmpty() && name != null;
-	}
+	
 
 	public static boolean validSubCategory(String subCategory) {
 		return SubCategoryDAO.getInstance().getAllSubCategories().containsKey(subCategory);

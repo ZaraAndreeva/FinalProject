@@ -1,24 +1,22 @@
 package com.example.controller;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map.Entry;
 import java.util.Scanner;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
+import com.example.dao.OrderDAO;
 import com.example.dao.ProductDAO;
 import com.example.dao.UserDAO;
+import com.example.krasiModel.Order;
 import com.example.krasiModel.Product;
 import com.example.krasiModel.User;
 
@@ -105,7 +103,11 @@ public class UserController {
 	
 	
 	@RequestMapping(value = "/ordersPage", method = RequestMethod.GET)
-	public String ordersPage(){
+	public String ordersPage(Model model, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		model.addAttribute("orders", user.getOrders());
+		
 		return("technomarket_orders");
 	}
 	
@@ -121,25 +123,6 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String register(HttpServletRequest req){
-//		String name = request.getParameter("name");
-//		String familyName = request.getParameter("family_name");
-//		String password = request.getParameter("password");
-//		String email = request.getParameter("email");
-//		String gender = request.getParameter("gender");
-//		String birthDate = request.getParameter("birthdate");
-	
-//		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
-//        LocalDate date = LocalDate.parse(birthDate, formatter);
-//		
-//		User u = new User(name, familyName, email, password, gender, date, false);
-//		UserDAO.getInstance().addUser(u);
-//		//TODO
-////		response.sendRedirect("uspeshnaRegistraciya.html");
-//		return ("redirect:uspeshnaRegistraciya.html");
-		
-		
-		
-		
 		Scanner sc = null;
 		try {
 			sc = new Scanner(req.getInputStream());
@@ -158,13 +141,6 @@ public class UserController {
 		
 		JsonObject respJSON = new JsonObject();
 		
-//		
-//		name: document.getElementById("fos_user_registration_form_first_name").value,	  		
-//		familyName: document.getElementById("fos_user_registration_form_last_name").value,
-//		email: document.getElementById("fos_user_registration_form_email").value,
-//		passwordFirst: document.getElementById("fos_user_registration_form_plainPassword_first").value,
-//		passwordSecond: document.getElementById("fos_user_registration_form_plainPassword_second").value,
-		
 		String name = obj.get("name").getAsString();
 		String familyName = obj.get("familyName").getAsString();
 		String email = obj.get("email").getAsString();
@@ -175,22 +151,21 @@ public class UserController {
 //		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
 //        LocalDate date = LocalDate.parse(birthDate, formatter);
 		
-		System.out.println("************");
-		System.out.println(name);
-		System.out.println(familyName);
-		System.out.println(email);
-		System.out.println(passwordFirst);
-		System.out.println(passwordSecond);
-		System.out.println(sex);
-//		System.out.println(birthDate);
-		System.out.println("***********");
+
+//		System.out.println("************");
+//		System.out.println(name);
+//		System.out.println(familyName);
+//		System.out.println(email);
+//		System.out.println(passwordFirst);
+//		System.out.println(passwordSecond);
+//		System.out.println(sex);
+//		System.out.println("***********");
 		
 		
 		if(!User.validUser(name, familyName, email, passwordFirst, passwordSecond, sex)){
 			respJSON.addProperty("error", true);
 			JsonArray errorsArray = new JsonArray();
 			if(!User.validText(name)){
-//				errorsArray.add(new JsonPrimitive("descriptionError"));
 				JsonObject error = new JsonObject();
 				error.addProperty("errorPlace", "nameError");
 				error.addProperty("errorMessege", "Моля, въведете име!");
@@ -198,7 +173,6 @@ public class UserController {
 				
 			}
 			if(!User.validText(familyName)){
-//				errorsArray.add(new JsonPrimitive("quantityError"));
 				JsonObject error = new JsonObject();
 				error.addProperty("errorPlace", "familyNameError");
 				error.addProperty("errorMessege", "Моля, въведете фамилно име!");
@@ -206,7 +180,6 @@ public class UserController {
 				
 			}
 			if(!User.validEmail(email)){
-//				errorsArray.add(new JsonPrimitive("priceError"));
 				if(UserDAO.getInstance().getAllUsers().containsKey(email)){
 					JsonObject error = new JsonObject();
 					error.addProperty("errorPlace", "emailError");
@@ -222,7 +195,6 @@ public class UserController {
 				
 			}
 			if(!User.validPassword(passwordFirst)){
-//				errorsArray.add(new JsonPrimitive("brandError"));	
 				JsonObject error = new JsonObject();
 				error.addProperty("errorPlace", "passwordFirstError");
 				error.addProperty("errorMessege", "Моля, въведете парола!");
@@ -243,7 +215,6 @@ public class UserController {
 				}
 			}
 			if(Integer.parseInt(sex) == 0){
-//				errorsArray.add(new JsonPrimitive("urlError"));
 				JsonObject error = new JsonObject();
 				error.addProperty("errorPlace", "sexError");
 				error.addProperty("errorMessege", "Моля, въведете пол!");
@@ -264,13 +235,7 @@ public class UserController {
 		}
 		else{
 			respJSON.addProperty("error", false);
-//			try {
-//				resp.getWriter().append(respJSON.toString());
-//			} catch (IOException e) {
-//				System.out.println("oops " + e.getMessage());
-//			}
 		}
-		
 		
 		User user = new User(name, familyName, email, passwordFirst, sex, LocalDate.now(), false);
 		System.out.println(user);
@@ -278,10 +243,8 @@ public class UserController {
 		UserDAO.getInstance().addUser(user);
 		
 		return respJSON.toString();
-		
-		
-//		User u = new User(name, familyName, email, password, gender, birthDate, isAdmin);
 	}
+	
 	@RequestMapping(value = "/registerPage", method = RequestMethod.GET)
 	public String registerPage(){
 		return("technomarket_register");
@@ -408,10 +371,34 @@ public class UserController {
 	}
 	
 	
-	@RequestMapping(value = "/orderPage", method = RequestMethod.GET)
-	public String orderPage(Model model, HttpServletRequest request){
+	@RequestMapping(value = "/orderPage/{orderId}", method = RequestMethod.GET)
+	public String orderPage(Model model, HttpServletRequest request, @PathVariable("orderId") String orderId){
 		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 		if(session.getAttribute("user") != null){
+			Order order = null;
+			for (Order o : user.getOrders()) {
+				if(o.getOrderId() == Long.parseLong(orderId)){
+					order = o;
+					break;
+				}
+			}
+			
+			for (Product p : order.getProducts().keySet()) {
+				System.out.println("**********");
+				System.out.println("**********");
+				System.out.println(p);
+				System.out.println("**********");
+				System.out.println("**********");
+				
+			}
+			
+			for (Entry<Product, Integer> entry : order.getProducts().entrySet()) {
+				System.out.println(entry.getKey() + " - " + entry.getValue());
+			}
+			
+			model.addAttribute("order", order);
+			
 			return "technomarket_order";
 		}
 		else{
@@ -420,6 +407,25 @@ public class UserController {
 		}
 	}
 	
-	
+	@RequestMapping(value = "/makeOrder", method = RequestMethod.POST)
+	public String addOrder(HttpServletRequest request){
+		HttpSession session = request.getSession();
+		LinkedHashMap<Product, Integer> cartProducts = (LinkedHashMap<Product, Integer>) session.getAttribute("cartProducts");
+		
+		User user = (User) session.getAttribute("user");
+		String userEmail = user.getEmail();
+		double cartPrice = 0;
+		LinkedHashMap<Product, Integer> productsForOrder = new LinkedHashMap<>();
+		for (Entry<Product, Integer> entry : cartProducts.entrySet()) {
+			productsForOrder.put(entry.getKey(), entry.getValue());
+			
+			cartPrice += (entry.getKey().getPrice() * entry.getValue());
+		}
+		
+		Order order = new Order(LocalDate.now(), "Непотвърдена", userEmail, cartPrice, "", "", "", "", "", 0, "", 0, 0, "", productsForOrder);
+		OrderDAO.getInstance().addOrder(order, user);
+		session.removeAttribute("cartProducts");
+		return("technomarket_register");
+	}
 	
 }

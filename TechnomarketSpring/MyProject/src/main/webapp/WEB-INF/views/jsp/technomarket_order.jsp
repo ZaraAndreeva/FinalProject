@@ -29,9 +29,9 @@
                             </div>
             <div class="panel-body">
                 <dl class="dl-horizontal">
-                    <dt>Дата:</dt><dd><p>26 април 2017 г., 3:32:51</p></dd>
-                    <dt>Статус:</dt><dd><p>Непотвърдена поръчка</p></dd>
-                    <dt>Е-майл:</dt><dd><p><a href="">zara.andreeva@yahoo.com</a></p></dd>
+                    <dt>Дата:</dt><dd><p>${order.date}</p></dd>
+                    <dt>Статус:</dt><dd><p>${order.status}</p></dd>
+                    <dt>Е-майл:</dt><dd><p><a href="">${order.email}</a></p></dd>
                 </dl>
             </div>
         </div><!--/.panel-->
@@ -44,12 +44,24 @@
                 <dl class="dl-horizontal">
                     <dt>Продукт:</dt>
                     <dd>
-                                                                        <p>
-                            1 x APPLE IPHONE 7 128GB RED SPECIAL EDITION - <var class="price xs"><span>1739.<sup>00</sup>  <small>лв.</small></span></var>
-                                                    </p>
+                        <p>
+                        	<!--  
+                            	1 x APPLE IPHONE 7 128GB RED SPECIAL EDITION - <var class="price xs"><span>1739.<sup>00</sup>  <small>лв.</small></span></var>
+                       			
+                       		-->
+                       		
+                       		
+                       	</p>
+                       	
+                       	
+                       	<c:forEach items="${order.products}" var="entry">
+		                	<p>
+                        		${entry.value} x ${entry.key.name} - <var class="price xs"><span>${entry.value * entry.key.price}<sup>00</sup>  <small>лв.</small></span></var>
+                      		</p>	
+						</c:forEach>
                                                                     </dd>
                     <dt>Доставка:</dt><dd><p><var class="price xs"><span>-</span></var></p></dd>
-                                        <dt>Общо за плащане:</dt><dd><p><var class="price xs"><span>1739.<sup>00</sup>  <small>лв.</small></span></var></p></dd>
+                                        <dt>Общо за плащане:</dt><dd><p><var class="price xs"><span>${order.price}<sup>00</sup>  <small>лв.</small></span></var></p></dd>
                 </dl>
             </div>
         </div><!--/.panel-->        

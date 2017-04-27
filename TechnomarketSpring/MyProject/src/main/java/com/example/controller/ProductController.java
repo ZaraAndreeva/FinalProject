@@ -57,7 +57,7 @@ public class ProductController {
 		
 		
 		if(!Product.validProduct(description, quantity, price, brand, "ddd", subCategory, 
-				"ddd")){
+				name)){
 			respJSON.addProperty("error", true);
 			JsonArray errorsArray = new JsonArray();
 			if(!Product.validText(description)){
@@ -92,7 +92,7 @@ public class ProductController {
 				errorsArray.add(error);
 				
 			}
-			if(!Product.validName(name)){
+			if(!Product.validText(name)){
 //				errorsArray.add(new JsonPrimitive("urlError"));
 				JsonObject error = new JsonObject();
 				error.addProperty("errorPlace", "nameError");

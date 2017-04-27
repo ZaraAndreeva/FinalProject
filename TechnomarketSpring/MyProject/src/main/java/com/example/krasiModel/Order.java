@@ -1,6 +1,7 @@
 package com.example.krasiModel;
 
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 public class Order {
@@ -8,7 +9,7 @@ public class Order {
 	private long orderId;
 	private LocalDate date;
 	private String status;
-	private long userId;
+	private String email;
 	private double price;
 	private String name;
 	private String familyName;
@@ -20,11 +21,11 @@ public class Order {
 	private int floor;
 	private int apartment;
 	private String descriptionAddress;
-	private LinkedHashSet<Product> products;
+	private LinkedHashMap<Product, Integer> products;
 	
-	public Order(LocalDate date, String status, long userId, double price, String name, String familyName,
+	public Order(LocalDate date, String status, String email, double price, String name, String familyName,
 			String phone, String town, String street, int block, String entrance, int floor, int apartment,
-			String descriptionAddress, LinkedHashSet<Product> products) {
+			String descriptionAddress, LinkedHashMap<Product, Integer> products) {
 		//TODO validate
 		if(date != null){
 			this.date = date;
@@ -32,8 +33,8 @@ public class Order {
 		if(validate(status)){
 			this.status = status;
 		}
-		if(userId > 0){
-			this.userId = userId;
+		if(validate(email)){
+			this.email = email;
 		}
 		if(price > 0){
 			this.price = price;
@@ -78,6 +79,22 @@ public class Order {
 			return false;
 		}
 		return !word.trim().isEmpty();
+//		this.date = date;
+//		this.status = status;
+//		this.email = email;
+//		this.price = price;
+//		this.name = name;
+//		this.familyName = familyName;
+//		this.phone = phone;
+//		this.town = town;
+//		this.street = street;
+//		this.block = block;
+//		this.entrance = entrance;
+//		this.floor = floor;
+//		this.apartment = apartment;
+//		this.descriptionAddress = descriptionAddress;
+//		this.products = products;
+		
 	}
 
 	public long getOrderId() {
@@ -142,12 +159,12 @@ public class Order {
 		return descriptionAddress;
 	}
 
-	public LinkedHashSet<Product> getProducts() {
+	public LinkedHashMap<Product, Integer> getProducts() {
 		return products;
 	}
 	
-	public long getUserId() {
-		return userId;
+	public String getEmail() {
+		return email;
 	}
 
 	@Override
@@ -158,6 +175,7 @@ public class Order {
 		result = prime * result + block;
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + ((descriptionAddress == null) ? 0 : descriptionAddress.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((entrance == null) ? 0 : entrance.hashCode());
 		result = prime * result + ((familyName == null) ? 0 : familyName.hashCode());
 		result = prime * result + floor;
@@ -171,7 +189,6 @@ public class Order {
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((street == null) ? 0 : street.hashCode());
 		result = prime * result + ((town == null) ? 0 : town.hashCode());
-		result = prime * result + (int) (userId ^ (userId >>> 32));
 		return result;
 	}
 
@@ -197,6 +214,11 @@ public class Order {
 			if (other.descriptionAddress != null)
 				return false;
 		} else if (!descriptionAddress.equals(other.descriptionAddress))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
 			return false;
 		if (entrance == null) {
 			if (other.entrance != null)
@@ -244,10 +266,10 @@ public class Order {
 				return false;
 		} else if (!town.equals(other.town))
 			return false;
-		if (userId != other.userId)
-			return false;
 		return true;
 	}
+
+	
 
 	
 	
