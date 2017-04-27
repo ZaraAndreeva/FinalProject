@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -342,9 +343,6 @@ public class UserController {
 		int oldCntProduct = cartProducts.get(product);
 		cartProducts.put(product, oldCntProduct+1);
 		
-		for (Entry<Product, Integer> e : cartProducts.entrySet()) {
-			e.getValue();
-		}
 		return "technomarket_cart";
 	}
 	
@@ -357,17 +355,41 @@ public class UserController {
 		return "technomarket_cart";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value = "/setNewQuantity/{productId}/{quantity}", method = RequestMethod.POST)
-	public void setNewQuantity(Model model, HttpServletRequest request, 
+	public String setNewQuantity(Model model, HttpServletRequest request, 
 								@PathVariable("productId") String productId,
-								@PathVariable("quantity") String quantity
-								){
-		
+								@PathVariable("quantity") String quantity){
+		String regex = "[0-9]+";
+		if(!quantity.matches(regex)){
+			quantity = "0";
+		}
 		int newQuantity = Integer.parseInt(quantity);
 		HttpSession session = request.getSession();	
 		LinkedHashMap<Product, Integer> cartProducts = (LinkedHashMap<Product, Integer>) session.getAttribute("cartProducts");
 		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
+		int oldCntProduct = cartProducts.get(product);
 		cartProducts.put(product, newQuantity);
+		
+		double newCartPrice = 0.0;
+		for (Entry<Product, Integer> entry : cartProducts.entrySet()) {
+			newCartPrice += (entry.getKey().getPrice() * entry.getValue());
+		}
+		
+		JsonObject respJSON = new JsonObject();
+		JsonArray respArray = new JsonArray();
+		JsonObject change1 = new JsonObject();
+		change1.addProperty("place", "total_product_price_"+productId);
+		change1.addProperty("messege", product.getPrice() * cartProducts.get(product));
+		JsonObject change2 = new JsonObject();
+		change2.addProperty("place", "total_cart_price");
+		change2.addProperty("messege", newCartPrice);
+		respArray.add(change1);
+		respArray.add(change2);
+		
+		respJSON.add("changes", respArray);
+		
+		return respJSON.toString();
 	}
 	
 	
@@ -384,14 +406,6 @@ public class UserController {
 				}
 			}
 			
-			for (Product p : order.getProducts().keySet()) {
-				System.out.println("**********");
-				System.out.println("**********");
-				System.out.println(p);
-				System.out.println("**********");
-				System.out.println("**********");
-				
-			}
 			
 			for (Entry<Product, Integer> entry : order.getProducts().entrySet()) {
 				System.out.println(entry.getKey() + " - " + entry.getValue());

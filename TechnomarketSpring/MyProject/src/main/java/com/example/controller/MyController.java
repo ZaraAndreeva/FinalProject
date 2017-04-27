@@ -29,7 +29,7 @@ public class MyController implements ServletContextAware {
 		
 //		return "home";
 //		return "technomarket_addProduct";
-		servletContext.setAttribute("entriesForAllCategories", CategoryDAO.getInstance().getAllCategories().entrySet());
+//		servletContext.setAttribute("entriesForAllCategories", CategoryDAO.getInstance().getAllCategories().entrySet());
 		return "new";
 	}
 	
@@ -44,6 +44,7 @@ public class MyController implements ServletContextAware {
 	@Override
 	public void setServletContext(ServletContext servletContext) {
 		this.servletContext = servletContext;
+		servletContext.setAttribute("entriesForAllCategories", CategoryDAO.getInstance().getAllCategories().entrySet());
 	}
 	
 	
