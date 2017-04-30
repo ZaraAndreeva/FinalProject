@@ -214,9 +214,9 @@ public class ProductDAO {
 			res = st.getGeneratedKeys();
 			res.next();
 			allProducts.remove(p.getProductId());
-		} catch (SQLException e) {
+		} catch (SQLException e2) {
 			p.setQuantity(0);
-			
+			allProducts.remove(p.getProductId());
 			String sql2 = "UPDATE products set quantity = 0 WHERE product_id = ?";
 			PreparedStatement st2 = null;
 			ResultSet res2 = null;
@@ -228,21 +228,21 @@ public class ProductDAO {
 				}
 				res2 = st2.getGeneratedKeys();
 				res2.next();
-			} catch (SQLException e2) {
+			} catch (SQLException e) {
 					System.out.println("deleteProduct: " + e.getMessage());
 			}
 			finally {
 				if(st2 != null){
 					try {
 						st2.close();
-					} catch (SQLException e2) {
+					} catch (SQLException e) {
 						System.out.println("deleteProduct: " + e.getMessage());
 					}
 				}
 				if(res2 != null){
 					try {
 						res2.close();
-					} catch (SQLException e2) {
+					} catch (SQLException e) {
 						System.out.println("deleteProduct: " + e.getMessage());
 						
 					}
@@ -303,21 +303,19 @@ public class ProductDAO {
 		}
 	}
 	
-	public void removePromotion(double price, long artNomer){
-		String sql = "UPDATE products set price = ?, promo_price = 0 WHERE product_id = ?";
+	public void removePromotion(long artNomer){
+		String sql = "UPDATE products set promo_price = 0 WHERE product_id = ?";
 		PreparedStatement st = null;
 		ResultSet res = null;
 		try{
 			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			st.setDouble(1, price);
-			st.setLong(2, artNomer);
+			st.setLong(1, artNomer);
 			synchronized(this){
 				st.execute();
 			}
 			res = st.getGeneratedKeys();
 			res.next();
 			allProducts.get(artNomer).setPromoPrice(0.0);
-			allProducts.get(artNomer).setPrice(price);
 		} catch (SQLException e) {
 				System.out.println("removePromotion: " + e.getMessage());
 		}
@@ -341,7 +339,6 @@ public class ProductDAO {
 	}
 	
 	public void editProduct(long artikulenNomer, int quantity, double price, String name, String description){
-		//TODO ne razchita kirilica
 		String sql = "UPDATE products set description = ?, quantity = ?, price = ?, name = ?  WHERE product_id = ?";
 		PreparedStatement st = null;
 		ResultSet res = null;
@@ -423,5 +420,45 @@ public class ProductDAO {
 		
 		return users;
 	}
+	
+//	public ArrayList<Long> allProductForPromotion(){
+//		String sql = "select product_id from products where promo_price = 0";
+//		PreparedStatement st = null;
+//		ResultSet res = null;
+//		ArrayList<Long> products = new ArrayList<>();
+//		try{
+//			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+//			synchronized(this){
+//				res = st.executeQuery();
+//			}
+////			res = st.getGeneratedKeys();
+//			while(res.next()){
+//				long productId = res.getLong("product_id");
+//				products.add(productId);
+//			}
+//			
+//		} catch (SQLException e) {
+//			System.out.println("allProductForPromotion" + e.getMessage());
+//		}
+//		finally {
+//			if(st != null){
+//				try {
+//					st.close();
+//				} catch (SQLException e) {
+//					System.out.println("allProductForPromotion " + e.getMessage());
+//				}
+//			}
+//			if(res != null){
+//				try {
+//					res.close();
+//				} catch (SQLException e) {
+//					System.out.println("allProductForPromotion " + e.getMessage());
+//					
+//				}
+//			}
+//		}
+//		
+//		return products;
+//	}
 
 }
