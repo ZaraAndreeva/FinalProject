@@ -2,7 +2,7 @@ package com.example.krasiModel;
 
 import java.util.HashMap;
 
-
+import com.example.dao.ProductDAO;
 import com.example.dao.SubCategoryDAO;
 
 public class Product {
@@ -188,7 +188,6 @@ public class Product {
 
 	public static boolean validProduct(String description, String quantity, String price, String brand,
 			String name, String subCategory, String subSubCategory) {
-		//TODO validSubSubCategory()
 		return validText(description) && validQuantity(quantity) && validPrice(price)
 				&& validText(brand) && validText(name) && validSubCategory(subCategory);
 		
@@ -241,6 +240,21 @@ public class Product {
 	public void setPromoPrice(double promoPrice) {
 		this.promoPrice = promoPrice;
 	}
+	
+	public static boolean validArtikulenNomer(String artikulenNomer) {
+		return ProductDAO.getInstance().getAllProducts().containsKey(artikulenNomer);
+	}
 
+	public static boolean validNewPrice(String newPrice) {
+		if(isDouble(newPrice)){
+			return Double.parseDouble(newPrice) > 0;
+		}
+		return false;
+	}
+	
+	public static boolean validPromotion(String artNomer, String newPrice) {
+		return validArtikulenNomer(artNomer) && validNewPrice(newPrice);
+		
+	}
 	
 }

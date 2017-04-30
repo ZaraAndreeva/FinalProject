@@ -85,18 +85,67 @@
                                                                 <button type="submit" class="btn btn-tm flix_cart_click_check">
                                     <i class="icon-basket"></i> Добави в количка
                                     
-                                </button> <br>
-                                <br>
+                                </button>
+                                </div>
+                         </form>
+                                
                                 <c:if test="${user.admin}">
                                 	<c:if test = "${product.promoPrice == 0}">
-                                  		<a href="http://localhost:8080/TechnomarketSpring/admin/addPromotionPage" class="btn btn-tm">Добави в промоция.</a>
+                                			<div class="buy-now">
+		                                		<button onclick="showDiv()" class="btn btn-tm flix_cart_click_check">Добави в промоция.</button>
+		                                	</div>
+		                                	<form action="http://localhost:8080/TechnomarketSpring/admin/addPromotion/${product.productId}" method = "GET" novalidate="1">
+			                  					<div id="welcomeDiv"  style="display:none;" class="buy-now">
+				                              		<b>Нова цена:</b> <br>
+				                                	<input type="number" min = "0" id="newPrice" name = "newPrice"/>
+				                                	<input class="btn btn-tm" type="submit" value="Добави" />
+		                         					
+												</div>
+											</form>
+											<script>
+											function showDiv() {
+												   document.getElementById('welcomeDiv').style.display = "block";
+												}
+										
+											</script>
                                   	</c:if>
-                                  	<c:if test = "${product.promoPrice != 0}">
-                                  		<a href="http://localhost:8080/TechnomarketSpring/admin/removePromotionPage" class="btn btn-tm">Премахни от промоция.</a>
-                                  	</c:if>
-                                </c:if>
+                                   	<c:if test = "${product.promoPrice != 0}">
+                                   		<div class="buy-now">
+                                   		<a href="http://localhost:8080/TechnomarketSpring/admin/removePromotion/${product.productId}" class="btn btn-tm flix_cart_click_check">Премахни от промоция</a>
+                                   		</div>
+                                   	</c:if>
+                             
+                                   	<div class="buy-now">
+                                   	<a href="http://localhost:8080/TechnomarketSpring/admin/deleteProduct/${product.productId}" class="btn btn-tm flix_cart_click_check">Премахни продукт</a>
+                                   	</div>
+                 
+                                   	<div class="buy-now">
+                                   		<button onclick="showDiv2()" class="btn btn-tm flix_cart_click_check">Редактирай продукт</button>
+                                   		<form action="http://localhost:8080/TechnomarketSpring/admin/editProduct/${product.productId}" method = "GET" novalidate="1">
+			                  					<div id="welcomeDiv2"  style="display:none;" class="buy-now">
+				                              		<b>Име:</b> <br>
+				                                	<input type="text" id="name" name = "name"/> <br>
+				                                	<b>Количество:</b> <br>
+				                                	<input type="number" min = "0" id="quantity" name = "quantity"/> <br>
+				                                	<b>Цена:</b> <br>
+				                                	<input type="number" min = "0" id="price" name = "price"/> <br>
+				                                	<b>Описание:</b> <br>
+				                                	<input type="text" id="description" name = "description"/> <br>
+				                                	<input class="btn btn-tm" type="submit" value="Промени" />
+		                         					
+												</div>
+										</form>
+										<script>
+											function showDiv2() {
+												   document.getElementById('welcomeDiv2').style.display = "block";
+												}
+										
+											</script>
+                                   	</div>
+                                 </c:if>
+                                
                                                             </div>
-                        </form>                     
+                                         
                         
 
                         <div class="partials-info">

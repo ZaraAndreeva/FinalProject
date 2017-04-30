@@ -136,12 +136,12 @@
                     
                     <c:if test="${sessionScope.user == null}">
                     
-                     	<SCRIPT type="text/javascript">
-						    window.history.forward();
-						    function noBack() { window.history.forward(); }
-						</SCRIPT>
-						</HEAD>
-						<BODY onload="noBack();"
+                    <SCRIPT type="text/javascript">
+						    	window.history.forward();
+						    	function noBack() { window.history.forward(); }
+							</SCRIPT>
+							</HEAD>
+							<BODY onload="noBack();"
 						    onpageshow="if (event.persisted) noBack();">
 						
 	                    <div class="user-bar">
@@ -183,10 +183,12 @@
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/ordersPage">Поръчки</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/viewFavProd">Любими</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/upload">Добави продукт</a></li>
+		                                <!-- 
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/removeProductPage">Премахни продукт</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/editProductPage">Редактирай продукт</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/addPromotionPage">Добави промоция</a></li>
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/admin/removePromotionPage">Премахни промоция</a></li>
+		                                 -->
 		                                <li><a href="http://localhost:8080/TechnomarketSpring/user/logout">Изход</a></li>
 		                            </ul>
 		                        </div>
@@ -201,14 +203,7 @@
                     	 
                     	<c:if test="${!sessionScope.user.admin}">
                     	
-                    	  	<SCRIPT type="text/javascript">
-						    	window.history.forward();
-						    	function noBack() { window.history.forward(); }
-							</SCRIPT>
-							</HEAD>
-							<BODY onload="noBack();"
-						    onpageshow="if (event.persisted) noBack();">
-
+                    	
 	                   		 <div class="user-bar">
 		                                                <div class="user-account dropdown">
 		                            <button class="btn btn-tm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

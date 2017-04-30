@@ -12,8 +12,8 @@ import javax.mail.internet.MimeMessage;
 
 public class MailSender extends Thread{
 	
-	final String senderEmailID = "zarra.smil3@gmail.com";
-	final String senderPassword = "summertime11";
+	final String senderEmailID = "technomarket.ittalents@gmail.com";
+	final String senderPassword = "technomarket123";
 	final String emailSMTPserver = "smtp.gmail.com";
 	final String emailServerPort = "465";
 	String receiverEmailID = null;
