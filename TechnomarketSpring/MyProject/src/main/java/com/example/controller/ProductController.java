@@ -1,7 +1,12 @@
 package com.example.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -107,6 +112,24 @@ public class ProductController {
 				errorsArray.add(error);
 				
 			}
+			if(name.length() > 50){
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "nameError");
+				error.addProperty("errorMessege", "Името е прекалено дълго!");
+				errorsArray.add(error);
+			}
+			if(brand.length() > 45){
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "brandError");
+				error.addProperty("errorMessege", "Името е прекалено дълго!");
+				errorsArray.add(error);
+			}
+			if(description.length() > 2000){
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "descriptionError");
+				error.addProperty("errorMessege", "Описанието е твърде дълго!");
+				errorsArray.add(error);
+			}
 			respJSON.add("errors", errorsArray);
 //			try {
 //				resp.getWriter().append(respJSON.toString());
@@ -149,6 +172,99 @@ public class ProductController {
 		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
 		model.addAttribute("product", product);
 		return "technomarket_viewProduct";
+	}
+	
+	@RequestMapping(value = "/sortProductsByName/{subCategory}", method = RequestMethod.GET)
+	public String sortProducts(Model model, @PathVariable("subCategory") String subCategory){
+		ArrayList<Product> products = ProductDAO.getInstance().giveProductsBySubCategory(subCategory);
+		TreeSet<Product> prodByName = new TreeSet<>(new Comparator<Product>() {
+
+			@Override
+			public int compare(Product o1, Product o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+
+		for(Product p : products){
+			prodByName.add(p);
+		}
+
+		model.addAttribute("categorySearch", true);
+		model.addAttribute("products", prodByName);
+		
+		return "new";
+	}
+	
+	@RequestMapping(value = "/sortProductsByPriceVuz/{subCategory}", method = RequestMethod.GET)
+	public String sortProductsByPriceVuz(Model model, @PathVariable("subCategory") String subCategory){
+		ArrayList<Product> products = ProductDAO.getInstance().giveProductsBySubCategory(subCategory);
+		TreeSet<Product> prodByPriceVuz = new TreeSet<>(new Comparator<Product>() {
+
+			@Override
+			public int compare(Product o1, Product o2) {
+				if(o1.getPromoPrice() != 0 && o2.getPromoPrice() != 0){
+					return o1.getPromoPrice() < o2.getPromoPrice() ? -1 : o1.getPromoPrice() == o2.getPromoPrice() ? 0 : 1;
+				}
+				else{
+					if(o1.getPromoPrice() != 0 && o2.getPromoPrice() == 0){
+						return o1.getPromoPrice() < o2.getPrice() ? -1 : o1.getPromoPrice() == o2.getPrice() ? 0 : 1;
+					}
+					else{
+						if(o1.getPromoPrice() == 0 && o2.getPromoPrice() != 0){
+							return o1.getPrice() < o2.getPromoPrice() ? -1 : o1.getPrice() == o2.getPromoPrice() ? 0 : 1;
+						}
+						else{
+							return o1.getPrice() < o2.getPrice() ? -1 : o1.getPrice() == o2.getPrice() ? 0 : 1;
+						}
+					}
+				}
+			}
+		});
+
+		for(Product p : products){
+			prodByPriceVuz.add(p);
+		}
+
+		model.addAttribute("categorySearch", true);
+		model.addAttribute("products", prodByPriceVuz);
+		
+		return "new";
+	}
+	
+	@RequestMapping(value = "/sortProductsByPriceNiz/{subCategory}", method = RequestMethod.GET)
+	public String sortProductsByPriceNiz(Model model, @PathVariable("subCategory") String subCategory){
+		ArrayList<Product> products = ProductDAO.getInstance().giveProductsBySubCategory(subCategory);
+		TreeSet<Product> prodByPriceNiz = new TreeSet<>(new Comparator<Product>() {
+
+			@Override
+			public int compare(Product o1, Product o2) {
+				if(o1.getPromoPrice() != 0 && o2.getPromoPrice() != 0){
+					return o2.getPromoPrice() < o1.getPromoPrice() ? -1 : o1.getPromoPrice() == o2.getPromoPrice() ? 0 : 1;
+				}
+				else{
+					if(o1.getPromoPrice() != 0 && o2.getPromoPrice() == 0){
+						return o2.getPrice() < o1.getPromoPrice() ? -1 : o1.getPromoPrice() == o2.getPrice() ? 0 : 1;
+					}
+					else{
+						if(o1.getPromoPrice() == 0 && o2.getPromoPrice() != 0){
+							return o2.getPromoPrice() < o1.getPrice() ? -1 : o1.getPrice() == o2.getPromoPrice() ? 0 : 1;
+						}
+						else{
+							return o2.getPrice() < o1.getPrice() ? -1 : o1.getPrice() == o2.getPrice() ? 0 : 1;
+						}
+					}
+				}
+			}
+		});
+
+		for(Product p : products){
+			prodByPriceNiz.add(p);
+		}
+		
+		model.addAttribute("categorySearch", true);
+		model.addAttribute("products", prodByPriceNiz);
+		
+		return "new";
 	}
 	
 }

@@ -198,7 +198,6 @@ public class UserController {
 				error.addProperty("errorPlace", "nameError");
 				error.addProperty("errorMessege", "Моля, въведете име!");
 				errorsArray.add(error);
-				
 			}
 			if(!User.validText(familyName)){
 				JsonObject error = new JsonObject();
@@ -250,6 +249,24 @@ public class UserController {
 				
 			}
 			
+			if(name.length() > 45){
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "nameError");
+				error.addProperty("errorMessege", "Името е прекалено дълго!");
+				errorsArray.add(error);
+			}
+			if(familyName.length() > 45){
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "familyNameError");
+				error.addProperty("errorMessege", "Името е прекалено дълго!");
+				errorsArray.add(error);
+			}
+			if(passwordFirst.length() > 45){
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "passwordFirstError");
+				error.addProperty("errorMessege", "Паролата е твърде дълга!");
+				errorsArray.add(error);
+			}
 //			if(birthDate == null){
 //				JsonObject error = new JsonObject();
 //				error.addProperty("errorPlace", "dateError");
@@ -307,9 +324,8 @@ public class UserController {
 		HttpSession session = request.getSession();
 		if(session.getAttribute("user") != null){
 			User u = (User) session.getAttribute("user");
-			LinkedHashSet<Product> favProducts = u.getFavouriteProducts();
-			System.out.println(favProducts.isEmpty());
-			System.out.println(favProducts);
+			LinkedHashSet<Product> favProducts = ProductDAO.getInstance().viewFavProducts(u);
+
 			if(favProducts.isEmpty()){
 				model.addAttribute("message123", "Няма налични любими продукти.");
 			}

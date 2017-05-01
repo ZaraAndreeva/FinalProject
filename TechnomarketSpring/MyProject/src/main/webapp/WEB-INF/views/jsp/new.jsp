@@ -17,15 +17,49 @@
                     <section class="">
             <div class="container">            	
                     
-                <section>
-    <div class="container"><div class="page-title sh-heading">
+            <section>
+        <div class="container"><div class="page-title sh-heading">
+            <h2>${category}</h2>
+        </div>
            
         </div>
-        <div class="row">
-            <aside class="col-md-3 sidebar">
-	<h3 class="aside-filter-title"><a aria-controls="aside-filter" aria-expanded="true" href="#aside-filter-58f7d9c33c0e3" data-toggle="collapse" role="button" class="tm-collapse">Филтър</a></h3>
-    
-</aside>
+
+	<div class="row">
+	            <aside class="col-md-3 sidebar">
+		<h3 class="aside-filter-title"><a aria-controls="aside-filter" aria-expanded="true" href="#aside-filter-590706410427b" data-toggle="collapse" role="button" class="tm-collapse">Филтър</a></h3>
+<c:if test = "${categorySearch}">
+	    <div id="aside-filter-590706410427b" class="aside-filter collapse in">
+	        <form name="sort" method="get" action="" class="form-horizontal" novalidate="1">
+		        <div id="filter_form">
+			        <fieldset class="filter-box"><header><h3>
+				        <a class="required" for="filter_form_sort">Подреди по</a></h3></header>
+				        <div class="filter-content">
+				        	<!-- 
+					        <select id="filter_form_sort" name="filter_form[sort]" class="form-control" >
+					        	<option value="default">по подразбиране</option>
+					        	<option value="type" id = "byName">по азбучен ред</option>
+					        	<option value="priceVuz">по цена възходящо</option>
+					        	<option value="priceNiz">по цена низходящо</option>
+					        </select>
+					         -->
+				         	<a href="http://localhost:8080/TechnomarketSpring/product/sortProductsByName/${category}" class="btn btn-tm flix_cart_click_check">По азбучен ред</a> <br> <br>
+					        <a href="http://localhost:8080/TechnomarketSpring/product/sortProductsByPriceVuz/${category}" class="btn btn-tm flix_cart_click_check">По цена възходящо</a> <br> <br> 
+					        <a href="http://localhost:8080/TechnomarketSpring/product/sortProductsByPriceNiz/${category}" class="btn btn-tm flix_cart_click_check">По цена низходящо</a>  
+					        
+				        </div>
+			        </fieldset>
+		
+		       		<fieldset class="filter-box"><header><h3><a class="required">Цена</a></h3></header><div class="filter-content">
+		       			<div class="range-widget">
+			       			<input type="number" min = "1" id="minPrice" name="minPrice" required="required" placeholder="" class="form-control" value="19">
+			       			<input type="number" min = "1" id="maxPrice" name="maxPrice" required="required" placeholder="" class="form-control" value="139">
+		       			</div></div>
+		       		</fieldset>
+	       		</div>
+		    </form>
+	    </div>	
+</c:if>
+	</aside>	
 
 <main class="col-md-13 filter-container">
     <div class="row">
