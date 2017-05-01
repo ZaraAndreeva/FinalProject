@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
 import java.util.Scanner;
 import java.util.TreeSet;
 
@@ -174,6 +175,7 @@ public class ProductController {
 		return "technomarket_viewProduct";
 	}
 	
+	@ResponseBody
 	@RequestMapping(value = "/sortProductsByName/{subCategory}", method = RequestMethod.GET)
 	public String sortProducts(Model model, @PathVariable("subCategory") String subCategory){
 		ArrayList<Product> products = ProductDAO.getInstance().giveProductsBySubCategory(subCategory);
@@ -192,7 +194,22 @@ public class ProductController {
 		model.addAttribute("categorySearch", true);
 		model.addAttribute("products", prodByName);
 		
-		return "new";
+		JsonObject respJson = new JsonObject();
+		JsonArray productsArray = new JsonArray();
+		for (Product product : prodByName) {
+			JsonObject productObj = new JsonObject();
+			productObj.addProperty("id", product.getProductId());
+			productObj.addProperty("name", product.getName());
+			productObj.addProperty("price", product.getPrice());
+			productObj.addProperty("promoPrice", product.getPromoPrice());
+			productObj.addProperty("viewProductLink", "http://localhost:8080/TechnomarketSpring/product/viewProductPage/" + product.getProductId());
+			productObj.addProperty("viewProductImage", "/TechnomarketSpring/image/" + product.getProductId());
+			productObj.addProperty("inPromotion", (product.getPromoPrice() > 0)? true : false);
+			productsArray.add(productObj);
+		}
+		respJson.add("products", productsArray);
+		
+		return respJson.toString();
 	}
 	
 	@RequestMapping(value = "/sortProductsByPriceVuz/{subCategory}", method = RequestMethod.GET)
@@ -265,6 +282,7 @@ public class ProductController {
 		model.addAttribute("products", prodByPriceNiz);
 		
 		return "new";
+
 	}
 	
 }

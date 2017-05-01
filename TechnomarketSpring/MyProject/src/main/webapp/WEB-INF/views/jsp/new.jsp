@@ -62,14 +62,16 @@
 	</aside>	
 
 <main class="col-md-13 filter-container">
-    <div class="row">
+	<div class="row" id="productsContainer">
 		<h2>${error}</h2>
-			
+		
 		<c:forEach items="${products}" var="product">
 		<c:if test = "${favPr}">
 			<h1>${message123}</h1>
 		</c:if>
 		<c:if test= "${product.quantity > 0}">
+    		
+    		
     		<div class="col-md-4">
 	                       
 				<figure itemscope itemtype="http://schema.org/Product" class="product">
@@ -123,6 +125,11 @@
 		</figure><!--.product-->
 
 	</div>
+	
+	
+	
+	
+	
 	</c:if>
 		</c:forEach>
 		<h3>${message}</h3>
@@ -152,6 +159,101 @@
     
     
    <%@ include file="/menu_krai.jsp" %>
+        
+        <!--Our html template here-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script id="productsTemplate" type="text/x-handlebars-template">
+			
+			{{#each products}}
+				<div class="col-md-4">
+				<figure itemscope itemtype="http://schema.org/Product" class="product">
+	        		<div class="badges">
+	        			{{#if inPromotion}}
+                    		<div class="badge-label badge-red badge-promo" title="Промо цена">Промо цена</div>
+						{{/if}}
+    
+                	</div>
+                	
+        			<a itemprop="url" href="{{viewProductLink}}" class="product-thumb">
+                		<!--  
+                		<img itemprop="image" src="//cdn.technomarket.bg/media/cache/my_thumb/uploads/library/product/09126068/560af7c4f4122.jpeg" alt="Technomarket" />
+            			-->
+            			<img itemprop="image" src="{{viewProductImage}}" alt="Technomarket" />
+            			
+            		</a>
+            			 
+    			<figcaption>
+        			<div class="product-name">
+            		<h3><a itemprop="url" href="{{viewProductLink}}"><span itemprop="name">{{name}}</span></a></h3>
+            		<small class="product-model">Арт.№: {{id}}<span itemprop="productID"></small>
+            		<ul itemprop="description" class="product-description">
+
+                     </ul>            
+       	 </div>
+       
+                <div class="product-price">
+            <var itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="price">
+            	<meta itemprop="priceCurrency" content="BGN" />
+                {{#if inPromotion}}
+                	<span itemprop="price" class="new">{{promoPrice}}<sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup><small>лв.</small></span>
+                	<span itemprop="price" class="old">{{price}}<sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup><small>лв.</small></span>
+                
+                {{else}}
+                	<span itemprop="price" class="new">{{price}}<sup>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup><small>лв.</small></span>
+                {{/if}}
+                                
+                <div><link itemprop="itemCondition" href="http://schema.org/NewCondition" /> <span class="hidden">New</span></div>
+            </var>
+            <form action="/cart/add">
+                <input type="hidden" value="09126068" name="product">
+                <button type="submit" class="btn btn-tm">
+                	<i class="icon-basket"></i> Купи онлайн
+                </button>
+            </form>            
+        </div>
+          </figcaption>
+		</figure><!--.product-->
+		</div>
+			{{/each}}
+		
+
+		</script>
+        <!--End of html template here-->
+          
+       
+       
+       <script>
+       		
+       		
+       		
+       			var productsData;
+       			$.ajax({
+      			  url: "/TechnomarketSpring/product/sortProductsByName/Телевизори",
+      			  type: "GET", //send it through get method
+      			  contentType : 'application/json; charset=utf-8',
+      			  dataType : 'json',
+      			  success: function(response) {
+      				console.log(response);
+      				//productsData = response;
+      				
+      				var rawTemplate = document.getElementById("productsTemplate").innerHTML;
+           			var compiledTemplete = Handlebars.compile(rawTemplate);
+           			console.log(response);
+           			var generatedHtml = compiledTemplete(response);
+           			var productsContainer = document.getElementById("productsContainer");
+           			productsContainer.innerHTML = generatedHtml;
+      			  },
+      			  error: function() {
+      				  alert("Error in getting ordered product by name.")
+      			  }
+      			});
+       			
+       			
+       	
+       		
+       		
+       </script>
+        
         
     </body>
 </html>
