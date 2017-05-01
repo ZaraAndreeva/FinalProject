@@ -37,7 +37,10 @@ public class ProductDAO {
 
 		int subCategoryId = SubCategoryDAO.getInstance().getAllSubCategories().get(p.getSubCategory());
 		String sql = "INSERT INTO products (description, quantity, price, promo_price, brand, name, sub_category) values (?, ?, ?, ?, ?, ?,(SELECT sub_category_id from sub_categories where sub_category_id = ?))";
-		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){
+		ResultSet res = null;
+		PreparedStatement st = null;
+		try{
+			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			st.setString(1, p.getDescription());
 			st.setInt(2, p.getQuantity());
 			st.setDouble(3, p.getPrice());
@@ -45,10 +48,11 @@ public class ProductDAO {
 			st.setString(5, p.getBrand());
 			st.setString(6, p.getName());
 			st.setInt(7, subCategoryId);
-			
 			synchronized(this){
 				st.execute();
 			}
+			res =st.getGeneratedKeys();
+			
 			
 			res.next();
 			long productId = res.getLong(1);
@@ -57,6 +61,7 @@ public class ProductDAO {
 			allProducts.put(productId, p);
 		} catch (SQLException e) {
 				System.out.println("addProduct: " + e.getMessage());
+				e.printStackTrace();
 		}
 	}
 	

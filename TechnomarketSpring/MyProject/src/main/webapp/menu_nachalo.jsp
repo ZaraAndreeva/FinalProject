@@ -14,6 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="//cdn.technomarket.bg/images/favicon.ico">
                                 <link rel="stylesheet" href="//cdn.technomarket.bg/css/f38a55a.css?v=1" />
+                            <script src="http://localhost:8080/TechnomarketSpring/js/handlebars-v4.0.5.js"></script>
                             <script type="text/javascript" src="//cdn.technomarket.bg/assets/vendor/requirejs/require.js"></script>
 
 <script type="text/javascript">
