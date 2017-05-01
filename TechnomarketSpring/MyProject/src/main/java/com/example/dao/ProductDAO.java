@@ -7,9 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.TreeSet;
 
 import com.example.krasiModel.Product;
 import com.example.krasiModel.User;
@@ -98,7 +101,7 @@ public class ProductDAO {
 					Product p = new Product(subCategoryString, description, quantity, price, promoPrice, brand, name);
 					p.setProductId(productId);
 					
-					allProducts.put(productId, p);	
+					allProducts.put(productId, p);
 				}
 			} catch(SQLException e){
 				System.out.println("getAllProducts: " + e.getMessage());
@@ -250,6 +253,23 @@ public class ProductDAO {
 		}
 		
 		return users;
+	}
+	
+	public LinkedHashSet<Product> viewFavProducts(User u){
+		String sql = "select product_id from favourite_products where user_id = ?";
+		LinkedHashSet<Product> prods = new LinkedHashSet<>();
+		try(PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.executeQuery();){
+			st.setLong(1, u.getUserId());
+			while(res.next()){
+				int prodId = res.getInt("product_id");
+				prods.add(ProductDAO.getInstance().getAllProducts().get(prodId));
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("checkForFavProducts" + e.getMessage());
+		}
+		
+		return prods;
 	}
 	
 }

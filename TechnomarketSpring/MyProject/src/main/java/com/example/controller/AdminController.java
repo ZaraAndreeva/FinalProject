@@ -128,8 +128,12 @@ public class AdminController {
 		}
 		
 		dao.editProduct(Long.parseLong(productId), quantity, price, name, description);
-		model.addAttribute("message", "Успешно променихте продукт с артикулен номер: " + Long.parseLong(productId));
-
+		if(quantity == -1 && price == 0 && name.isEmpty() && description.isEmpty()){
+			model.addAttribute("message", "Не сте въвели никакви промени.");
+		}
+		else{
+			model.addAttribute("message", "Успешно променихте продукт с артикулен номер: " + Long.parseLong(productId));
+		}
 		return new ModelAndView("forward:/product/viewProductPage/" + productId);
 	}
 	

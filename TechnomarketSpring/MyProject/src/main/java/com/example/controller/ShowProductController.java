@@ -24,7 +24,8 @@ public class ShowProductController {
 			model.addAttribute("error", "Все още няма такива продукти");
 			return "new";
 		}
-		
+		model.addAttribute("category", subCategory);
+		model.addAttribute("categorySearch", true);
 		//TODO remove from another place also
 //		Collection<Product> allProducts = ProductDAO.getInstance().getAllProducts().values();
 		
