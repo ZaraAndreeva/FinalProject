@@ -193,5 +193,7 @@
         
   <%@ include file="/menu_krai.jsp" %>
   
+  
+  
     </body>
 </html>
