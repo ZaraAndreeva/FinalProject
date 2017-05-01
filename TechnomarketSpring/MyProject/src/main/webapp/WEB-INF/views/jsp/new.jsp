@@ -30,8 +30,11 @@
 <main class="col-md-13 filter-container">
     <div class="row">
 		<h2>${error}</h2>
-		
+			
 		<c:forEach items="${products}" var="product">
+		<c:if test = "${favPr}">
+			<h1>${message123}</h1>
+		</c:if>
 		<c:if test= "${product.quantity > 0}">
     		<div class="col-md-4">
 	                       

@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -38,10 +37,7 @@ public class OrderDAO {
 		String sql = "INSERT INTO orders (date, status, email, price, name, family_name, phone, town, street, block, entrance, floor, apartment, description_address) "
 				+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-		PreparedStatement st = null;
-		ResultSet res = null;
-		try{
-			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){		
 			st.setDate(1,  Date.valueOf(o.getDate()));
 			st.setString(2, o.getStatus());
 			st.setString(3, u.getEmail());	
@@ -60,7 +56,6 @@ public class OrderDAO {
 			
 			st.execute();
 			
-			res = st.getGeneratedKeys();
 			res.next();
 			long orderId = res.getLong(1);
 			o.setOrderId(orderId);
@@ -68,24 +63,6 @@ public class OrderDAO {
 			addToOrderedProducts(o);
 		} catch(SQLException e){
 			System.out.println("addOrder: " + e.getMessage());
-		}
-		finally {
-			if(st != null){
-				try {
-					st.close();
-				} catch (SQLException e2) {
-					System.out.println("oops " + e2.getMessage());
-				}
-			}
-			if(res != null){
-				try {
-					res.close();
-				} catch (SQLException e2) {
-					System.out.println("oops " + e2.getMessage());
-					
-				}
-			}
-
 		}
 		
 		u.addOrder(o);
@@ -101,10 +78,7 @@ public class OrderDAO {
 		LinkedHashMap<Product, Integer> productsInThisOrder = o.getProducts();
 		for (Entry<Product, Integer> entry : productsInThisOrder.entrySet()) {
 			String sql = "INSERT INTO ordered_products (product_id, order_id, quantity) values (?, ?, ?)";
-			PreparedStatement st = null;
-			ResultSet res = null;
-			try{
-				st = DBManager.getInstance().getConnection().prepareStatement(sql);
+			try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql); ){
 				st.setInt(1,  (int) entry.getKey().getProductId());
 				st.setInt(2, (int) o.getOrderId());
 				st.setInt(3, entry.getValue());
@@ -114,23 +88,7 @@ public class OrderDAO {
 			} catch(SQLException e){
 				System.out.println("addOrder: " + e.getMessage());
 			}
-			finally {
-				if(st != null){
-					try {
-						st.close();
-					} catch (SQLException e2) {
-						System.out.println("oops " + e2.getMessage());
-					}
-				}
-				if(res != null){
-					try {
-						res.close();
-					} catch (SQLException e2) {
-						System.out.println("oops " + e2.getMessage());
-						
-					}
-				}
-			}
+
 		}
 	}
 	

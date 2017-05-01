@@ -25,12 +25,8 @@ public class CategoryDAO {
 	public synchronized HashMap<String, ArrayList<String>> getAllCategories(){
 		if(allCategories.isEmpty()){
 			String sql = "SELECT category_id, name FROM categories";
-			PreparedStatement st = null;
-			ResultSet res = null;
-			try {
-				st = DBManager.getInstance().getConnection().prepareStatement(sql);
-				res = st.executeQuery();
-				
+			try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql); ResultSet res = st.executeQuery();){
+
 //				int x = 1;
 				while(res.next()){
 					String category = res.getString("name");

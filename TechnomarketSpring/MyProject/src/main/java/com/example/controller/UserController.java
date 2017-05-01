@@ -42,8 +42,8 @@ public class UserController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(HttpServletRequest request, Model model){
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
+		String email = request.getParameter("email").trim();
+		String password = request.getParameter("password").trim();
 		
 		if(UserDAO.getInstance().validLogin(email, password)){
 			User u = UserDAO.getInstance().getAllUsers().get(email);
@@ -142,11 +142,11 @@ public class UserController {
 		
 		JsonObject respJSON = new JsonObject();
 		
-		String name = obj.get("name").getAsString();
-		String familyName = obj.get("familyName").getAsString();
-		String email = obj.get("email").getAsString();
-		String passwordFirst = obj.get("passwordFirst").getAsString();
-		String passwordSecond = obj.get("passwordSecond").getAsString();
+		String name = obj.get("name").getAsString().trim();
+		String familyName = obj.get("familyName").getAsString().trim();
+		String email = obj.get("email").getAsString().trim();
+		String passwordFirst = obj.get("passwordFirst").getAsString().trim();
+		String passwordSecond = obj.get("passwordSecond").getAsString().trim();
 		String sex = (obj.get("sex")!= null)?  obj.get("sex").getAsString() : "0";
 //		String birthDate = obj.get("birthDate").getAsString();
 //		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
@@ -250,29 +250,7 @@ public class UserController {
 	public String registerPage(){
 		return("technomarket_register");
 	}
-	
-	@RequestMapping(value = "/abonirane/{productId}", method = RequestMethod.GET)
-	public String sendMail(@PathVariable("productId") String productId, Model model, HttpServletRequest request){
-		//TODO da vzemem artikulniya nomer na suotvetniya produkt
-		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
-		model.addAttribute("product", product);
-		HttpSession session = request.getSession();
-		if(session.getAttribute("user") != null){
-			User u = (User) session.getAttribute("user");
-			if(u.getFavouriteProducts().contains(product)){
-//				new MailSender(u.getEmail() ,"Абониране", "Успешно се абонирахте за продукт с артикулен номер: + productId +.");
-				model.addAttribute("message", "Вие вече сте абонирани за този продукт.");
-			}
-			else{
-				model.addAttribute("message", "Първо трябва да добавите този продукт в любими.");
-			}
-		}
-		else{
-			model.addAttribute("message", "Трябва да влезете в профила си, за да се абонирате.");
-		}
-		return "technomarket_viewProduct";
-	}
-	
+
 	@RequestMapping(value = "/addFavProd/{productId}", method = RequestMethod.GET)
 	public String addFavProd(@PathVariable("productId") String productId, Model model, HttpServletRequest request){
 		
@@ -286,7 +264,6 @@ public class UserController {
 			else{
 				UserDAO.getInstance().addFavProducts(u, product);
 				new MailSender(u.getEmail() ,"Абониране", "Вие се абонирахте за продукт с артикулен номер: " + productId + ".");
-//				model.addAttribute("message", "Успешно добавихте този продукт в любими.");
 				model.addAttribute("message", "Успешно добавихте този продукт в любими и се абонирахте за него.");
 			}
 		}
@@ -304,6 +281,11 @@ public class UserController {
 		if(session.getAttribute("user") != null){
 			User u = (User) session.getAttribute("user");
 			LinkedHashSet<Product> favProducts = u.getFavouriteProducts();
+			System.out.println(favProducts.isEmpty());
+			System.out.println(favProducts);
+			if(favProducts.isEmpty()){
+				model.addAttribute("message123", "Няма налични любими продукти.");
+			}
 			model.addAttribute("products", favProducts);
 			model.addAttribute("favPr", true);
 		}

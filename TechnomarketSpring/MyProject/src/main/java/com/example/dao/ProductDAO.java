@@ -1,5 +1,6 @@
 package com.example.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,17 +31,10 @@ public class ProductDAO {
 	}
 	
 	public void addProduct(Product p){
-		
-		//TODO if is admin
 
 		int subCategoryId = SubCategoryDAO.getInstance().getAllSubCategories().get(p.getSubCategory());
 		String sql = "INSERT INTO products (description, quantity, price, promo_price, brand, name, sub_category) values (?, ?, ?, ?, ?, ?,(SELECT sub_category_id from sub_categories where sub_category_id = ?))";
-
-		PreparedStatement st = null;
-		ResultSet res = null;
-		try{
-			System.out.println(p.getDescription());
-			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){
 			st.setString(1, p.getDescription());
 			st.setInt(2, p.getQuantity());
 			st.setDouble(3, p.getPrice());
@@ -48,81 +42,41 @@ public class ProductDAO {
 			st.setString(5, p.getBrand());
 			st.setString(6, p.getName());
 			st.setInt(7, subCategoryId);
-//			st.setString(7, p.getSubCategory());
 			
 			synchronized(this){
 				st.execute();
 			}
 			
-			res = st.getGeneratedKeys();
 			res.next();
 			long productId = res.getLong(1);
+			
 			p.setProductId(productId);
 			allProducts.put(productId, p);
 		} catch (SQLException e) {
 				System.out.println("addProduct: " + e.getMessage());
-		}
-		finally {
-			if(st != null){
-				try {
-					st.close();
-				} catch (SQLException e) {
-					System.out.println("addProduct " + e.getMessage());
-				}
-			}
-			if(res != null){
-				try {
-					res.close();
-				} catch (SQLException e) {
-					System.out.println("addProduct " + e.getMessage());
-					
-				}
-			}
 		}
 	}
 	
 	public void addFavouriteProduct(Product p, User u){
  		String sql = "insert into favourite_products (user_id, product_id) values ((select user_id from users where user_id = user_id),"
  				+ "(select product_id from products where product_id = product_id))";
- 		PreparedStatement st = null;
- 		ResultSet res = null;
- 		try{
- 			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+ 		
+ 		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){
  			st.setLong(1, u.getUserId());
 			st.setLong(2, p.getProductId());
- 			res = st.getGeneratedKeys();
  			res.next();
  			u.addFavouriteProduct(p);
  		} catch (SQLException e) {
  			System.out.println("addFavouriteProduct: " + e.getMessage());
  		}
- 		finally {
-			if(st != null){
-				try {
-					st.close();
-				} catch (SQLException e) {
-					System.out.println("addFavouriteProduct " + e.getMessage());
-				}
-			}
-			if(res != null){
-				try {
-					res.close();
-				} catch (SQLException e) {
-					System.out.println("addFavouriteProduct " + e.getMessage());
-					
-				}
-			}
-		}
+ 		
 	}
 	
 	public HashMap<Long, Product> getAllProducts(){
 		if(allProducts.isEmpty()){
 			String sql = "SELECT product_id, description, quantity, price, promo_price, brand, name, sub_category FROM products";
-			PreparedStatement st = null;
-			ResultSet set = null;
-			try {
-				st = DBManager.getInstance().getConnection().prepareStatement(sql);
-				set = st.executeQuery();
+
+			try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql); ResultSet set = st.executeQuery();){
 				
 				while(set.next()){
 					long productId = set.getInt("product_id");
@@ -149,17 +103,7 @@ public class ProductDAO {
 			} catch(SQLException e){
 				System.out.println("getAllProducts: " + e.getMessage());
 			}
-			finally {
-				if(st != null){
-					try {
-						st.close();
-					} catch (SQLException e) {
-						System.out.println("getAllProducts " + e.getMessage());
-					}
-				}
-			}
 		}
-
 		return allProducts;
 	}
 	
@@ -203,147 +147,76 @@ public class ProductDAO {
 	
 	public void deleteProduct(Product p){
 		String sql = "DELETE from products WHERE product_id = ?";
-		PreparedStatement st = null;
-		ResultSet res = null;
-		try{
-			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		Connection con = DBManager.getInstance().getConnection();
+		try(PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){
+			con.setAutoCommit(false);
 			st.setLong(1, p.getProductId());
 			synchronized(this){
 				st.execute();
 			}
-			res = st.getGeneratedKeys();
 			res.next();
 			allProducts.remove(p.getProductId());
+			con.commit();
 		} catch (SQLException e2) {
 			p.setQuantity(0);
 			allProducts.remove(p.getProductId());
 			String sql2 = "UPDATE products set quantity = 0 WHERE product_id = ?";
-			PreparedStatement st2 = null;
-			ResultSet res2 = null;
-			try{
-				st2 = DBManager.getInstance().getConnection().prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS);
+			try(PreparedStatement st2 = DBManager.getInstance().getConnection().prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS); ResultSet res2 = st2.getGeneratedKeys();){
 				st2.setLong(1, p.getProductId());
 				synchronized(this){
 					st2.execute();
 				}
-				res2 = st2.getGeneratedKeys();
 				res2.next();
 			} catch (SQLException e) {
 					System.out.println("deleteProduct: " + e.getMessage());
 			}
-			finally {
-				if(st2 != null){
-					try {
-						st2.close();
-					} catch (SQLException e) {
-						System.out.println("deleteProduct: " + e.getMessage());
-					}
-				}
-				if(res2 != null){
-					try {
-						res2.close();
-					} catch (SQLException e) {
-						System.out.println("deleteProduct: " + e.getMessage());
-						
-					}
-				}
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				System.out.println("deleteProduct: " + e.getMessage());
 			}
 		}
 		finally {
-			if(st != null){
-				try {
-					st.close();
-				} catch (SQLException e) {
-					System.out.println("deleteProduct " + e.getMessage());
-				}
-			}
-			if(res != null){
-				try {
-					res.close();
-				} catch (SQLException e) {
-					System.out.println("deleteProduct " + e.getMessage());
-					
-				}
+			try {
+				con.setAutoCommit(true);
+			} catch (SQLException e) {
+				System.out.println("deleteProduct: " + e.getMessage());
 			}
 		}
 	}
 	
 	public void addPromotion(double newPrice, long artNomer){
 		String sql = "UPDATE products set promo_price = ? WHERE product_id = ?";
-		PreparedStatement st = null;
-		ResultSet res = null;
-		try{
-			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		try(PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){
 			st.setDouble(1, newPrice);
 			st.setLong(2, artNomer);
 			synchronized(this){
 				st.execute();
 			}
-			res = st.getGeneratedKeys();
 			res.next();
 		} catch (SQLException e) {
 				System.out.println("addPromotion: " + e.getMessage());
 		}
-		finally {
-			if(st != null){
-				try {
-					st.close();
-				} catch (SQLException e) {
-					System.out.println("addPromotion: " + e.getMessage());
-				}
-			}
-			if(res != null){
-				try {
-					res.close();
-				} catch (SQLException e) {
-					System.out.println("addPromotion: " + e.getMessage());
-					
-				}
-			}
-		}
+
 	}
 	
 	public void removePromotion(long artNomer){
 		String sql = "UPDATE products set promo_price = 0 WHERE product_id = ?";
-		PreparedStatement st = null;
-		ResultSet res = null;
-		try{
-			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		try(PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){
 			st.setLong(1, artNomer);
 			synchronized(this){
 				st.execute();
 			}
-			res = st.getGeneratedKeys();
 			res.next();
 			allProducts.get(artNomer).setPromoPrice(0.0);
 		} catch (SQLException e) {
 				System.out.println("removePromotion: " + e.getMessage());
 		}
-		finally {
-			if(st != null){
-				try {
-					st.close();
-				} catch (SQLException e) {
-					System.out.println("removePromotion: " + e.getMessage());
-				}
-			}
-			if(res != null){
-				try {
-					res.close();
-				} catch (SQLException e) {
-					System.out.println("removePromotion: " + e.getMessage());
-					
-				}
-			}
-		}
 	}
 	
 	public void editProduct(long artikulenNomer, int quantity, double price, String name, String description){
 		String sql = "UPDATE products set description = ?, quantity = ?, price = ?, name = ?  WHERE product_id = ?";
-		PreparedStatement st = null;
-		ResultSet res = null;
-		try{
-			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		try(PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){
 			st.setString(1, description);
 			st.setInt(2, quantity);
 			st.setDouble(3, price);
@@ -352,7 +225,6 @@ public class ProductDAO {
 			synchronized(this){
 				st.execute();
 			}
-			res = st.getGeneratedKeys();
 			res.next();
 			allProducts.get(artikulenNomer).setDescription(description);
 			allProducts.get(artikulenNomer).setName(name);
@@ -361,37 +233,13 @@ public class ProductDAO {
 		} catch (SQLException e) {
 				System.out.println("editProduct: " + e.getMessage());
 		}
-		finally {
-			if(st != null){
-				try {
-					st.close();
-				} catch (SQLException e) {
-					System.out.println("editProduct " + e.getMessage());
-				}
-			}
-			if(res != null){
-				try {
-					res.close();
-				} catch (SQLException e) {
-					System.out.println("editProduct " + e.getMessage());
-					
-				}
-			}
-		}
 	}
 	
 	public ArrayList<Integer> checkForFavProducts(Product p){
 		String sql = "select user_id from favourite_products where product_id = ?";
-		PreparedStatement st = null;
-		ResultSet res = null;
 		ArrayList<Integer> users = new ArrayList<>();
-		try{
-			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		try(PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.executeQuery();){
 			st.setLong(1, p.getProductId());
-			synchronized(this){
-				res = st.executeQuery();
-			}
-//			res = st.getGeneratedKeys();
 			while(res.next()){
 				int userId = res.getInt("user_id");
 				users.add(userId);
@@ -400,65 +248,8 @@ public class ProductDAO {
 		} catch (SQLException e) {
 			System.out.println("checkForFavProducts" + e.getMessage());
 		}
-		finally {
-			if(st != null){
-				try {
-					st.close();
-				} catch (SQLException e) {
-					System.out.println("checkForFavProducts " + e.getMessage());
-				}
-			}
-			if(res != null){
-				try {
-					res.close();
-				} catch (SQLException e) {
-					System.out.println("checkForFavProducts " + e.getMessage());
-					
-				}
-			}
-		}
 		
 		return users;
 	}
 	
-//	public ArrayList<Long> allProductForPromotion(){
-//		String sql = "select product_id from products where promo_price = 0";
-//		PreparedStatement st = null;
-//		ResultSet res = null;
-//		ArrayList<Long> products = new ArrayList<>();
-//		try{
-//			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-//			synchronized(this){
-//				res = st.executeQuery();
-//			}
-////			res = st.getGeneratedKeys();
-//			while(res.next()){
-//				long productId = res.getLong("product_id");
-//				products.add(productId);
-//			}
-//			
-//		} catch (SQLException e) {
-//			System.out.println("allProductForPromotion" + e.getMessage());
-//		}
-//		finally {
-//			if(st != null){
-//				try {
-//					st.close();
-//				} catch (SQLException e) {
-//					System.out.println("allProductForPromotion " + e.getMessage());
-//				}
-//			}
-//			if(res != null){
-//				try {
-//					res.close();
-//				} catch (SQLException e) {
-//					System.out.println("allProductForPromotion " + e.getMessage());
-//					
-//				}
-//			}
-//		}
-//		
-//		return products;
-//	}
-
 }
