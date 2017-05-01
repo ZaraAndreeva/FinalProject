@@ -8,8 +8,6 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map.Entry;
 
 import com.example.krasiModel.Order;
 import com.example.krasiModel.Product;
@@ -33,9 +31,9 @@ public class UserDAO {
 	
 	public void addUser(User u){
 		String sql = "INSERT into users (email, password, name, family_name, gender, birth_date, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?)";
-		PreparedStatement st = null;
-		try {
-			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();) {
+
 			st.setString(1, u.getEmail());
 			st.setString(2, u.getPassword());
 			st.setString(3, u.getName());
@@ -48,7 +46,7 @@ public class UserDAO {
 				st.execute();
 			}
 			
-			ResultSet res = st.getGeneratedKeys();
+			
 			res.next();
 			long user_id = res.getLong(1);
 			u.setUserId(user_id);
@@ -56,36 +54,16 @@ public class UserDAO {
 		} catch (SQLException e) {
 			System.out.println("oops " + e.getMessage());
 		}
-		finally {
-			if(st != null){
-				try {
-					st.close();
-				} catch (SQLException e) {
-					System.out.println("oops " + e.getMessage());
-				}
-			}
-		}
 		
 		allUsers.put(u.getEmail(), u);
 	}
 	
-//	public synchronized String getEmailById(long id){
-//		String sql = "SELECT email FROM users WHERE user_id = " + id;
-//		PreparedStatement st = null;
-//		try {
-//			st = DBManager.getInstance().getConnection().prepareStatement(sql);
-//		} catch (SQLException e) {
-//			System.out.println("oops " + e.getMessage());
-//		}
-//	}
-	
 	public synchronized HashMap<String, User> getAllUsers(){
 		if(allUsers.isEmpty()){
 			String sql = "SELECT user_id, email, password, name, family_name, gender, birth_date, is_admin FROM users" ;
-			PreparedStatement st;
-			try {
-				st = DBManager.getInstance().getConnection().prepareStatement(sql);
-				ResultSet res = st.executeQuery();
+			
+			try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql); ResultSet res = st.executeQuery();){
+
 				while(res.next()){
 					String name = res.getString("name");
 					String familyName = res.getString("family_name");
@@ -124,9 +102,9 @@ public class UserDAO {
 		String sql = "INSERT into favourite_products (user_id, product_id) VALUES "
 				+ "((SELECT user_id from users where user_id = ?), "
 				+ "(SELECT product_id from products where product_id = ?))";
-		PreparedStatement st = null;
-		try {
-			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+		try(PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();) {
+
 			st.setInt(1, (int)u.getUserId());
 			st.setInt(2, (int)p.getProductId());
 
@@ -134,59 +112,24 @@ public class UserDAO {
 				st.execute();
 			}
 			
-			ResultSet res = st.getGeneratedKeys();
 			res.next();
 			
 			u.addFavouriteProduct(p);
 
-			
-			
-			System.out.println("*****************************************************************");
-			System.out.println(p);
-			for (Product pr : u.getFavouriteProducts()) {
-				System.out.println(pr);
-			}
-			System.out.println("*****************************************************************");
-			
 		} catch (SQLException e) {
 			System.out.println("addFavProducts " + e.getMessage());
-		}
-		finally {
-			if(st != null){
-				try {
-					st.close();
-				} catch (SQLException e) {
-					System.out.println("addFavProducts " + e.getMessage());
-				}
-			}
 		}
 	}
 	
 	public void fillFavProducts(User u){
 		String sql = "SELECT product_id FROM favourite_products where user_id = ?" ;
-		PreparedStatement st = null;
-		ResultSet res = null;
-		try {
-			st = DBManager.getInstance().getConnection().prepareStatement(sql);
+		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql); ResultSet res =  st.executeQuery();) {
 			st.setInt(1, (int) u.getUserId());
-			res = st.executeQuery();
 			while(res.next()){
 				long productId = (long) res.getInt("product_id");
 				System.out.println(u.getUserId() + " - " + productId);
 				
 				Product p = ProductDAO.getInstance().getAllProducts().get(productId);
-				
-				System.out.println("*********");
-				for (Entry<Long, Product> e : ProductDAO.getInstance().getAllProducts().entrySet()) {
-					if(e.getKey() == productId){
-						u.addFavouriteProduct(e.getValue());
-						System.out.println("kjdnaskjdnsakjn");
-						System.out.println(e.getValue());
-						System.out.println("kjdnaskjdnsakjn");
-						p = e.getValue();
-					}
-				}
-				System.out.println("*********");
 				
 				u.addFavouriteProduct(p);
 				System.out.println(u);
@@ -200,9 +143,8 @@ public class UserDAO {
 	
 	public void removeFavProducts(User u, Product p){
 		String sql = "delete from favourite_products where product_id = ? and user_id = ?;";
-		PreparedStatement st = null;
-		try {
-			st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){
 			st.setInt(1, (int)p.getProductId());
 			st.setInt(2, (int)u.getUserId());
 
@@ -210,7 +152,6 @@ public class UserDAO {
 				st.execute();
 			}
 			
-			ResultSet res = st.getGeneratedKeys();
 			res.next();
 			
 			u.removeFavProduct(p);
@@ -221,13 +162,11 @@ public class UserDAO {
 	}
 	
 	private void fillOrders(User user){
-		String sql = "SELECT order_id, date, status, email, price, name, family_name, phone, town, street, block, entrance, floor, apartment, description_address FROM orders";
-		PreparedStatement st = null;
-		ResultSet res = null;
-		try {
-			st = DBManager.getInstance().getConnection().prepareStatement(sql);
-			res = st.executeQuery();
-			
+		String sql = "SELECT order_id, date, status, email, price, name, family_name, phone, town, street, block, entrance, floor,"
+				+ " apartment, description_address FROM orders";
+
+		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql); ResultSet res = st.executeQuery();){
+
 			while(res.next()){
 				long orderId = res.getInt("order_id");
 				LocalDate date = res.getDate("date").toLocalDate();
@@ -273,26 +212,6 @@ public class UserDAO {
 		} catch(SQLException e){
 			System.out.println("getAllOrders: " + e.getMessage());
 		
-		}
-		finally {
-			
-			if(st != null){
-				try {
-					st.close();
-				} catch (SQLException e) {
-
-					System.out.println("getAllOrders " + e.getMessage());
-				}
-			}
-			
-			if(res != null){
-				try {
-					res.close();
-				} catch (SQLException e) {
-					System.out.println("getAllOrders " + e.getMessage());
-					
-				}
-			}
 		}
 	
 	}

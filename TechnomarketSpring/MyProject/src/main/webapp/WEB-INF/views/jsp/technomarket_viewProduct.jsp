@@ -44,8 +44,7 @@
                                                                             <a href="http://localhost:8080/TechnomarketSpring/user/addFavProd/${product.productId}" class="favorites favorites-add"><i class="icon-heart"></i> Любими</a>
                                                                     </li>
                                 <li>
-                                                                                                                <a href="http://localhost:8080/TechnomarketSpring/user/abonirane/${product.productId}" class="compare compare-add"><i class="icon-compare"></i> Абонирай се</a>
-                                                                    </li>                       	
+                                                                                                                   </li>                       	
                             </ul>
                             
                                                         

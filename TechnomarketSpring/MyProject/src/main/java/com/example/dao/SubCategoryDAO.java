@@ -25,11 +25,7 @@ public class SubCategoryDAO {
 	public synchronized HashMap<String, Integer> getAllSubCategories(){
 		if(allSubCategories.isEmpty()){
 			String sql = "SELECT sub_category_id, name FROM sub_categories";
-			PreparedStatement st = null;
-			ResultSet res = null;
-			try {
-				st = DBManager.getInstance().getConnection().prepareStatement(sql);
-				res = st.executeQuery();
+			try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql); ResultSet res = st.executeQuery(); ) {
 				
 //				int x = 1;
 				while(res.next()){

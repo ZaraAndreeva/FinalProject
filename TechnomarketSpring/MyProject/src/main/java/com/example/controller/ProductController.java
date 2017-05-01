@@ -28,7 +28,6 @@ public class ProductController {
 	@RequestMapping(value = "/addProduct", method = RequestMethod.POST)
 	public String addProduct(Model model,  HttpServletRequest req, HttpServletResponse resp){
 		
-//	System.out.println("hello");
 		Scanner sc = null;
 		try {
 			sc = new Scanner(req.getInputStream());
@@ -47,13 +46,12 @@ public class ProductController {
 		
 		JsonObject respJSON = new JsonObject();
 		
-		String description = obj.get("description").getAsString();
-		String quantity = obj.get("quantity").getAsString();
-		String price = obj.get("price").getAsString();
-		String brand = obj.get("brand").getAsString();
-		String name = obj.get("name").getAsString();
-		String subCategory = obj.get("subCategory").getAsString();
-//		String subSubCategory = obj.get("subSubCategory").getAsString();
+		String description = obj.get("description").getAsString().trim();
+		String quantity = obj.get("quantity").getAsString().trim();
+		String price = obj.get("price").getAsString().trim();
+		String brand = obj.get("brand").getAsString().trim();
+		String name = obj.get("name").getAsString().trim();
+		String subCategory = obj.get("subCategory").getAsString().trim();
 		
 		
 		if(!Product.validProduct(description, quantity, price, brand, "ddd", subCategory, 
@@ -141,7 +139,7 @@ public class ProductController {
 		System.out.println(sb);
 		
 		respJSON.addProperty("productId", p.getProductId());
-//		
+	
 		return respJSON.toString();
 	}
 	
