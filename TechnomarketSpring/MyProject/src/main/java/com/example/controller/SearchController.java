@@ -19,10 +19,16 @@ import com.example.krasiModel.Product;
 @RequestMapping(value = "/search")
 public class SearchController {
 	
-	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	@RequestMapping(value = "/search", method = {RequestMethod.GET, RequestMethod.POST})
 	public String search(HttpServletRequest request, Model model){
 		
-		String search = request.getParameter("search");
+		String search = null;
+		if(request.getParameter("search") != null){
+			search = request.getParameter("search");
+		}
+		else{
+			search = (String) request.getAttribute("search");
+		}
 		
 		Collection<Product> searchProd = ProductDAO.getInstance().searchProduct(search);
 		
@@ -36,7 +42,7 @@ public class SearchController {
 		else{
 			model.addAttribute("message", "Няма намерени продукти.");
 		}
-			return "new";
+		return "new";
 		
 	}
 	

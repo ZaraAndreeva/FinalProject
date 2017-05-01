@@ -123,7 +123,7 @@
                 <div class="heading-collapse">
                     <div itemscope itemtype="http://schema.org/WebSite" class="search">
                     	<link itemprop="url" href="http://www.technomarket.bg"/>
-                        <form itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction" action="http://localhost:8080/TechnomarketSpring/search/search" method="POST" class="input-group">
+                        <form itemprop="potentialAction" itemscope itemtype="http://schema.org/SearchAction" action="http://localhost:8080/TechnomarketSpring/search/search" method="GET" class="input-group">
                             <meta itemprop="target" content="http://www.technomarket.bg/search/?query={query}"/>	
                             <input itemprop="query-input" type="text" name="search" placeholder="Търси..." class="form-control">
                             <span class="search-bar"></span>
@@ -156,7 +156,7 @@
 	                        </div><!-- /.user-account -->
 	                                                <div class="basket">
 	                            <a href="http://localhost:8080/TechnomarketSpring/user/cartPage" class="btn btn-tm">
-	                                <i class="icon-basket"></i> -
+	                                <i class="icon-basket"></i>
 	                            </a>
 	                        </div><!-- /.basket -->
 	                    </div><!-- /.user-bar -->

@@ -1,13 +1,21 @@
 package com.example.controller;
 
 import java.time.LocalDate;
+
+import static org.mockito.Matchers.intThat;
+
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.swing.plaf.synth.SynthSpinnerUI;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +33,10 @@ import com.example.krasiModel.User;
 
 
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -41,7 +51,7 @@ public class UserController {
 	
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request, Model model){
+	public ModelAndView login(HttpServletRequest request, Model model){
 		String email = request.getParameter("email").trim();
 		String password = request.getParameter("password").trim();
 		
@@ -53,15 +63,21 @@ public class UserController {
 			session.setAttribute("logged", true);
 			//TODO
 //			response.sendRedirect("index.jsp");
-			return "new";
+//			return "new";
+			request.setAttribute("search", "");
+			return new ModelAndView("forward:/search/search");
+			
 		}
 		else{
 			model.addAttribute("message", "Въвели сте грешно потребителско име или парола.");
-			return "technomarket_login";
+//			return "technomarket_login";
+			
+			return new ModelAndView("forward:/user/loginPage");
+			
 		}
 	}
 	
-	@RequestMapping(value = "/loginPage", method = RequestMethod.GET)
+	@RequestMapping(value = "/loginPage", method = {RequestMethod.GET, RequestMethod.POST})
 	public String loginPage(){
 		return("technomarket_login");
 	}
@@ -76,11 +92,12 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpServletRequest request){
+	public ModelAndView logout(HttpServletRequest request){
 		HttpSession session = request.getSession(true);
 		session.setAttribute("logged", false);
 		request.getSession().invalidate();
-		return ("new");
+//		return ("new");
+		return new ModelAndView("forward:/user/loginPage");
 	}
 	
 //	@RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -107,7 +124,17 @@ public class UserController {
 	public String ordersPage(Model model, HttpServletRequest request){
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		model.addAttribute("orders", user.getOrders());
+		if(user == null){
+			return "technomarket_register";
+		}
+		else{
+			if(!(Boolean)session.getAttribute("logged") || session.getAttribute("logged") == null){
+				return "technomarket_register";
+			}
+		}
+		model.addAttribute("orders", user.getOrders().values());
+		
+		
 		
 		return("technomarket_orders");
 	}
@@ -324,6 +351,7 @@ public class UserController {
 		}
 		int oldCntProduct = cartProducts.get(product);
 		cartProducts.put(product, oldCntProduct+1);
+		System.out.println(session.getAttribute("cartPrice"));
 		
 		return "technomarket_cart";
 	}
@@ -380,13 +408,14 @@ public class UserController {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		if(session.getAttribute("user") != null){
-			Order order = null;
-			for (Order o : user.getOrders()) {
-				if(o.getOrderId() == Long.parseLong(orderId)){
-					order = o;
-					break;
-				}
-			}
+			Order order = user.getOrders().get(Long.parseLong(orderId));
+			
+//			for (Order o : user.getOrders().values()) {
+//				if(o.getOrderId() == Long.parseLong(orderId)){
+//					order = o;
+//					break;
+//				}
+//			}
 			
 			
 			for (Entry<Product, Integer> entry : order.getProducts().entrySet()) {
@@ -424,5 +453,157 @@ public class UserController {
 		session.removeAttribute("cartProducts");
 		return("technomarket_register");
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/finishOrder/{orderId}", method = RequestMethod.POST)
+	public String finishOrder(HttpServletRequest request, @PathVariable("orderId") String orderId){
+		Scanner sc = null;
+		try {
+			sc = new Scanner(request.getInputStream());
+		} catch (IOException e) {
+			System.out.println("problem with finishOrder" + e.getMessage());
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		while(sc.hasNextLine()){
+			sb.append(sc.nextLine());
+		}
+		
+		JsonParser parser = new JsonParser();
+		JsonObject obj = parser.parse(sb.toString()).getAsJsonObject();
+		
+		JsonObject respJSON = new JsonObject();
+		
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		int orderIdInt = Integer.parseInt(orderId);
+//		Order order = OrderDAO.getInstance().getAllOrders().get((long)orderIdInt);
+		Order order = user.getOrders().get((long)orderIdInt);
+		
+//		for (Order userOrder : user.getOrders()) {
+//			if(userOrder == order){
+//				System.out.println("yeeeeeeeeeeeeeeeeeeeees");
+//			}
+//		}
+		
+		String name = obj.get("name").getAsString();
+		String familyName = obj.get("familyName").getAsString();
+		String phone = obj.get("phone").getAsString();
+		String town = obj.get("city").getAsString();
+		String street = obj.get("street").getAsString();
+		
+		if(!Order.validOrder(name, familyName, phone, town, street)){
+			respJSON.addProperty("error", true);
+			JsonArray errorsArray = new JsonArray();
+			if(!User.validText(name)){
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "nameError");
+				error.addProperty("errorMessege", "Моля, въведете име!");
+				errorsArray.add(error);
+				
+			}
+			if(!User.validText(familyName)){
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "familyNameError");
+				error.addProperty("errorMessege", "Моля, въведете фамилно име!");
+				errorsArray.add(error);
+				
+			}
+			if(!Order.validPhone(phone)){
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "phoneError");
+				error.addProperty("errorMessege", "Моля, въведете валиден телефонен номер(в момента поддържаме български и американски формат)!");
+				errorsArray.add(error);
+			}
+			if(!User.validText(town)){
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "cityError");
+				error.addProperty("errorMessege", "Моля, въведете град!");
+				errorsArray.add(error);
+			}
+			if(!User.validText(street)){
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "streetError");
+				error.addProperty("errorMessege", "Моля, въведете улица!");
+				errorsArray.add(error);
+			}
+			
+			respJSON.add("errors", errorsArray);
+			System.out.println(respJSON);
+			return respJSON.toString();
+		}
+		else{
+			respJSON.addProperty("error", false);
+		}
+		
+//		OrderDAO.getInstance().updateOrderIntColumn(orderIdInt, name, "name", "String");
+//		OrderDAO.getInstance().updateOrderIntColumn(orderIdInt, familyName, "familyName", "String");
+//		OrderDAO.getInstance().updateOrderIntColumn(orderIdInt, phone, "phone", "String");
+//		OrderDAO.getInstance().updateOrderIntColumn(orderIdInt, city, "town", "String");
+//		OrderDAO.getInstance().updateOrderIntColumn(orderIdInt, street, "street", "String");
+//		OrderDAO.getInstance().updateOrderIntColumn(orderIdInt, status, "status", "Изчакване");
+		
+		OrderDAO.getInstance().updateOrderName(name, orderIdInt);
+		order.setName(name);
+		OrderDAO.getInstance().updateOrderFamilyName(familyName, orderIdInt);
+		order.setFamilyName(familyName);
+		OrderDAO.getInstance().updateOrderPhone(phone, orderIdInt);
+		order.setPhone(phone);
+		OrderDAO.getInstance().updateOrderTown(town, orderIdInt);
+		order.setTown(town);
+		OrderDAO.getInstance().updateOrderStreet(street, orderIdInt);
+		order.setStreet(street);
+		OrderDAO.getInstance().updateOrderStatus("Изчакване", orderIdInt);
+		order.setStatus("Изчакване");
+		System.out.println("order");
+		System.out.println(order);
+		System.out.println("order");
+		
+		
+		
+		if(obj.get("block") != null){
+			if(!obj.get("block").getAsString().trim().isEmpty()){
+				int block = Integer.parseInt(obj.get("block").getAsString());
+				OrderDAO.getInstance().updateOrderBlock(block, orderIdInt);;
+				order.setBlock(block);
+			}
+		}
+		if(obj.get("entrance") != null){
+			if(!obj.get("entrance").getAsString().trim().isEmpty()){
+				String entrance = obj.get("entrance").getAsString();
+				OrderDAO.getInstance().updateOrderEntrance(entrance, orderIdInt);;
+				order.setEntrance(entrance);
+			}
+		}
+		if(obj.get("floor") != null){
+			if(!obj.get("floor").getAsString().trim().isEmpty()){
+				int floor = Integer.parseInt(obj.get("floor").getAsString());
+				OrderDAO.getInstance().updateOrderFloor(floor, orderIdInt);;
+				order.setFloor(floor);
+			}
+		}
+		if(obj.get("apartment") != null){
+			if(!obj.get("apartment").getAsString().trim().isEmpty()){
+				int apartment = Integer.parseInt(obj.get("apartment").getAsString());
+				OrderDAO.getInstance().updateOrderApartment(apartment, orderIdInt);;
+				order.setApartment(apartment);
+			}
+		}
+		if(obj.get("descriptionAddress") != null){
+			if(!obj.get("descriptionAddress").getAsString().trim().isEmpty()){
+				System.out.println("hello");
+				String descriptionAddress = obj.get("descriptionAddress").getAsString();
+				OrderDAO.getInstance().updateOrderDescriptionAddress(descriptionAddress, orderIdInt);;
+				order.setDescriptionAddress(descriptionAddress);
+			}
+		}
+		
+		return respJSON.toString();
+	}
+	
+	
+	
+	
 	
 }

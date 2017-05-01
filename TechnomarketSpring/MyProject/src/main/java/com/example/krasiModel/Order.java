@@ -23,6 +23,16 @@ public class Order {
 	private String descriptionAddress;
 	private LinkedHashMap<Product, Integer> products;
 	
+	
+	
+	@Override
+	public String toString() {
+		return "Order [orderId=" + orderId + ", status=" + status + ", name=" + name + ", familyName=" + familyName
+				+ ", phone=" + phone + ", town=" + town + ", street=" + street + ", block=" + block + ", entrance="
+				+ entrance + ", floor=" + floor + ", apartment=" + apartment + ", descriptionAddress="
+				+ descriptionAddress + "]";
+	}
+
 	public Order(LocalDate date, String status, String email, double price, String name, String familyName,
 			String phone, String town, String street, int block, String entrance, int floor, int apartment,
 			String descriptionAddress, LinkedHashMap<Product, Integer> products) {
@@ -269,6 +279,69 @@ public class Order {
 			return false;
 		return true;
 	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setFamilyName(String familyName) {
+		this.familyName = familyName;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public void setTown(String town) {
+		this.town = town;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public void setBlock(int block) {
+		this.block = block;
+	}
+
+	public void setEntrance(String entrance) {
+		this.entrance = entrance;
+	}
+
+	public void setFloor(int floor) {
+		this.floor = floor;
+	}
+
+	public void setApartment(int apartment) {
+		this.apartment = apartment;
+	}
+
+	public void setDescriptionAddress(String descriptionAddress) {
+		this.descriptionAddress = descriptionAddress;
+	}
+
+	public static boolean validPhone(String phone) {
+		String bgPhoneRegex = "/08[7-9][0-9]{7}/";
+		String usPhoneRegex = "[\\(]?\\d{3}[\\)]?([-.]?)\\s*\\d{3}\\1\\s*\\d{4}";
+		
+		if(phone == null){
+			return false;
+		}
+		String trimmedNumber = phone.trim();
+		return !trimmedNumber.isEmpty() && (trimmedNumber.matches(bgPhoneRegex) || trimmedNumber.matches(usPhoneRegex));
+		
+	}
+
+	public static boolean validOrder(String name, String familyName, String phone, String city, String street) {
+		return User.validText(name) && User.validText(familyName) && Order.validPhone(phone) && 
+			 User.validText(city) && User.validText(street);
+	}
+
+	
 
 	
 

@@ -2,6 +2,7 @@ package com.example.krasiModel;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 import com.example.dao.UserDAO;
@@ -17,7 +18,7 @@ public class User {
 	private boolean isAdmin;
 	private LinkedHashSet<Product> cart;
 	private LinkedHashSet<Product> favouriteProducts;
-	private LinkedHashSet<Order> orders;
+	private LinkedHashMap<Long, Order> orders;
 
 	public User(String name, String familyName, String email, String password, String gender, LocalDate birthDate, boolean isAdmin) {
 		if(validate(name)){
@@ -41,7 +42,7 @@ public class User {
 		this.isAdmin = isAdmin;
 		this.cart = new LinkedHashSet<>();
 		this.favouriteProducts = new LinkedHashSet<>();
-		this.orders = new LinkedHashSet<>();
+		this.orders = new LinkedHashMap<>();
 	}
 	
 	private boolean validate(String word){
@@ -75,7 +76,7 @@ public class User {
 		return birthDate;
 	}
 
-	public LinkedHashSet<Order> getOrders() {
+	public LinkedHashMap<Long, Order> getOrders() {
 		return orders;
 	}
 
@@ -123,7 +124,10 @@ public class User {
 	}
 
 	public static boolean validText(String name) {
-		return name != null && !name.isEmpty();
+		if(name == null){
+			return false;
+		}
+		return !name.trim().isEmpty();
 	}
 
 	public static boolean validEmail(String email) {
@@ -134,7 +138,10 @@ public class User {
 	
 	public static boolean validPassword(String passwordFirst) {
 		// TODO password regex
-		return !passwordFirst.isEmpty() && passwordFirst != null;
+		if(passwordFirst == null){
+			return false;
+		}
+		return !passwordFirst.trim().isEmpty();
 	}
 	
 	public static boolean validPasswords(String passwordFirst, String passwordSecond) {
@@ -163,7 +170,7 @@ public class User {
 				&& validSex(sex);
 	}
 
-	public void setOrders(LinkedHashSet<Order> orders) {
+	public void setOrders(LinkedHashMap<Long, Order> orders) {
 		if(orders != null && !orders.isEmpty()){
 			this.orders = orders;
 		}
@@ -174,6 +181,6 @@ public class User {
 		if(o == null){
 			return;
 		}
-		this.orders.add(o);
+		this.orders.put(o.getOrderId(), o);
 	}
 }

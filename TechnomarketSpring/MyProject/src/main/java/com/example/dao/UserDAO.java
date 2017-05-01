@@ -201,13 +201,13 @@ public class UserDAO {
 					productsForThisOrder.put(p, quantity);
 				}
 				
-				Order o = new Order(date, status, email, price, name, familyName,
+				Order order = new Order(date, status, email, price, name, familyName,
 						phone, town, street, block, entrance, floor, apartment,
 						descriptionAddress, productsForThisOrder);
 				
-				o.setOrderId(orderId);	
-				
-				user.addOrder(o);
+				order.setOrderId(orderId);	
+				user.addOrder(order);
+//				OrderDAO.getInstance().addToAllOrders(order);
 			}
 		} catch(SQLException e){
 			System.out.println("getAllOrders: " + e.getMessage());
