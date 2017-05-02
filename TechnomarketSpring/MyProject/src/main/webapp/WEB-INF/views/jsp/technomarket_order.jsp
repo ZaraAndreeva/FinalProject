@@ -25,7 +25,7 @@
     <div class="panel-group tm-panel-group">        
         <div class="panel" id="heading-1">
             <div class="panel-heading">
-                                    <h3><a>Вашата поръчка все още не е потвърдена</a></h3>
+                        <h3><a>${order.status} поръчка</a></h3>
                             </div>
             <div class="panel-body">
                 <dl class="dl-horizontal">
@@ -36,6 +36,7 @@
                 </dl>
             </div>
         </div><!--/.panel-->
+            
             
         <div class="panel" id="heading-2">
             <div class="panel-heading">
@@ -65,8 +66,44 @@
                                         <dt>Общо за плащане:</dt><dd><p><var class="price xs"><span>${order.price}<sup>00</sup>  <small>лв.</small></span></var></p></dd>
                 </dl>
             </div>
-        </div><!--/.panel-->        
+        </div><!--/.panel--> 
+        
+        
+        
+            <c:if test="${order.status == 'Потвърдена'}">
             
+            <div class="panel" id="panel_address">
+            <div class="panel-heading">
+                <h3><a>Адрес за доставка</a></h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-8">
+             <div class="tm-html">
+<div class="form-horizontal" novalidate="2">
+
+                    <b>Име: </b> ${order.name} <br>
+                    <b>Фамилия: </b> ${order.familyName} <br>
+                    <b>Телефон: </b> ${order.phone} <br>
+                    <b>Град: </b> ${order.town} <br>
+                    <b>Улица/Квартал: </b> ${order.street} <br>
+                    
+    </div>
+    </div>
+    </div>
+    </div>
+</div>
+                    
+            </c:if>
+        
+        
+        
+        
+        
+        
+        
+        
+               
+            <c:if test="${order.status == 'Непотвърдена'}">
                 <div class="panel" id="panel_address">
             <div class="panel-heading">
                 <h3><a>Адрес за доставка</a></h3>
@@ -296,7 +333,7 @@
     					document.getElementById("streetError").innerHTML="";
     					document.getElementById("status").innerHTML="";
     				if(!response.error){
-    					  	document.getElementById("status").innerHTML="Вашата поръчка чака потвърждение. Моля, проверете си пощата и потвърдете поръчката.";
+    					  	document.getElementById("status").innerHTML="Вашата поръчка е потвърдена. Моля, очаквайте доставка.";
     					  	document.getElementById("name").value="";	  		
     						document.getElementById("familyName").value="";
     						document.getElementById("phone").value="";
@@ -326,8 +363,9 @@
 </div></div>
                 </div>
             </div>
+            
         </div><!--/.panel-->
-        
+       </c:if> 
             
         
                 

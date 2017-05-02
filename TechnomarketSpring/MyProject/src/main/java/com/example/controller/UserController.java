@@ -2,20 +2,13 @@ package com.example.controller;
 
 import java.time.LocalDate;
 
-import static org.mockito.Matchers.intThat;
-
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.swing.plaf.synth.SynthSpinnerUI;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,7 +29,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -302,6 +294,7 @@ public class UserController {
 		HttpSession session = request.getSession();
 		if(session.getAttribute("user") != null){
 			User u = (User) session.getAttribute("user");
+
 			if(u.getFavouriteProducts().contains(product)){
 				model.addAttribute("message", "Този продукт вече е добавен в любими.");
 			}
@@ -324,8 +317,9 @@ public class UserController {
 		HttpSession session = request.getSession();
 		if(session.getAttribute("user") != null){
 			User u = (User) session.getAttribute("user");
-			LinkedHashSet<Product> favProducts = ProductDAO.getInstance().viewFavProducts(u);
-
+			UserDAO.getInstance().fillFavProducts(u);
+//			LinkedHashSet<Product> favProducts = ProductDAO.getInstance().viewFavProducts(u);
+			LinkedHashSet<Product> favProducts = u.getFavouriteProducts();
 			if(favProducts.isEmpty()){
 				model.addAttribute("message123", "Няма налични любими продукти.");
 			}
@@ -341,8 +335,10 @@ public class UserController {
 		HttpSession session = request.getSession();
 		if(session.getAttribute("user") != null){
 			User u = (User) session.getAttribute("user");
+			
 			if(u.getFavouriteProducts().contains(product)){
 				UserDAO.getInstance().removeFavProducts(u, product);
+//				LinkedHashSet<Product> favProducts = ProductDAO.getInstance().viewFavProducts(u);
 				LinkedHashSet<Product> favProducts = u.getFavouriteProducts();
 				model.addAttribute("products", favProducts);
 				model.addAttribute("favPr", true);
@@ -570,8 +566,8 @@ public class UserController {
 		order.setTown(town);
 		OrderDAO.getInstance().updateOrderStreet(street, orderIdInt);
 		order.setStreet(street);
-		OrderDAO.getInstance().updateOrderStatus("Изчакване", orderIdInt);
-		order.setStatus("Изчакване");
+		OrderDAO.getInstance().updateOrderStatus("Потвърдена", orderIdInt);
+		order.setStatus("Потвърдена");
 		System.out.println("order");
 		System.out.println(order);
 		System.out.println("order");

@@ -18,8 +18,7 @@
 
                     <section class="">
             <div class="container">            	
-                    
-                	    
+                 
     		<div class="row">
             <figure itemscope="" itemtype="http://schema.org/Product" class="product product-details clearfix">
                 <div class="product-thumb photoswipe">
@@ -31,9 +30,9 @@
                     
                     	                    <img itemprop="image" src="/TechnomarketSpring/image/${product.productId}" alt="Technomarket" />
                     <div class="product-gallery">
-                                        </div><!--/.product-gallery-->
+                                        </div>
 
-                                    </div><!--.product-thumb-->
+                </div>
                 <figcaption>
                     <div class="product-name">    
                                                  
@@ -49,7 +48,7 @@
                             
                                                         
                             
-                        </div><!--/.product-share-->
+                        </div>
 
 
                                                                                                 <ul itemprop="description" class="product-description moreLines">
@@ -117,7 +116,7 @@
                                    	<div class="buy-now">
                                    	<a href="http://localhost:8080/TechnomarketSpring/admin/deleteProduct/${product.productId}" class="btn btn-tm flix_cart_click_check">Премахни продукт</a>
                                    	</div>
-                 
+                 					
                                    	<div class="buy-now">
                                    		<button onclick="showDiv2()" class="btn btn-tm flix_cart_click_check">Редактирай продукт</button>
                                    		<form action="http://localhost:8080/TechnomarketSpring/admin/editProduct/${product.productId}" method = "GET" novalidate="1">
@@ -141,6 +140,7 @@
 										
 											</script>
                                    	</div>
+    	
                                  </c:if>
                                 
                                                             </div>
@@ -148,8 +148,12 @@
                         
 
                         <div class="partials-info">
-                                                                                </div><!--/.partials-->                         
-                    </div><!--.product-price-->                   
+                                                                                </div>                       
+                    </div>
+     
+                       <c:if test="${product.quantity} == 0">
+                      	 <h1>Продуктът вече не е наличен.</h1>
+                       </c:if>        
                                     </figcaption>
                 <div class="partials">
                     <div class="col-md-12">
@@ -157,13 +161,15 @@
                                                     </div>
                     </div>
                 </div>
-            </figure><!--.product-details-->          
+            </figure>          
         </div>
 
 
-
-	<h1>${message}</h1>
-        
+     <h1>${messageErrorN}</h1>  
+     <h1>${messageErrorQ}</h1>
+     <h1>${messageErrorD}</h1>
+     <h1>${messageErrorP}</h1>
+	 <h1>${message}</h1> 
        
     <div class="row row-brp">            
         <div class="col-md-12">                             
@@ -171,9 +177,11 @@
                                 <ul class="nav nav-tabs">
                                         
                     <li class="active">
+                    <!-- 
                         <a aria-expanded="true" aria-controls="product-tab1" data-toggle="tab" role="tab" id="product-nav-tab-1" href="#product-tab1">
                             Спецификации
                         </a>
+                         -->
                     </li>
                                                                                     <li class="kiosk-hidden ">
                         
