@@ -121,7 +121,7 @@ public class ProductDAO {
 		getAllProducts();
 		
 		for (Product product : allProducts.values()) {
-			if(product.sameSubCategory(subCategory)){
+			if(product.sameSubCategory(subCategory) && product.getQuantity() > 0){
 				generatedProducts.add(product);
 			}
 		}

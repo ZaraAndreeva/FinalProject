@@ -191,8 +191,8 @@ public class ProductController {
 			prodByName.add(p);
 		}
 
-		model.addAttribute("categorySearch", true);
-		model.addAttribute("products", prodByName);
+//		model.addAttribute("categorySearch", true);
+//		model.addAttribute("products", prodByName);
 		
 		JsonObject respJson = new JsonObject();
 		JsonArray productsArray = new JsonArray();
@@ -212,10 +212,11 @@ public class ProductController {
 		return respJson.toString();
 	}
 	
-	@RequestMapping(value = "/sortProductsByPriceVuz/{subCategory}", method = RequestMethod.GET)
+	@ResponseBody
+	@RequestMapping(value = "/sortProductsByPriceAsc/{subCategory}", method = RequestMethod.GET)
 	public String sortProductsByPriceVuz(Model model, @PathVariable("subCategory") String subCategory){
 		ArrayList<Product> products = ProductDAO.getInstance().giveProductsBySubCategory(subCategory);
-		TreeSet<Product> prodByPriceVuz = new TreeSet<>(new Comparator<Product>() {
+		TreeSet<Product> prodByPriceAsc = new TreeSet<>(new Comparator<Product>() {
 
 			@Override
 			public int compare(Product o1, Product o2) {
@@ -239,19 +240,36 @@ public class ProductController {
 		});
 
 		for(Product p : products){
-			prodByPriceVuz.add(p);
+			prodByPriceAsc.add(p);
 		}
 
-		model.addAttribute("categorySearch", true);
-		model.addAttribute("products", prodByPriceVuz);
+//		model.addAttribute("categorySearch", true);
+//		model.addAttribute("products", prodByPriceAsc);
 		
-		return "new";
+		JsonObject respJson = new JsonObject();
+		JsonArray productsArray = new JsonArray();
+		for (Product product : prodByPriceAsc) {
+			JsonObject productObj = new JsonObject();
+			productObj.addProperty("id", product.getProductId());
+			productObj.addProperty("name", product.getName());
+			productObj.addProperty("price", product.getPrice());
+			productObj.addProperty("promoPrice", product.getPromoPrice());
+			productObj.addProperty("viewProductLink", "http://localhost:8080/TechnomarketSpring/product/viewProductPage/" + product.getProductId());
+			productObj.addProperty("viewProductImage", "/TechnomarketSpring/image/" + product.getProductId());
+			productObj.addProperty("inPromotion", (product.getPromoPrice() > 0)? true : false);
+			productsArray.add(productObj);
+		}
+		respJson.add("products", productsArray);
+		
+		return respJson.toString();
+		
 	}
 	
-	@RequestMapping(value = "/sortProductsByPriceNiz/{subCategory}", method = RequestMethod.GET)
+	@ResponseBody
+	@RequestMapping(value = "/sortProductsByPriceDesc/{subCategory}", method = RequestMethod.GET)
 	public String sortProductsByPriceNiz(Model model, @PathVariable("subCategory") String subCategory){
 		ArrayList<Product> products = ProductDAO.getInstance().giveProductsBySubCategory(subCategory);
-		TreeSet<Product> prodByPriceNiz = new TreeSet<>(new Comparator<Product>() {
+		TreeSet<Product> prodByPriceDesc = new TreeSet<>(new Comparator<Product>() {
 
 			@Override
 			public int compare(Product o1, Product o2) {
@@ -275,13 +293,30 @@ public class ProductController {
 		});
 
 		for(Product p : products){
-			prodByPriceNiz.add(p);
+			prodByPriceDesc.add(p);
 		}
 		
-		model.addAttribute("categorySearch", true);
-		model.addAttribute("products", prodByPriceNiz);
+//		model.addAttribute("categorySearch", true);
+//		model.addAttribute("products", prodByPriceNiz);
+//		
+//		return "new";
 		
-		return "new";
+		JsonObject respJson = new JsonObject();
+		JsonArray productsArray = new JsonArray();
+		for (Product product : prodByPriceDesc) {
+			JsonObject productObj = new JsonObject();
+			productObj.addProperty("id", product.getProductId());
+			productObj.addProperty("name", product.getName());
+			productObj.addProperty("price", product.getPrice());
+			productObj.addProperty("promoPrice", product.getPromoPrice());
+			productObj.addProperty("viewProductLink", "http://localhost:8080/TechnomarketSpring/product/viewProductPage/" + product.getProductId());
+			productObj.addProperty("viewProductImage", "/TechnomarketSpring/image/" + product.getProductId());
+			productObj.addProperty("inPromotion", (product.getPromoPrice() > 0)? true : false);
+			productsArray.add(productObj);
+		}
+		respJson.add("products", productsArray);
+		
+		return respJson.toString();
 
 	}
 	
