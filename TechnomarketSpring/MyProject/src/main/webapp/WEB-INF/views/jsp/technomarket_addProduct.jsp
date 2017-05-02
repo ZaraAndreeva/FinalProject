@@ -7,6 +7,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
  <%@ include file="/menu_nachalo.jsp" %>
+
+ 
 </header>
                                                 <div id="contentholder" class="contentholder">
         <section>
@@ -69,15 +71,20 @@
             	<a href="" class="btn btn-tm">Избери</a>
             -->
             <form method="POST" enctype="multipart/form-data">
-				<input type="file" id="file" name="failche" accept="image/*">
+            	<input type="file" id="file" name="failche" accept="image/*" style="display: none;"><br>
+            	<input type="button" id="loadFileXml" value="Избери снимка" onclick="document.getElementById('file').click();" class="btn btn-tm"/><br><br>
+				<b>Изберете артикулен номер</b>
 				<input type="text" id="productId" name="productId" class="form-control" required/>
 				<!--      		
 										
 					<input type="submit" value="Upload now" class="btn btn-tm">
 				-->
-				<button id="btnUpload" type="submit" class="btn btn-tm">Качи</button>
+				<button id="btnUpload" type="submit" class="btn btn-tm" onclick="validateProductId()">Качи</button>
 			</form>
+			<!--  
 			<h2>${messege}</h2>
+			-->
+			<span id="error" class="help-block"><ul class="list-unstyled"><li><span class="glyphicon glyphicon-exclamation-sign"></span> </li></ul></span>
        	</div>
          <div class="col-half">
             
@@ -91,7 +98,7 @@
         
   <%@ include file="/menu_krai.jsp" %>
   
-  
+  	
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   	<script>
   	var btn = document.getElementById("btn"); 
@@ -146,13 +153,92 @@
 			  error: function(xhr) {
 				  document.getElementById("status").innerHTML="Грешката е при нас... Моля, опитайте по-късно.";
 			  }
-			});    
-		
-		
+			});
+	});
+	
+	$("form").submit(function(e) {
+		e.preventDefault();
+		var self = this;
+		$.ajax({
+			  url: "/TechnomarketSpring/validateUpload",
+			  type: "POST", //send it through get method
+			  contentType : 'application/json; charset=utf-8',
+			  dataType : 'json',
+			  data: JSON.stringify(
+					  	{
+					  		numPictures: document.getElementById("file").files.length,
+					  		productId: document.getElementById("productId").value
+					  	}			  
+			  ),
+			  success: function(response) {
+				  responseData = response;
+				  if(!response.error){
+					  alert("Вие успещно добавихте снимка на продукт с арт. номер " + document.getElementById("productId").value);
+					  self.submit();
+					  			  
+					  //flag = true;
+					  //return true;
+				  }
+				  else{
+					  document.getElementById("error").innerHTML = response.errorMessege;
+					  //flag = false;
+					  //return false;
+				  }
+				  
+			  },
+			  error: function(xhr) {
+				  //return false;
+			  }
+		});
 		
 	});
 	
+	/*
+	function validateMyForm(){
+		document.getElementById("error").innerHTML = "";
+		if(document.getElementById("file").files.length == 0){
+			document.getElementById("error").innerHTML = "Моля, посочете снимка!";
+			return false;
+		}
+		
+		return falidateProductId();
+	}
 	
+	
+
+	function falidateProductId() {
+		var flag = false;
+		$.ajax({
+			  url: "/TechnomarketSpring/validateUpload",
+			  type: "POST", //send it through get method
+			  contentType : 'application/json; charset=utf-8',
+			  dataType : 'json',
+			  data: JSON.stringify(
+					  	{
+					  		productId: document.getElementById("productId").value
+					  	}			  
+			  ),
+			  success: function(response) {
+				  responseData = response;
+				  if(!response.error){
+					  alert("vlizatuka");
+					  flag = true;
+					  //return true;
+				  }
+				  else{
+					  document.getElementById("error").innerHTML = "Моля, посочете валиден артикулен номер!";
+					  flag = false;
+					  //return false;
+				  }
+				  
+			  },
+			  error: function(xhr) {
+				  return false;
+			  }
+		});
+		
+	}
+	*/
 	
   	</script>
   

@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.util.Scanner;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.example.dao.ProductDAO;
+import com.example.dao.UserDAO;
+import com.example.krasiModel.User;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 
 @Controller
@@ -69,5 +79,52 @@ public class UploadImageController {
 		vzemiToqImage = productId + ".jpg";
 		model.addAttribute("filename", vzemiToqImage);
 		return "technomarket_addProduct";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/validateUpload", method=RequestMethod.POST)
+	public String validateUpload(HttpServletRequest req) {
+		System.out.println("HELLO");
+		
+		Scanner sc = null;
+		try {
+			sc = new Scanner(req.getInputStream());
+		} catch (IOException e) {
+			System.out.println("problem with validating form" + e.getMessage());
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		while(sc.hasNextLine()){
+			sb.append(sc.nextLine());
+		}
+		
+		JsonParser parser = new JsonParser();
+		JsonObject obj = parser.parse(sb.toString()).getAsJsonObject();
+		
+		JsonObject respJSON = new JsonObject();
+		
+		int numPictures = Integer.parseInt(obj.get("numPictures").getAsString());
+		String productIdString = obj.get("productId").getAsString().trim();
+		if(numPictures != 1){
+			respJSON.addProperty("error", true);
+			respJSON.addProperty("errorMessege", "Моля, посочете снимка!");
+			return respJSON.toString();
+		}
+		if(!productIdString.matches("[0-9]+")){
+			respJSON.addProperty("error", true);
+			respJSON.addProperty("errorMessege", "Моля, посочете валиден арт. номер!");
+			return respJSON.toString();
+		}
+		long produdtIdLong = Long.parseLong(productIdString);
+		if(!ProductDAO.getInstance().getAllProducts().containsKey(produdtIdLong)){
+			respJSON.addProperty("error", true);
+			respJSON.addProperty("errorMessege", "Моля, посочете валиден арт. номер!");
+			return respJSON.toString();
+		}
+		
+		respJSON.addProperty("error", false);
+		System.out.println(respJSON);
+		return respJSON.toString();
 	}
 }

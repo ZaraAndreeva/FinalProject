@@ -23,7 +23,7 @@
             <figure itemscope="" itemtype="http://schema.org/Product" class="product product-details clearfix">
                 <div class="product-thumb photoswipe">
                     <div class="product-heading">
-                                                <div class="product-category"><a href=""><i class="icon-arrow-long-left"></i> ${product.subCategory}</a></div>
+                                                <div class="product-category"><a href="/TechnomarketSpring/showProduct/${product.subCategory}"><i class="icon-arrow-long-left"></i> ${product.subCategory}</a></div>
                                                 <h1><a href=""><span itemprop="name">${product.name}</span></a></h1>
                         <div class="product-model">Арт.№: <span itemprop="productID">${product.productId}</span></div>
                     </div>                                
