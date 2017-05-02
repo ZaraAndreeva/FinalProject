@@ -91,31 +91,55 @@ public class AdminController {
 	@RequestMapping(value = "/editProduct/{productId}", method = RequestMethod.GET)
 	public ModelAndView editProduct(@PathVariable("productId") String productId, HttpServletRequest request, Model model){
 		Product p = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
-		int quantity = -1;
-		double price = 0;
-		String description = "";
-		String name = "";
-	
-		try {			
-		   quantity = Integer.valueOf(request.getParameter("quantity"));
-	   }catch (NumberFormatException e){
-		   quantity = p.getQuantity();   
-	   } 
-		try {
-			price = Double.valueOf(request.getParameter("price"));
-		 }catch (NumberFormatException e){
-			 price = p.getPrice();
-		 }
-		try {
-			description = request.getParameter("description");
-		 }catch (NumberFormatException e){
-			 description = p.getDescription();
-		 }
-		try {
-			name = request.getParameter("name");
-		 }catch (NumberFormatException e){
-			 name = p.getName();
-		 }
+
+		if(request.getParameter("quantity") != null){
+			if(!request.getParameter("quantity").trim().isEmpty()){
+				int quantity = Integer.valueOf(request.getParameter("quantity"));
+				if(quantity > 0){
+					ProductDAO.getInstance().editQuantity(p.getProductId(), quantity);
+					model.addAttribute("message", "Успешно променихте продукт с артикулен номер: " + Long.parseLong(productId));
+				}
+				else{
+					model.addAttribute("messageErrorQ", "Количеството трябва да е положително число.");
+				}
+			}
+		}
+		if(request.getParameter("price") != null){
+			if(!request.getParameter("price").trim().isEmpty()){
+				double price = Double.valueOf(request.getParameter("price"));
+				if(price > 0){
+					ProductDAO.getInstance().editPrice(p.getProductId(), price);
+					model.addAttribute("message", "Успешно променихте продукт с артикулен номер: " + Long.parseLong(productId));
+				}
+				else{
+					model.addAttribute("messageErrorP", "Цената трябва да е положително число.");
+				}
+			}
+		}
+		if(request.getParameter("description") != null){
+			if(!request.getParameter("description").trim().isEmpty()){
+				String description = request.getParameter("description");
+				if(description.length() < 2000){
+					ProductDAO.getInstance().editDescription(p.getProductId(), description);
+					model.addAttribute("message", "Успешно променихте продукт с артикулен номер: " + Long.parseLong(productId));
+				}
+				else{
+					model.addAttribute("messageErrorD", "Описанието е прекалено дълго.");
+				}
+			}
+		}
+		if(request.getParameter("name") != null){
+			if(!request.getParameter("name").trim().isEmpty()){
+				String name = request.getParameter("name");
+				if(name.length() < 50){
+					ProductDAO.getInstance().editName(p.getProductId(), name);
+					model.addAttribute("message", "Успешно променихте продукт с артикулен номер: " + Long.parseLong(productId));
+				}
+				else{
+					model.addAttribute("messageErrorN", "Името е прекалено дълго.");
+				}
+			}
+		}
 		
 		ArrayList<Integer> users = dao.checkForFavProducts(p);
 		for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
@@ -127,13 +151,6 @@ public class AdminController {
 			}
 		}
 		
-		dao.editProduct(Long.parseLong(productId), quantity, price, name, description);
-		if(quantity == -1 && price == 0 && name.isEmpty() && description.isEmpty()){
-			model.addAttribute("message", "Не сте въвели никакви промени.");
-		}
-		else{
-			model.addAttribute("message", "Успешно променихте продукт с артикулен номер: " + Long.parseLong(productId));
-		}
 		return new ModelAndView("forward:/product/viewProductPage/" + productId);
 	}
 	

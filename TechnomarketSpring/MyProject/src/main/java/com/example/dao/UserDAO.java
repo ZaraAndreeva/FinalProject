@@ -102,12 +102,12 @@ public class UserDAO {
 		String sql = "INSERT into favourite_products (user_id, product_id) VALUES "
 				+ "((SELECT user_id from users where user_id = ?), "
 				+ "(SELECT product_id from products where product_id = ?))";
-
-		try(PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();) {
+		ResultSet res = null;
+		try(PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ) {
 
 			st.setInt(1, (int)u.getUserId());
 			st.setInt(2, (int)p.getProductId());
-
+			res = st.getGeneratedKeys();
 			synchronized (this) {
 				st.execute();
 			}
@@ -123,8 +123,10 @@ public class UserDAO {
 	
 	public void fillFavProducts(User u){
 		String sql = "SELECT product_id FROM favourite_products where user_id = ?" ;
-		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql); ResultSet res =  st.executeQuery();) {
+		ResultSet res =  null;
+		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql); ) {
 			st.setInt(1, (int) u.getUserId());
+			res = st.executeQuery();
 			while(res.next()){
 				long productId = (long) res.getInt("product_id");
 				System.out.println(u.getUserId() + " - " + productId);
@@ -143,11 +145,11 @@ public class UserDAO {
 	
 	public void removeFavProducts(User u, Product p){
 		String sql = "delete from favourite_products where product_id = ? and user_id = ?;";
-
-		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){
+		ResultSet res = null;
+		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ){
 			st.setInt(1, (int)p.getProductId());
 			st.setInt(2, (int)u.getUserId());
-
+			res = st.getGeneratedKeys();
 			synchronized (this) {
 				st.execute();
 			}
