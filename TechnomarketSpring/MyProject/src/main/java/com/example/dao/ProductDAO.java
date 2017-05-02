@@ -7,12 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.TreeSet;
 
 import com.example.krasiModel.Product;
 import com.example.krasiModel.User;
@@ -153,12 +150,82 @@ public class ProductDAO {
 		return Collections.unmodifiableList(searchResults);
 	}
 	
-	public void deleteProduct(Product p){
+	public void deleteProduct(Product p, User u){
+		//ako e v liubimi i ne e poruchvan -> triem go ot liubimi i ot produkti
+		String sql = "delete from favourite_products where product_id = ? and user_id = ?;";
+		String sql2 = "DELETE from products WHERE product_id = ?";
+		
+		Connection con = DBManager.getInstance().getConnection();
+		try(PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); PreparedStatement st2 = con.prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS);){
+			con.setAutoCommit(false);
+			st.setLong(1, p.getProductId());
+			st.setLong(2, u.getUserId());
+			
+			st2.setLong(1, p.getProductId());
+			synchronized(this){
+				st.execute();
+				st2.execute();
+			}
+			allProducts.remove(p.getProductId());
+			u.removeFavProduct(p);
+			con.commit();
+		} catch (SQLException e) {
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+				System.out.println("deleteProduct: " + e.getMessage());
+			}
+		}
+		finally {
+			try {
+				con.setAutoCommit(true);
+			} catch (SQLException e) {
+				System.out.println("deleteProduct: " + e.getMessage());
+			}
+		}
+	}
+	
+	public void deleteProduct2(Product p, User u){
+		//ako e v liubimi i e poruchvan -> triem go ot liubimi i setQuantity(0)
+		String sql = "delete from favourite_products where product_id = ? and user_id = ?;";
+		String sql2 = "UPDATE products set quantity = 0 WHERE product_id = ?";
+		
+		Connection con = DBManager.getInstance().getConnection();
+		try(PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); PreparedStatement st2 = con.prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS);){
+			con.setAutoCommit(false);
+			st.setLong(1, p.getProductId());
+			st.setLong(2, u.getUserId());
+			
+			st2.setLong(1, p.getProductId());
+			synchronized(this){
+				st.execute();
+				st2.execute();
+			}
+			p.setQuantity(0);
+			u.removeFavProduct(p);
+			con.commit();
+		} catch (SQLException e) {
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+				System.out.println("deleteProduct2: " + e.getMessage());
+			}
+		}
+		finally {
+			try {
+				con.setAutoCommit(true);
+			} catch (SQLException e) {
+				System.out.println("deleteProduct2: " + e.getMessage());
+			}
+		}
+	}
+	
+	public void deleteProduct3(Product p){
+		//ako ne e v liubimi i ne e poruchvan -> triem go ot produkt
 		String sql = "DELETE from products WHERE product_id = ?";
 		Connection con = DBManager.getInstance().getConnection();
 		ResultSet res = null;
 		try(PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ){
-//			con.setAutoCommit(false);
 			st.setLong(1, p.getProductId());
 			res = st.getGeneratedKeys();
 			synchronized(this){
@@ -166,35 +233,27 @@ public class ProductDAO {
 			}
 			res.next();
 			allProducts.remove(p.getProductId());
-//			con.commit();
-		} catch (SQLException e2) {
-			p.setQuantity(0);
-			allProducts.remove(p.getProductId());
-			String sql2 = "UPDATE products set quantity = 0 WHERE product_id = ?";
-			ResultSet res2 = null;
-			try(PreparedStatement st2 = DBManager.getInstance().getConnection().prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS); ){
-				st2.setLong(1, p.getProductId());
-				res2 = st2.getGeneratedKeys();
-				synchronized(this){
-					st2.execute();
-				}
-				res2.next();
-			} catch (SQLException e) {
-					System.out.println("deleteProduct: " + e.getMessage());
-			}
-//			try {
-//				con.rollback();
-//			} catch (SQLException e) {
-//				System.out.println("deleteProduct: " + e.getMessage());
-//			}
+		} catch (SQLException e) {
+			System.out.println("delete product3: " + e.getMessage());
 		}
-//		finally {
-//			try {
-//				con.setAutoCommit(true);
-//			} catch (SQLException e) {
-//				System.out.println("deleteProduct: " + e.getMessage());
-//			}
-//		}
+	}
+	
+	public void deleteProduct4(Product p){
+		//ako ne e v liubimi i e poruchvan -> setQuantity(0)
+		String sql = "update products set quantity = 0 WHERE product_id = ?";
+		Connection con = DBManager.getInstance().getConnection();
+		ResultSet res = null;
+		try(PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ){
+			st.setLong(1, p.getProductId());
+			res = st.getGeneratedKeys();
+			synchronized(this){
+				st.execute();
+			}
+			res.next();
+			p.setQuantity(0);
+		} catch (SQLException e) {
+			System.out.println("delete product3: " + e.getMessage());
+		}
 	}
 	
 	public void addPromotion(double newPrice, long artNomer){
@@ -225,27 +284,6 @@ public class ProductDAO {
 				System.out.println("removePromotion: " + e.getMessage());
 		}
 	}
-	
-//	public void editProduct(long artikulenNomer, int quantity, double price, String name, String description){
-//		String sql = "UPDATE products set description = ?, quantity = ?, price = ?, name = ?  WHERE product_id = ?";
-//		try(PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){
-//			st.setString(1, description);
-//			st.setInt(2, quantity);
-//			st.setDouble(3, price);
-//			st.setString(4, name);
-//			st.setLong(5, artikulenNomer);
-//			synchronized(this){
-//				st.execute();
-//			}
-//			res.next();
-//			allProducts.get(artikulenNomer).setDescription(description);
-//			allProducts.get(artikulenNomer).setName(name);
-//			allProducts.get(artikulenNomer).setPrice(price);
-//			allProducts.get(artikulenNomer).setQuantity(quantity);
-//		} catch (SQLException e) {
-//				System.out.println("editProduct: " + e.getMessage());
-//		}
-//	}
 	
 	public void editQuantity(long artikulenNomer, int quantity){
 		String sql = "UPDATE products set quantity = ? WHERE product_id = ?";
@@ -320,6 +358,25 @@ public class ProductDAO {
 		}
 		
 		return users;
+	}
+	
+	public ArrayList<Integer> checkForOrderedProducts(Product p){
+		String sql = "select order_id from ordered_products where product_id = ?";
+		ArrayList<Integer> orders = new ArrayList<>();
+		ResultSet res = null;
+		try(PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ){
+			st.setLong(1, p.getProductId());
+			res = st.executeQuery();
+			while(res.next()){
+				int orderId = res.getInt("order_id");
+				orders.add(orderId);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("checkForFavProducts: " + e.getMessage());
+		}
+		
+		return orders;
 	}
 	
 }

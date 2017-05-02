@@ -23,7 +23,9 @@
         </div>
            
         </div>
-
+<c:if test = "${deleteTrue}">
+<h1>${messageDelete}</h1>
+</c:if>
 	<div class="row">
 	            <aside class="col-md-3 sidebar">
 		<h3 class="aside-filter-title"><a aria-controls="aside-filter" aria-expanded="true" href="#aside-filter-590706410427b" data-toggle="collapse" role="button" class="tm-collapse">Филтър</a></h3>

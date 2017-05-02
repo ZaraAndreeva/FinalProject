@@ -41,32 +41,78 @@ public class UserController {
 		return "technomarket_register";
 	}
 	
-	
+	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView login(HttpServletRequest request, Model model){
-		String email = request.getParameter("email").trim();
-		String password = request.getParameter("password").trim();
+	public String login(HttpServletRequest req, Model model){
+//		String email = request.getParameter("email").trim();
+//		String password = request.getParameter("password").trim();
+//		
+//		if(UserDAO.getInstance().validLogin(email, password)){
+//			User u = UserDAO.getInstance().getAllUsers().get(email);
+//			HttpSession session = request.getSession();
+//			session.setAttribute("user", u);
+//			session.setMaxInactiveInterval(3000);
+//			session.setAttribute("logged", true);
+//			//TODO
+////			response.sendRedirect("index.jsp");
+////			return "new";
+//			request.setAttribute("search", "");
+//			return new ModelAndView("forward:/search/search");
+//			
+//		}
+//		else{
+//			model.addAttribute("message", "Въвели сте грешно потребителско име или парола.");
+////			return "technomarket_login";
+//			
+//			return new ModelAndView("forward:/user/loginPage");
+//			
+//		}
 		
-		if(UserDAO.getInstance().validLogin(email, password)){
+		Scanner sc = null;
+		try {
+			sc = new Scanner(req.getInputStream());
+		} catch (IOException e) {
+			System.out.println("problem with login user " + e.getMessage());
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		while(sc.hasNextLine()){
+			sb.append(sc.nextLine());
+		}
+		
+		JsonParser parser = new JsonParser();
+		JsonObject obj = parser.parse(sb.toString()).getAsJsonObject();
+		
+		JsonObject respJSON = new JsonObject();
+	
+		String email = obj.get("email").getAsString().trim();
+		String password = obj.get("password").getAsString().trim();
+		
+		if(!UserDAO.getInstance().validLogin(email, password)){
+			respJSON.addProperty("error", true);
+			JsonArray errorsArray = new JsonArray();
+			JsonObject error = new JsonObject();
+			error.addProperty("errorPlace", "emailError");
+			error.addProperty("errorMessege", "Невалиден e-mail или парола!");
+			errorsArray.add(error);	
+			
+			respJSON.add("errors", errorsArray);
+			
+			return respJSON.toString();
+		}
+		else{
+			respJSON.addProperty("error", false);
 			User u = UserDAO.getInstance().getAllUsers().get(email);
-			HttpSession session = request.getSession();
+			HttpSession session = req.getSession();
 			session.setAttribute("user", u);
 			session.setMaxInactiveInterval(3000);
 			session.setAttribute("logged", true);
-			//TODO
-//			response.sendRedirect("index.jsp");
-//			return "new";
-			request.setAttribute("search", "");
-			return new ModelAndView("forward:/search/search");
-			
+			req.setAttribute("search", "");
 		}
-		else{
-			model.addAttribute("message", "Въвели сте грешно потребителско име или парола.");
-//			return "technomarket_login";
-			
-			return new ModelAndView("forward:/user/loginPage");
-			
-		}
+		
+		return respJSON.toString();
+		
 	}
 	
 	@RequestMapping(value = "/loginPage", method = {RequestMethod.GET, RequestMethod.POST})

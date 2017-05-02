@@ -98,7 +98,7 @@ public class Product {
 	}
 	
 	public void setQuantity(int quantity) {
-		if(quantity > 0){
+		if(quantity >= 0){
 			this.quantity = quantity;
 		}
 	}
@@ -255,6 +255,11 @@ public class Product {
 	public static boolean validPromotion(String artNomer, String newPrice) {
 		return validArtikulenNomer(artNomer) && validNewPrice(newPrice);
 		
+	}
+	
+	public static boolean validThePrice(String newPrice, long artN){
+		double price = ProductDAO.getInstance().getAllProducts().get(artN).getPrice();
+		return !newPrice.trim().isEmpty() && newPrice != null && Double.parseDouble(newPrice) > 0 && Double.parseDouble(newPrice) < price;
 	}
 	
 }
