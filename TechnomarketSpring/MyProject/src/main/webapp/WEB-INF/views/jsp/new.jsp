@@ -19,7 +19,7 @@
                     
             <section>
         <div class="container"><div class="page-title sh-heading">
-            <h2>${category}</h2>
+            <h2 id="category">${category}</h2>
         </div>
            
         </div>
@@ -31,30 +31,23 @@
 	    <div id="aside-filter-590706410427b" class="aside-filter collapse in">
 	        <form name="sort" method="get" action="" class="form-horizontal" novalidate="1">
 		        <div id="filter_form">
-			        <fieldset class="filter-box"><header><h3>
-				        <a class="required" for="filter_form_sort">Подреди по</a></h3></header>
-				        <div class="filter-content">
-				        	<!-- 
-					        <select id="filter_form_sort" name="filter_form[sort]" class="form-control" >
-					        	<option value="default">по подразбиране</option>
-					        	<option value="type" id = "byName">по азбучен ред</option>
-					        	<option value="priceVuz">по цена възходящо</option>
-					        	<option value="priceNiz">по цена низходящо</option>
-					        </select>
-					         -->
-				         	<a href="http://localhost:8080/TechnomarketSpring/product/sortProductsByName/${category}" class="btn btn-tm flix_cart_click_check">По азбучен ред</a> <br> <br>
-					        <a href="http://localhost:8080/TechnomarketSpring/product/sortProductsByPriceVuz/${category}" class="btn btn-tm flix_cart_click_check">По цена възходящо</a> <br> <br> 
-					        <a href="http://localhost:8080/TechnomarketSpring/product/sortProductsByPriceNiz/${category}" class="btn btn-tm flix_cart_click_check">По цена низходящо</a>  
-					        
-				        </div>
-			        </fieldset>
-		
-		       		<fieldset class="filter-box"><header><h3><a class="required">Цена</a></h3></header><div class="filter-content">
+			        <fieldset class="filter-box"><header><h3><a class="required" for="filter_form_sort">Подреди по</a></h3></header>
+			       		<div class="filter-content">
+				       		<select id="filter_form_sort" name="filter_form[sort]" class="form-control" onChange="filterProducts(this.options[this.selectedIndex].value)">
+					       		<option value="default">по подразбиране</option>
+					       		<option value="price_asc">по цена&nbsp;(възходящо)</option>
+					       		<option value="price_desc">по цена&nbsp;(низходящо)</option>
+					       		<option value="name">по име</option>
+					       	</select>
+			       		</div>
+		       		</fieldset>
+			         <fieldset class="filter-box"><header><h3><a class="required">Цена</a></h3></header><div class="filter-content">
 		       			<div class="range-widget">
 			       			<input type="number" min = "1" id="minPrice" name="minPrice" required="required" placeholder="" class="form-control" value="19">
 			       			<input type="number" min = "1" id="maxPrice" name="maxPrice" required="required" placeholder="" class="form-control" value="139">
 		       			</div></div>
 		       		</fieldset>
+		       		
 	       		</div>
 		    </form>
 	    </div>	
@@ -223,9 +216,40 @@
        
        
        <script>
+       			function filterProducts(value){
+       				var category = document.getElementById("category").innerHTML;
+       				if(value.valueOf() == "price_asc" || value.valueOf() == "price_desc" || value.valueOf() == "name"){
+       					var url;
+       					if(value.valueOf() == "price_asc"){
+       						url = "/TechnomarketSpring/product/sortProductsByPriceAsc/" + category;
+       					}
+						if(value.valueOf() == "price_desc"){
+							url = "/TechnomarketSpring/product/sortProductsByPriceDesc/" + category;
+       					}
+						if(value.valueOf() == "name"){
+							url = "/TechnomarketSpring/product/sortProductsByName/" + category;
+       					}
+       					$.ajax({
+       	      			  url: url,
+       	      			  type: "GET", //send it through get method
+       	      			  contentType : 'application/json; charset=utf-8',
+       	      			  dataType : 'json',
+       	      			  success: function(response) {
+       	      				var rawTemplate = document.getElementById("productsTemplate").innerHTML;
+       	           			var compiledTemplete = Handlebars.compile(rawTemplate);
+       	           			var generatedHtml = compiledTemplete(response);
+       	           			var productsContainer = document.getElementById("productsContainer");
+       	           			productsContainer.innerHTML = generatedHtml;
+       	      			  },
+       	      			  error: function() {
+       	      				  alert("Error in getting ordered product by name.")
+       	      			  }
+       	      			});
+       				}
+       			}
        		
        		
-       		
+       			/*
        			var productsData;
        			$.ajax({
       			  url: "/TechnomarketSpring/product/sortProductsByName/Телевизори",
@@ -247,7 +271,7 @@
       				  alert("Error in getting ordered product by name.")
       			  }
       			});
-       			
+       			*/
        			
        	
        		
