@@ -1,21 +1,29 @@
 package com.example.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Map.Entry;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.dao.ProductDAO;
 import com.example.dao.UserDAO;
 import com.example.krasiModel.Product;
 import com.example.krasiModel.User;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -28,64 +36,146 @@ public class AdminController {
 		return("technomarket_addProduct");
 	}
 
-	@RequestMapping(value = "/addPromotion/{productId}", method = RequestMethod.GET)
-	public ModelAndView addPromotion(@PathVariable("productId") String productId, Model model, HttpServletRequest request){
+//	@RequestMapping(value = "/addPromotion/{productId}", method = RequestMethod.GET)
+//	public ModelAndView addPromotion(@PathVariable("productId") String productId, Model model, HttpServletRequest request){
+//
+//		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
+//		model.addAttribute("product", product);
+//		if(request.getParameter("newPrice").isEmpty() || request.getParameter("newPrice") == null){
+//			model.addAttribute("message", "Моля, въведете цена.");
+//		}
+//		else{
+//			double newPrice = Double.valueOf(request.getParameter("newPrice"));
+//			if(newPrice < 0){
+//				model.addAttribute("message", "Моля, въведете положително число за цена.");
+//			}
+//			else{
+//				if(newPrice < product.getPrice()){
+//				
+//					product.setPromoPrice(newPrice);		
+//					dao.addPromotion(newPrice, Long.parseLong(productId));
+//					
+//					ArrayList<Integer> users = dao.checkForFavProducts(product);
+//					for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
+//						for (Integer i : users) {	
+//							if(e.getValue().getUserId() == i){
+//								MailSender mailSender = new MailSender(e.getValue().getEmail() ,"Промяна на артикул", "Продукт с артикулен номер " + product.getProductId() + " и име " + product.getName() + " е на цена " + newPrice + " лв.");
+//								mailSender.start();
+//							}
+//						}
+//					}
+//					model.addAttribute("message", "Успешно добавихте промоция на продукт с артикулен номер: " + Long.parseLong(productId));
+//				}
+//				else{
+//					model.addAttribute("message", "Цената, която сте въвели е по-висока от текущата цена на продукта.");
+//				}
+//			}
+//		}
+//
+//		return new ModelAndView("forward:/product/viewProductPage/" + productId);
+//	}
+	@ResponseBody
+	@RequestMapping(value = "/addPromotion/{productId}", method = RequestMethod.POST)
+	public String addPromotion(@PathVariable("productId") String productId, HttpServletRequest req){
 
 		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
-		model.addAttribute("product", product);
-		if(request.getParameter("newPrice").isEmpty() || request.getParameter("newPrice") == null){
-			model.addAttribute("message", "Моля, въведете цена.");
+
+		Scanner sc = null;
+		try {
+			sc = new Scanner(req.getInputStream());
+		} catch (IOException e) {
+			System.out.println("problem with addPromotion " + e.getMessage());
 		}
-		else{
-			double newPrice = Double.valueOf(request.getParameter("newPrice"));
-			if(newPrice < 0){
-				model.addAttribute("message", "Моля, въведете положително число за цена.");
+		
+		StringBuilder sb = new StringBuilder();
+		
+		while(sc.hasNextLine()){
+			sb.append(sc.nextLine());
+		}
+		
+		JsonParser parser = new JsonParser();
+		JsonObject obj = parser.parse(sb.toString()).getAsJsonObject();
+		
+		JsonObject respJSON = new JsonObject();
+	
+		String newPrice = obj.get("newPrice").getAsString().trim();
+		
+		if(!Product.validThePrice(newPrice, product.getProductId())){
+			respJSON.addProperty("error", true);
+			JsonArray errorsArray = new JsonArray();
+			if(newPrice.trim().isEmpty() || newPrice == null){
+				JsonObject error = new JsonObject();
+				error.addProperty("errorPlace", "newPriceError");
+				error.addProperty("errorMessege", "Моля, въведете цена!");
+				errorsArray.add(error);	
 			}
 			else{
-				if(newPrice < product.getPrice()){
-				
-					product.setPromoPrice(newPrice);		
-					dao.addPromotion(newPrice, Long.parseLong(productId));
-					
-					ArrayList<Integer> users = dao.checkForFavProducts(product);
-					for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
-						for (Integer i : users) {	
-							if(e.getValue().getUserId() == i){
-								MailSender mailSender = new MailSender(e.getValue().getEmail() ,"Промяна на артикул", "Продукт с артикулен номер " + product.getProductId() + " и име " + product.getName() + " е на цена " + newPrice + " лв.");
-								mailSender.start();
-							}
-						}
-					}
-					model.addAttribute("message", "Успешно добавихте промоция на продукт с артикулен номер: " + Long.parseLong(productId));
+				if(Double.parseDouble(newPrice) >= product.getPrice()){
+					JsonObject error = new JsonObject();
+					error.addProperty("errorPlace", "newPriceError");
+					error.addProperty("errorMessege", "Въведената цена е по-висока от текущата!");
+					errorsArray.add(error);	
 				}
 				else{
-					model.addAttribute("message", "Цената, която сте въвели е по-висока от текущата цена на продукта.");
+					if(Double.parseDouble(newPrice) <= 0){
+						JsonObject error = new JsonObject();
+						error.addProperty("errorPlace", "newPriceError");
+						error.addProperty("errorMessege", "Моля, въведете положително число!");
+						errorsArray.add(error);	
+					}
 				}
 			}
+			
+			respJSON.add("errors", errorsArray);
+			
+			return respJSON.toString();
 		}
-
-		return new ModelAndView("forward:/product/viewProductPage/" + productId);
+		else{
+			respJSON.addProperty("error", false);
+			product.setPromoPrice(Double.parseDouble(newPrice));		
+			dao.addPromotion(Double.parseDouble(newPrice), Long.parseLong(productId));
+		}
+		
+		return respJSON.toString();
 	}
 	
 	@RequestMapping(value = "/deleteProduct/{productId}", method = RequestMethod.GET)
-	public ModelAndView deleteProduct(@PathVariable("productId") String productId, Model model){
-		//TODO da ne se pokazva stranicata na produkta sled kato veche e iztrit !!!!!!!!!!!!!!!!!!!!!
+	public String deleteProduct(@PathVariable("productId") String productId, Model model){
 		Product p = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
-		dao.deleteProduct(p);				
-		
+				
+		//ako e v liubimi i ne e poruchvan -> triem go ot liubimi i ot produkti
+		//ako e v liubimi i e poruchvan -> triem go ot liubimi i setQuantity(0)
 		if(!dao.checkForFavProducts(p).isEmpty()){
 			ArrayList<Integer> users = dao.checkForFavProducts(p);
 			for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
 				for (Integer i : users) {	
 					if(e.getValue().getUserId() == i){
+						if(dao.checkForOrderedProducts(p).isEmpty()){
+							dao.deleteProduct(p, e.getValue());	
+						}
+						else{
+							dao.deleteProduct2(p, e.getValue());
+						}
 						MailSender mailSender = new MailSender(e.getValue().getEmail() ,"Няма наличност", "Продукт с артикулен номер " + p.getProductId() + " и име " + p.getName() + " вече не е наличен.");
 						mailSender.start();
 					}
 				}
 			}
 		}
-		model.addAttribute("message", "Успешно премахнахте продукт с артикулен номер: " + productId);
-		return new ModelAndView("forward:/product/viewProductPage/" + productId);
+		//ako ne e v liubimi i ne e poruchvan -> triem go ot produkt
+		//ako ne e v liubimi i e poruchvan -> setQuantity(0)
+		else{
+			if(dao.checkForOrderedProducts(p).isEmpty()){
+				dao.deleteProduct3(p);
+			}
+			else{
+				dao.deleteProduct4(p);
+			}
+		}
+
+		model.addAttribute("messageDelete", "Успешно премахнахте продукт с артикулен номер: " + productId);
+		model.addAttribute("deleteTrue", true);
+		return "new";
 	}
 
 	@RequestMapping(value = "/editProduct/{productId}", method = RequestMethod.GET)

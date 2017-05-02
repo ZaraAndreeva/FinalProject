@@ -92,14 +92,17 @@
                                 			<div class="buy-now">
 		                                		<button onclick="showDiv()" class="btn btn-tm flix_cart_click_check">Добави в промоция.</button>
 		                                	</div>
-		                                	<form action="http://localhost:8080/TechnomarketSpring/admin/addPromotion/${product.productId}" method = "GET" novalidate="1">
-			                  					<div id="welcomeDiv"  style="display:none;" class="buy-now">
+		                                		<div id="welcomeDiv"  style="display:none;" class="buy-now">
 				                              		<b>Нова цена:</b> <br>
-				                                	<input type="number" min = "0" id="newPrice" name = "newPrice"/>
-				                                	<input class="btn btn-tm" type="submit" value="Добави" />
-		                         					
+				                              		<span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar">
+                                           			 <input type="number" min = "0" id="newPrice" name="newPrice" required="required" class="form-control" />
+                                            		<span id="newPriceError" class="help-block"><ul class="list-unstyled"><li><span class="glyphicon glyphicon-exclamation-sign"></span> </li></ul></span>
+                                            		<span class="bar"></span></div>
+				                                	<input id = "btn" class="btn btn-tm" type="submit" value="Добави" />
+		                       
+		                         			
 												</div>
-											</form>
+											
 											<script>
 											function showDiv() {
 												   document.getElementById('welcomeDiv').style.display = "block";
@@ -107,6 +110,49 @@
 										
 											</script>
                                   	</c:if>
+                                  	
+		<script>
+        var btn = document.getElementById("btn"); 
+    	btn.addEventListener("click", function() {
+    		$.ajax({
+    			  url: "/TechnomarketSpring/admin/addPromotion/${product.productId}",
+    			  type: "POST", //send it through get method
+    			  contentType : 'application/json; charset=utf-8',
+    			  dataType : 'json',
+    			  data: JSON.stringify(
+    					  	{
+    					  		newPrice: document.getElementById("newPrice").value,
+    					  	}			  
+    			  ),
+    			  success: function(response) {
+    				  	var responseData = response;
+    					document.getElementById("newPriceError").innerHTML="";
+    				  	
+    				  if(!responseData.error){
+    					  window.location.href = "http://localhost:8080/TechnomarketSpring/product/viewProductPage/${product.productId}";  		
+    				  }
+    				  else{
+    					  var errors = responseData.errors;
+    					  
+    					  for(var i = 0; i < errors.length; i++){
+    						  document.getElementById(errors[i].errorPlace).innerHTML = errors[i].errorMessege;
+    					  }
+    				  }
+    				  
+    				  
+    			  },
+    			  error: function(xhr) {
+    				  document.getElementById("status").innerHTML="Грешката е при нас... Моля, опитайте по-късно.";
+    			  }
+    			});    
+    		
+    		
+    		
+    	});
+        
+        
+        </script>
+                                  	
                                    	<c:if test = "${product.promoPrice != 0}">
                                    		<div class="buy-now">
                                    		<a href="http://localhost:8080/TechnomarketSpring/admin/removePromotion/${product.productId}" class="btn btn-tm flix_cart_click_check">Премахни от промоция</a>

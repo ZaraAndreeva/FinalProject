@@ -37,8 +37,8 @@ public class UploadImageController {
 	
 	private String vzemiToqImage;
 	private static String sep = File.separator;
-	private static final String FILE_LOCATION = "C:"+sep+"Users"+sep+"Ivan"+sep+"Desktop"+sep+"PictureUpload" + sep;
-//	private static final String FILE_LOCATION = "C:"+sep+"Users"+sep+"ZARA_"+sep+"Desktop"+sep+"UploadPics" + sep;
+//	private static final String FILE_LOCATION = "C:"+sep+"Users"+sep+"Ivan"+sep+"Desktop"+sep+"PictureUpload" + sep;
+	private static final String FILE_LOCATION = "C:"+sep+"Users"+sep+"ZARA_"+sep+"Desktop"+sep+"UploadPics" + sep;
 	@RequestMapping(value="/upload", method=RequestMethod.GET)
 	public String prepareForUpload() {
 //		return "upload";

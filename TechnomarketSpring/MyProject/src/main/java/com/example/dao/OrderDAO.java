@@ -36,8 +36,8 @@ public class OrderDAO {
 	public synchronized void addOrder(Order order, User user){
 		String sql = "INSERT INTO orders (date, status, email, price, name, family_name, phone, town, street, block, entrance, floor, apartment, description_address) "
 				+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){		
+		ResultSet res = null;
+		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);){		
 			st.setDate(1,  Date.valueOf(order.getDate()));
 			st.setString(2, order.getStatus());
 			st.setString(3, user.getEmail());	
@@ -54,6 +54,7 @@ public class OrderDAO {
 			st.setString(14, order.getDescriptionAddress());
 			
 			st.execute();
+			res = st.getGeneratedKeys();
 			
 			res.next();
 			long orderId = res.getLong(1);
