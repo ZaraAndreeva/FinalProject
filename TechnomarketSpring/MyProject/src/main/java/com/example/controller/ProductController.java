@@ -176,8 +176,29 @@ public class ProductController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/sortProductsByName/{subCategory}", method = RequestMethod.GET)
-	public String sortProducts(Model model, @PathVariable("subCategory") String subCategory){
+	@RequestMapping(value = "/sortProductsByName/{subCategory}", method = RequestMethod.POST)
+	public String sortProducts(Model model, @PathVariable("subCategory") String subCategory, HttpServletRequest req){
+		System.out.println("HELLO");
+		
+		Scanner sc = null;
+		try {
+			sc = new Scanner(req.getInputStream());
+		} catch (IOException e) {
+			System.out.println("problem with get min and max price in sortProductsByName" + e.getMessage());
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		while(sc.hasNextLine()){
+			sb.append(sc.nextLine());
+		}
+		
+		JsonParser parser = new JsonParser();
+		JsonObject obj = parser.parse(sb.toString()).getAsJsonObject();
+		
+		double minPrice = Double.parseDouble(obj.get("minPrice").getAsString());
+		double maxPrice = Double.parseDouble(obj.get("maxPrice").getAsString());
+		
 		ArrayList<Product> products = ProductDAO.getInstance().giveProductsBySubCategory(subCategory);
 		TreeSet<Product> prodByName = new TreeSet<>(new Comparator<Product>() {
 
@@ -188,11 +209,14 @@ public class ProductController {
 		});
 
 		for(Product p : products){
-			prodByName.add(p);
+			if(p.getPrice() >= minPrice && p.getPrice() <= maxPrice){
+				prodByName.add(p);
+			}
 		}
 
 //		model.addAttribute("categorySearch", true);
 //		model.addAttribute("products", prodByName);
+		
 		
 		JsonObject respJson = new JsonObject();
 		JsonArray productsArray = new JsonArray();
@@ -213,8 +237,29 @@ public class ProductController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/sortProductsByPriceAsc/{subCategory}", method = RequestMethod.GET)
-	public String sortProductsByPriceVuz(Model model, @PathVariable("subCategory") String subCategory){
+	@RequestMapping(value = "/sortProductsByPriceAsc/{subCategory}", method = RequestMethod.POST)
+	public String sortProductsByPriceVuz(Model model, @PathVariable("subCategory") String subCategory, HttpServletRequest req){
+
+		
+		Scanner sc = null;
+		try {
+			sc = new Scanner(req.getInputStream());
+		} catch (IOException e) {
+			System.out.println("problem with get min and max price in sortProductsByName" + e.getMessage());
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		while(sc.hasNextLine()){
+			sb.append(sc.nextLine());
+		}
+		
+		JsonParser parser = new JsonParser();
+		JsonObject obj = parser.parse(sb.toString()).getAsJsonObject();
+		
+		double minPrice = Double.parseDouble(obj.get("minPrice").getAsString());
+		double maxPrice = Double.parseDouble(obj.get("maxPrice").getAsString());
+		
 		ArrayList<Product> products = ProductDAO.getInstance().giveProductsBySubCategory(subCategory);
 		TreeSet<Product> prodByPriceAsc = new TreeSet<>(new Comparator<Product>() {
 
@@ -240,7 +285,11 @@ public class ProductController {
 		});
 
 		for(Product p : products){
-			prodByPriceAsc.add(p);
+			if(p.getPrice() >= minPrice && p.getPrice() <= maxPrice){
+				prodByPriceAsc.add(p);
+				
+			}
+			
 		}
 
 //		model.addAttribute("categorySearch", true);
@@ -266,8 +315,27 @@ public class ProductController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/sortProductsByPriceDesc/{subCategory}", method = RequestMethod.GET)
-	public String sortProductsByPriceNiz(Model model, @PathVariable("subCategory") String subCategory){
+	@RequestMapping(value = "/sortProductsByPriceDesc/{subCategory}", method = RequestMethod.POST)
+	public String sortProductsByPriceNiz(Model model, @PathVariable("subCategory") String subCategory, HttpServletRequest req){
+		Scanner sc = null;
+		try {
+			sc = new Scanner(req.getInputStream());
+		} catch (IOException e) {
+			System.out.println("problem with get min and max price in sortProductsByName" + e.getMessage());
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		while(sc.hasNextLine()){
+			sb.append(sc.nextLine());
+		}
+		
+		JsonParser parser = new JsonParser();
+		JsonObject obj = parser.parse(sb.toString()).getAsJsonObject();
+		
+		double minPrice = Double.parseDouble(obj.get("minPrice").getAsString());
+		double maxPrice = Double.parseDouble(obj.get("maxPrice").getAsString());
+		
 		ArrayList<Product> products = ProductDAO.getInstance().giveProductsBySubCategory(subCategory);
 		TreeSet<Product> prodByPriceDesc = new TreeSet<>(new Comparator<Product>() {
 
@@ -293,7 +361,10 @@ public class ProductController {
 		});
 
 		for(Product p : products){
-			prodByPriceDesc.add(p);
+			if(p.getPrice() >= minPrice && p.getPrice() <= maxPrice){
+				prodByPriceDesc.add(p);
+				
+			}
 		}
 		
 //		model.addAttribute("categorySearch", true);
@@ -301,8 +372,11 @@ public class ProductController {
 //		
 //		return "new";
 		
+		
+		
 		JsonObject respJson = new JsonObject();
 		JsonArray productsArray = new JsonArray();
+		
 		for (Product product : prodByPriceDesc) {
 			JsonObject productObj = new JsonObject();
 			productObj.addProperty("id", product.getProductId());

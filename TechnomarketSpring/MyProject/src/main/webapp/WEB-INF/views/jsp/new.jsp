@@ -33,7 +33,7 @@
 		        <div id="filter_form">
 			        <fieldset class="filter-box"><header><h3><a class="required" for="filter_form_sort">Подреди по</a></h3></header>
 			       		<div class="filter-content">
-				       		<select id="filter_form_sort" name="filter_form[sort]" class="form-control" onChange="filterProducts(this.options[this.selectedIndex].value)">
+				       		<select id="sortForm" name="filter_form[sort]" class="form-control" onChange="filterProducts()">
 					       		<option value="default">по подразбиране</option>
 					       		<option value="price_asc">по цена&nbsp;(възходящо)</option>
 					       		<option value="price_desc">по цена&nbsp;(низходящо)</option>
@@ -43,8 +43,8 @@
 		       		</fieldset>
 			         <fieldset class="filter-box"><header><h3><a class="required">Цена</a></h3></header><div class="filter-content">
 		       			<div class="range-widget">
-			       			<input type="number" min = "1" id="minPrice" name="minPrice" required="required" placeholder="" class="form-control" value="19">
-			       			<input type="number" min = "1" id="maxPrice" name="maxPrice" required="required" placeholder="" class="form-control" value="139">
+			       			<input type="number" min = "1" id="minPrice" name="minPrice" required="required" placeholder="" class="form-control" value="${minPrice}" onChange="filterProducts()">
+			       			<input type="number" min = "1" id="maxPrice" name="maxPrice" required="required" placeholder="" class="form-control" value="${maxPrice}" onChange="filterProducts()">
 		       			</div></div>
 		       		</fieldset>
 		       		
@@ -216,8 +216,11 @@
        
        
        <script>
-       			function filterProducts(value){
+       			function filterProducts(){
+       				var selectElement = document.getElementById("sortForm");
+       				var value = selectElement[selectElement.selectedIndex].value;
        				var category = document.getElementById("category").innerHTML;
+       				
        				if(value.valueOf() == "price_asc" || value.valueOf() == "price_desc" || value.valueOf() == "name"){
        					var url;
        					if(value.valueOf() == "price_asc"){
@@ -229,11 +232,17 @@
 						if(value.valueOf() == "name"){
 							url = "/TechnomarketSpring/product/sortProductsByName/" + category;
        					}
-       					$.ajax({
+						$.ajax({
        	      			  url: url,
-       	      			  type: "GET", //send it through get method
+       	      			  type: "POST", //send it through get method
        	      			  contentType : 'application/json; charset=utf-8',
        	      			  dataType : 'json',
+	       	      		  data: JSON.stringify(
+	        					  	{
+	        					  		minPrice: document.getElementById("minPrice").value,
+	        					  		maxPrice: document.getElementById("maxPrice").value
+	        					  	}			  
+	        			  ),
        	      			  success: function(response) {
        	      				var rawTemplate = document.getElementById("productsTemplate").innerHTML;
        	           			var compiledTemplete = Handlebars.compile(rawTemplate);
@@ -242,12 +251,39 @@
        	           			productsContainer.innerHTML = generatedHtml;
        	      			  },
        	      			  error: function() {
-       	      				  alert("Error in getting ordered product by name.")
+       	      				  alert("Error in getting ordered product");
        	      			  }
        	      			});
        				}
+       				
+       				
+       				/*
+       				$.ajax({
+	          			  url: "/TechnomarketSpring/product/sortProductsByName/Телевизори",
+	          			  type: "GET", //send it through get method
+	          			  contentType : 'application/json; charset=utf-8',
+	          			  dataType : 'json',
+	          			  data: JSON.stringify(
+	          					  	{
+	          							minPrice: document.getElementById("minPrice").value,	  		
+	          							maxPrice: document.getElementById("maxPrice").value,
+	          						}			  
+	          			  ),
+	          			  success: function() {
+	          				  	
+	          			  },
+	          			  error: function() {
+	          				  
+	          			  }
+          			});   
+       				*/
+       				
+       				
+       				
+       				
+       				
        			}
-       		
+       			
        		
        			/*
        			var productsData;

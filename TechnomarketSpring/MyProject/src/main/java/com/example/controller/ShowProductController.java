@@ -32,9 +32,19 @@ public class ShowProductController {
 //		for (Product product : allProducts) {
 //			System.out.println(product);
 //		}
-		
+		double minPrice = products.get(0).getPrice();
+		double maxPrice = products.get(0).getPrice();
+		for (Product product : products) {
+			if(product.getPrice() < minPrice){
+				minPrice = product.getPrice(); 
+			}
+			if(product.getPrice() > maxPrice){
+				maxPrice = product.getPrice(); 
+			}
+		}
 		model.addAttribute("products", products);
-		
+		model.addAttribute("minPrice", minPrice);
+		model.addAttribute("maxPrice", maxPrice);
 		return "new";
 	}
 }
