@@ -25,8 +25,9 @@
                                             <span class="required" title="This field is required"></span></label><div class="col-sm-10 control-bar"><input type="password" id="password" name="password" required="required" pattern=".{2,}" class="form-control" />
                                             <span id="emailError" class="bar"></span></div></div>
                 <div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_email">
-                
+                <!-- 
         			<a href = "http://localhost:8080/TechnomarketSpring/forgotPass/forgotPassSend">Забравена парола?</a>
+        			 -->
                     <div class="col-sm-offset-6 col-sm-10">
                          <input id = "btn" class="btn btn-tm" type="submit" value="Вход" />
                     </div>

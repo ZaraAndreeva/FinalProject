@@ -333,12 +333,14 @@
     					document.getElementById("streetError").innerHTML="";
     					document.getElementById("status").innerHTML="";
     				if(!response.error){
-    					  	document.getElementById("status").innerHTML="Вашата поръчка е потвърдена. Моля, очаквайте доставка.";
-    					  	document.getElementById("name").value="";	  		
-    						document.getElementById("familyName").value="";
-    						document.getElementById("phone").value="";
-    						document.getElementById("address_city_br").value="";
-    						document.getElementById("street").value="";
+    					  	//document.getElementById("status").innerHTML="Вашата поръчка е потвърдена. Моля, очаквайте доставка.";
+    					  	//document.getElementById("name").value="";	  		
+    						//document.getElementById("familyName").value="";
+    						//document.getElementById("phone").value="";
+    						//document.getElementById("address_city_br").value="";
+    						//document.getElementById("street").value="";
+    						alert("Вашата поръчка е потвърдена. Моля, очаквайте доставка.");
+    						window.location.href = "http://localhost:8080/TechnomarketSpring/user/ordersPage";
     				  }
     				  else{
     					  var errors = response.errors;

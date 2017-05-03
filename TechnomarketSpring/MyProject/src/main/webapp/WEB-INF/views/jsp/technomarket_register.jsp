@@ -50,15 +50,7 @@
                                             <input type="radio" id="fos_user_registration_form_sex_1" name="sex" required="required" value="2" />Жена</label></div>
                                             	<span id="sexError" class="help-block"><ul class="list-unstyled"><li><span class="glyphicon glyphicon-exclamation-sign"></span> </li></ul></span>
                                             <span class="bar"></span></div></div><div class="form-group"><label  class="col-sm-6 control-label required">
-                                            <!-- 
-                    Дата на раждане         
-                    						 <span class="required" title="This field is required">*</span></label><div class="col-sm-10 control-bar">
-                                            <input type="date" id="birthDate" name="birthDate" required="required" class="form-control" />
-                                            	<span id="passwordFirstError" class="help-block"><ul class="list-unstyled"><li><span class="glyphicon glyphicon-exclamation-sign"></span> </li></ul></span>
-                                            <span class="bar"></span></div></div><div class="form-group"><label  class="col-sm-6 control-label required" for="fos_user_registration_form_plainPassword_second">
-                  
-                                            <span class="required" title="This field is required">*</span></label><div class="col-sm-10 control-bar"><div id="fos_user_registration_form_birthday" class="form-inline"><select id="fos_user_registration_form_birthday_day" name="fos_user_registration_form[birthday][day]" required="required" class="form-control"></select></div><span class="bar"></span></div></div><div class="form-group"><div class="col-sm-6"></div><div class="col-sm-10"><div class="checkbox"><label class="required"><input type="checkbox" id="fos_user_registration_form_subscribe" name="fos_user_registration_form[subscribe]" required="required" value="1" /></label></div></div></div><div class="form-group"><div class="col-sm-6"></div><div class="col-sm-10"><input type="checkbox" id="fos_user_registration_form_accept_terms" name="fos_user_registration_form[accept_terms]" required="required" value="1" /></div></div><input type="hidden" id="fos_user_registration_form__token" name="fos_user_registration_form[_token]" class="form-control" value="QELEjmkCqek7doFbSVGnQGNNdJekaTUZVPziZdl4nOc" /><div class="form-group">
-                                             -->
+                                            
                     <div class="col-sm-offset-6 col-sm-10">
                          <button  class="btn btn-tm" id="btn">Добави</button>
                     </div>

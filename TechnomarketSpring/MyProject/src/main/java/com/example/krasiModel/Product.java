@@ -21,9 +21,6 @@ public class Product {
 	public Product(String subCategory, String description, int quantity,
 			double price, double promoPrice, String brand, String name) {
 
-//		if(category != null && !category.isEmpty()){
-//			this.category = category;
-//		}
 		if(subCategory != null && !subCategory.isEmpty()){
 			this.subCategory = subCategory;
 		}

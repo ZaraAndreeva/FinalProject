@@ -65,7 +65,6 @@ public class ProductController {
 			respJSON.addProperty("error", true);
 			JsonArray errorsArray = new JsonArray();
 			if(!Product.validText(description)){
-//				errorsArray.add(new JsonPrimitive("descriptionError"));
 				JsonObject error = new JsonObject();
 				error.addProperty("errorPlace", "descriptionError");
 				error.addProperty("errorMessege", "Моля, въведете описание!");
@@ -73,7 +72,6 @@ public class ProductController {
 				
 			}
 			if(!Product.validQuantity(quantity)){
-//				errorsArray.add(new JsonPrimitive("quantityError"));
 				JsonObject error = new JsonObject();
 				error.addProperty("errorPlace", "quantityError");
 				error.addProperty("errorMessege", "Моля, въведете положително число!");
@@ -81,7 +79,6 @@ public class ProductController {
 				
 			}
 			if(!Product.validPrice(price)){
-//				errorsArray.add(new JsonPrimitive("priceError"));
 				JsonObject error = new JsonObject();
 				error.addProperty("errorPlace", "priceError");
 				error.addProperty("errorMessege", "Моля, въведете положително число за цена!");
@@ -89,7 +86,6 @@ public class ProductController {
 				
 			}
 			if(!Product.validText(brand)){
-//				errorsArray.add(new JsonPrimitive("brandError"));
 				JsonObject error = new JsonObject();
 				error.addProperty("errorPlace", "brandError");
 				error.addProperty("errorMessege", "Моля, въведете марка!");
@@ -97,7 +93,6 @@ public class ProductController {
 				
 			}
 			if(!Product.validText(name)){
-//				errorsArray.add(new JsonPrimitive("urlError"));
 				JsonObject error = new JsonObject();
 				error.addProperty("errorPlace", "nameError");
 				error.addProperty("errorMessege", "Моля, въведете име!");
@@ -105,7 +100,6 @@ public class ProductController {
 				
 			}
 			if(!Product.validSubCategory(subCategory)){
-//				errorsArray.add(new JsonPrimitive("subCategoryError"));
 				System.out.println(subCategory);
 				JsonObject error = new JsonObject();
 				error.addProperty("errorPlace", "subCategoryError");
@@ -132,26 +126,13 @@ public class ProductController {
 				errorsArray.add(error);
 			}
 			respJSON.add("errors", errorsArray);
-//			try {
-//				resp.getWriter().append(respJSON.toString());
-//			} catch (IOException e) {
-//				System.out.println("oops " + e.getMessage());
-//			}
+
 			return respJSON.toString();
 		}
 		else{
 			respJSON.addProperty("error", false);
-//			try {
-//				resp.getWriter().append(respJSON.toString());
-//			} catch (IOException e) {
-//				System.out.println("oops " + e.getMessage());
-//			}
+
 		}
-		
-		//TODO
-//		if(!User.validSubSubCategory(subSubCategory)){
-//			
-//		}
 		
 		Product p = new Product(subCategory, description, 
 				Integer.parseInt(quantity), Double.parseDouble(price), 0, brand, name);
@@ -169,7 +150,6 @@ public class ProductController {
 	
 	@RequestMapping(value = "/viewProductPage/{productId}", method = RequestMethod.GET)
 	public String viewProduct(@PathVariable("productId") String productId, Model model){
-		//TODO validating if productId is Integer
 		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
 		model.addAttribute("product", product);
 		return "technomarket_viewProduct";
@@ -366,14 +346,7 @@ public class ProductController {
 				
 			}
 		}
-		
-//		model.addAttribute("categorySearch", true);
-//		model.addAttribute("products", prodByPriceNiz);
-//		
-//		return "new";
-		
-		
-		
+			
 		JsonObject respJson = new JsonObject();
 		JsonArray productsArray = new JsonArray();
 		

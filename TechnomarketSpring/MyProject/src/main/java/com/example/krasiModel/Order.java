@@ -341,13 +341,4 @@ public class Order {
 			 User.validText(city) && User.validText(street);
 	}
 
-	
-
-	
-
-	
-	
-	
-	
-
 }
