@@ -242,67 +242,7 @@
                     <section class="product-specifications">                      
                         <table class="table tm-table">
                             <tbody>
-                            <!-- 
-                                        <tr>
-        <th><i class="icon-arrow-right"></i>Размер на екрана, inch:</th>
-        <td>
-                            15.6
-                    </td>
-    </tr>
-        <tr>
-        <th><i class="icon-arrow-right"></i>Дисплей, резолюция:</th>
-        <td>
-                            1366x768                    </td>
-    </tr>
-        <tr>
-        <th><i class="icon-arrow-right"></i>Памет (RAM):</th>
-        <td>
-                            4GB                    </td>
-    </tr>
-        <tr>
-        <th><i class="icon-arrow-right"></i>Процесор, серия:</th>
-        <td>
-                            Intel Pentium                    </td>
-    </tr>
-        <tr>
-        <th><i class="icon-arrow-right"></i>Хардиск (GB):</th>
-        <td>
-                            1000
-                    </td>
-    </tr>
-        <tr>
-        <th><i class="icon-arrow-right"></i>Хардиск, тип:</th>
-        <td>
-                            SATA                    </td>
-    </tr>
-        <tr>
-        <th><i class="icon-arrow-right"></i>Видео карта (VGA Chip):</th>
-        <td>
-                            NVIDIA                    </td>
-    </tr>
-        <tr>
-        <th><i class="icon-arrow-right"></i>Видео памет, GB:</th>
-        <td>
-                            1 GB                    </td>
-    </tr>
-        <tr>
-        <th><i class="icon-arrow-right"></i>Операционна система:</th>
-        <td>
-                            Без операционна система                    </td>
-    </tr>
-        <tr>
-        <th><i class="icon-arrow-right"></i>Тегло (кг):</th>
-        <td>
-                            2
-                    </td>
-    </tr>
-        <tr>
-        <th><i class="icon-arrow-right"></i>Оптични устройства:</th>
-        <td>
-                                                <div class="specs-value" title="Да"><i class="icon-check"></i> </div>
-                                    </td>
-    </tr>
-    -->
+                            
                             </tbody>
                         </table>
                     </section>                         

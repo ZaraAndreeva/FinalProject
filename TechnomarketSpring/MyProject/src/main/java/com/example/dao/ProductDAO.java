@@ -62,20 +62,20 @@ public class ProductDAO {
 		}
 	}
 	
-	public void addFavouriteProduct(Product p, User u){
- 		String sql = "insert into favourite_products (user_id, product_id) values ((select user_id from users where user_id = user_id),"
- 				+ "(select product_id from products where product_id = product_id))";
- 		
- 		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){
- 			st.setLong(1, u.getUserId());
-			st.setLong(2, p.getProductId());
- 			res.next();
- 			u.addFavouriteProduct(p);
- 		} catch (SQLException e) {
- 			System.out.println("addFavouriteProduct: " + e.getMessage());
- 		}
- 		
-	}
+//	public void addFavouriteProduct(Product p, User u){
+// 		String sql = "insert into favourite_products (user_id, product_id) values ((select user_id from users where user_id = user_id),"
+// 				+ "(select product_id from products where product_id = product_id))";
+// 		
+// 		try (PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); ResultSet res = st.getGeneratedKeys();){
+// 			st.setLong(1, u.getUserId());
+//			st.setLong(2, p.getProductId());
+// 			res.next();
+// 			u.addFavouriteProduct(p);
+// 		} catch (SQLException e) {
+// 			System.out.println("addFavouriteProduct: " + e.getMessage());
+// 		}
+// 		
+//	}
 	
 	public HashMap<Long, Product> getAllProducts(){
 		if(allProducts.isEmpty()){
@@ -135,7 +135,11 @@ public class ProductDAO {
 		getAllProducts();
 		for(Product p : allProducts.values()){
 			if(p.getDescription() != null && p.getSubCategory() != null && p.getBrand() != null && p.getName() != null){
-				if(p.getDescription().contains(search) || p.getSubCategory().contains(search) || p.getBrand().contains(search) || p.getName().contains(search)){
+				String description = p.getDescription().toLowerCase();
+				String subCat = p.getSubCategory().toLowerCase();
+				String brand = p.getBrand().toLowerCase();
+				String name = p.getName().toLowerCase();
+				if(description.contains(search.toLowerCase()) || subCat.contains(search.toLowerCase()) || brand.contains(search.toLowerCase()) || name.contains(search.toLowerCase())){
 					searchResults.add(p);
 				}
 			}
@@ -299,7 +303,7 @@ public class ProductDAO {
 		}
 	}
 	
-	public void editDescription(long artikulenNomer, String description){
+	public synchronized void editDescription(long artikulenNomer, String description){
 		String sql = "UPDATE products set description = ? WHERE product_id = ?";
 		try(PreparedStatement st = DBManager.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);){
 			st.setString(1, description);
@@ -378,5 +382,6 @@ public class ProductDAO {
 		
 		return orders;
 	}
+	
 	
 }

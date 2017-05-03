@@ -36,44 +36,6 @@ public class AdminController {
 		return("technomarket_addProduct");
 	}
 
-//	@RequestMapping(value = "/addPromotion/{productId}", method = RequestMethod.GET)
-//	public ModelAndView addPromotion(@PathVariable("productId") String productId, Model model, HttpServletRequest request){
-//
-//		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
-//		model.addAttribute("product", product);
-//		if(request.getParameter("newPrice").isEmpty() || request.getParameter("newPrice") == null){
-//			model.addAttribute("message", "Моля, въведете цена.");
-//		}
-//		else{
-//			double newPrice = Double.valueOf(request.getParameter("newPrice"));
-//			if(newPrice < 0){
-//				model.addAttribute("message", "Моля, въведете положително число за цена.");
-//			}
-//			else{
-//				if(newPrice < product.getPrice()){
-//				
-//					product.setPromoPrice(newPrice);		
-//					dao.addPromotion(newPrice, Long.parseLong(productId));
-//					
-//					ArrayList<Integer> users = dao.checkForFavProducts(product);
-//					for(Entry<String, User> e : UserDAO.getInstance().getAllUsers().entrySet()){
-//						for (Integer i : users) {	
-//							if(e.getValue().getUserId() == i){
-//								MailSender mailSender = new MailSender(e.getValue().getEmail() ,"Промяна на артикул", "Продукт с артикулен номер " + product.getProductId() + " и име " + product.getName() + " е на цена " + newPrice + " лв.");
-//								mailSender.start();
-//							}
-//						}
-//					}
-//					model.addAttribute("message", "Успешно добавихте промоция на продукт с артикулен номер: " + Long.parseLong(productId));
-//				}
-//				else{
-//					model.addAttribute("message", "Цената, която сте въвели е по-висока от текущата цена на продукта.");
-//				}
-//			}
-//		}
-//
-//		return new ModelAndView("forward:/product/viewProductPage/" + productId);
-//	}
 	@ResponseBody
 	@RequestMapping(value = "/addPromotion/{productId}", method = RequestMethod.POST)
 	public String addPromotion(@PathVariable("productId") String productId, HttpServletRequest req){
@@ -198,8 +160,19 @@ public class AdminController {
 			if(!request.getParameter("price").trim().isEmpty()){
 				double price = Double.valueOf(request.getParameter("price"));
 				if(price > 0){
-					ProductDAO.getInstance().editPrice(p.getProductId(), price);
-					model.addAttribute("message", "Успешно променихте продукт с артикулен номер: " + Long.parseLong(productId));
+					if(p.getPromoPrice() != 0){
+						if(price > p.getPromoPrice()){
+							ProductDAO.getInstance().editPrice(p.getProductId(), price);
+							model.addAttribute("message", "Успешно променихте продукт с артикулен номер: " + Long.parseLong(productId));
+						}
+						else{
+							model.addAttribute("messageErrorP", "Продуктът вече е в промоция, цената трябва да е по-висока от тази на промоцията.");
+						}
+					}
+					else{
+						ProductDAO.getInstance().editPrice(p.getProductId(), price);
+						model.addAttribute("message", "Успешно променихте продукт с артикулен номер: " + Long.parseLong(productId));
+					}
 				}
 				else{
 					model.addAttribute("messageErrorP", "Цената трябва да е положително число.");

@@ -10,6 +10,7 @@ import java.util.Scanner;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,30 +45,7 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(HttpServletRequest req, Model model){
-//		String email = request.getParameter("email").trim();
-//		String password = request.getParameter("password").trim();
-//		
-//		if(UserDAO.getInstance().validLogin(email, password)){
-//			User u = UserDAO.getInstance().getAllUsers().get(email);
-//			HttpSession session = request.getSession();
-//			session.setAttribute("user", u);
-//			session.setMaxInactiveInterval(3000);
-//			session.setAttribute("logged", true);
-//			//TODO
-////			response.sendRedirect("index.jsp");
-////			return "new";
-//			request.setAttribute("search", "");
-//			return new ModelAndView("forward:/search/search");
-//			
-//		}
-//		else{
-//			model.addAttribute("message", "Въвели сте грешно потребителско име или парола.");
-////			return "technomarket_login";
-//			
-//			return new ModelAndView("forward:/user/loginPage");
-//			
-//		}
-		
+
 		Scanner sc = null;
 		try {
 			sc = new Scanner(req.getInputStream());
@@ -88,8 +66,9 @@ public class UserController {
 	
 		String email = obj.get("email").getAsString().trim();
 		String password = obj.get("password").getAsString().trim();
+		String securedPass = DigestUtils.md5Hex(password);
 		
-		if(!UserDAO.getInstance().validLogin(email, password)){
+		if(!UserDAO.getInstance().validLogin(email, securedPass)){
 			respJSON.addProperty("error", true);
 			JsonArray errorsArray = new JsonArray();
 			JsonObject error = new JsonObject();
@@ -134,30 +113,9 @@ public class UserController {
 		HttpSession session = request.getSession(true);
 		session.setAttribute("logged", false);
 		request.getSession().invalidate();
-//		return ("new");
 		return new ModelAndView("forward:/user/loginPage");
 	}
-	
-//	@RequestMapping(value = "/register", method = RequestMethod.POST)
-//	public String register(HttpServletRequest request){
-//		String name = request.getParameter("name");
-//		String familyName = request.getParameter("family_name");
-//		String password = request.getParameter("password");
-//		String email = request.getParameter("email");
-//		String gender = request.getParameter("gender");
-//		String birthDate = request.getParameter("birthdate");
-//	
-//		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
-//        LocalDate date = LocalDate.parse(birthDate, formatter);
-//		
-//		User u = new User(name, familyName, email, password, gender, date, false);
-//		UserDAO.getInstance().addUser(u);
-//		//TODO
-////		response.sendRedirect("uspeshnaRegistraciya.html");
-//		return ("redirect:uspeshnaRegistraciya.html");
-//	}
-	
-	
+
 	@RequestMapping(value = "/ordersPage", method = RequestMethod.GET)
 	public String ordersPage(Model model, HttpServletRequest request){
 		HttpSession session = request.getSession();
@@ -181,10 +139,6 @@ public class UserController {
 	public String cartPage(){
 		return("technomarket_cart");
 	}
-
-//		response.sendRedirect("index.jsp");
-	
-	
 	
 	@ResponseBody
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -212,21 +166,7 @@ public class UserController {
 		String email = obj.get("email").getAsString().trim();
 		String passwordFirst = obj.get("passwordFirst").getAsString().trim();
 		String passwordSecond = obj.get("passwordSecond").getAsString().trim();
-		String sex = (obj.get("sex")!= null)?  obj.get("sex").getAsString() : "0";
-//		String birthDate = obj.get("birthDate").getAsString();
-//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
-//        LocalDate date = LocalDate.parse(birthDate, formatter);
-		
-
-//		System.out.println("************");
-//		System.out.println(name);
-//		System.out.println(familyName);
-//		System.out.println(email);
-//		System.out.println(passwordFirst);
-//		System.out.println(passwordSecond);
-//		System.out.println(sex);
-//		System.out.println("***********");
-		
+		String sex = (obj.get("sex")!= null)?  obj.get("sex").getAsString() : "0";		
 		
 		if(!User.validUser(name, familyName, email, passwordFirst, passwordSecond, sex)){
 			respJSON.addProperty("error", true);
@@ -305,13 +245,6 @@ public class UserController {
 				error.addProperty("errorMessege", "Паролата е твърде дълга!");
 				errorsArray.add(error);
 			}
-//			if(birthDate == null){
-//				JsonObject error = new JsonObject();
-//				error.addProperty("errorPlace", "dateError");
-//				error.addProperty("errorMessege", "Моля, въведете дата на раждане!");
-//				errorsArray.add(error);
-//			}
-			
 			respJSON.add("errors", errorsArray);
 			
 			return respJSON.toString();
@@ -320,8 +253,9 @@ public class UserController {
 			respJSON.addProperty("error", false);
 		}
 		
-		User user = new User(name, familyName, email, passwordFirst, sex, LocalDate.now(), false);
-		System.out.println(user);
+		String securedPass = DigestUtils.md5Hex(passwordFirst);
+		User user = new User(name, familyName, email, securedPass, sex, LocalDate.now(), false);
+		
 		
 		UserDAO.getInstance().addUser(user);
 		
@@ -346,7 +280,8 @@ public class UserController {
 			}
 			else{
 				UserDAO.getInstance().addFavProducts(u, product);
-				new MailSender(u.getEmail() ,"Абониране", "Вие се абонирахте за продукт с артикулен номер: " + productId + ".");
+				MailSender mailSender = new MailSender(u.getEmail() ,"Абониране", "Вие се абонирахте за продукт с артикулен номер: " + productId + " и име " + product.getName() + ".");
+				mailSender.start();
 				model.addAttribute("message", "Успешно добавихте този продукт в любими и се абонирахте за него.");
 			}
 		}
@@ -409,7 +344,6 @@ public class UserController {
 		}
 		int oldCntProduct = cartProducts.get(product);
 		cartProducts.put(product, oldCntProduct+1);
-		System.out.println(session.getAttribute("cartPrice"));
 		
 		return "technomarket_cart";
 	}
@@ -436,7 +370,10 @@ public class UserController {
 		HttpSession session = request.getSession();	
 		LinkedHashMap<Product, Integer> cartProducts = (LinkedHashMap<Product, Integer>) session.getAttribute("cartProducts");
 		Product product = ProductDAO.getInstance().getAllProducts().get(Long.parseLong(productId));
-		int oldCntProduct = cartProducts.get(product);
+		if(newQuantity > product.getQuantity()){
+			newQuantity = product.getQuantity();
+		}
+		int oldQuantity = cartProducts.get(product);
 		cartProducts.put(product, newQuantity);
 		
 		double newCartPrice = 0.0;
@@ -506,7 +443,6 @@ public class UserController {
 		}
 		
 		Order order = new Order(LocalDate.now(), "Непотвърдена", userEmail, cartPrice, "", "", "", "", "", 0, "", 0, 0, "", productsForOrder);
-		System.out.println(order);
 		OrderDAO.getInstance().addOrder(order, user);
 		session.removeAttribute("cartProducts");
 		return("technomarket_register");
@@ -514,7 +450,7 @@ public class UserController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/finishOrder/{orderId}", method = RequestMethod.POST)
-	public String finishOrder(HttpServletRequest request, @PathVariable("orderId") String orderId){
+	public synchronized String finishOrder(HttpServletRequest request, @PathVariable("orderId") String orderId){
 		Scanner sc = null;
 		try {
 			sc = new Scanner(request.getInputStream());
@@ -538,12 +474,13 @@ public class UserController {
 		int orderIdInt = Integer.parseInt(orderId);
 //		Order order = OrderDAO.getInstance().getAllOrders().get((long)orderIdInt);
 		Order order = user.getOrders().get((long)orderIdInt);
+		LinkedHashMap<Product, Integer> productsInThisOrder = order.getProducts();
 		
-//		for (Order userOrder : user.getOrders()) {
-//			if(userOrder == order){
-//				System.out.println("yeeeeeeeeeeeeeeeeeeeees");
-//			}
-//		}
+		for (Entry<Product, Integer> entry : productsInThisOrder.entrySet()) {
+			int newQuantity = entry.getKey().getQuantity() - entry.getValue();
+			entry.getKey().setQuantity(newQuantity);
+			ProductDAO.getInstance().editQuantity(entry.getKey().getProductId(), newQuantity);
+		}
 		
 		String name = obj.get("name").getAsString();
 		String familyName = obj.get("familyName").getAsString();
@@ -588,19 +525,11 @@ public class UserController {
 			}
 			
 			respJSON.add("errors", errorsArray);
-			System.out.println(respJSON);
 			return respJSON.toString();
 		}
 		else{
 			respJSON.addProperty("error", false);
 		}
-		
-//		OrderDAO.getInstance().updateOrderIntColumn(orderIdInt, name, "name", "String");
-//		OrderDAO.getInstance().updateOrderIntColumn(orderIdInt, familyName, "familyName", "String");
-//		OrderDAO.getInstance().updateOrderIntColumn(orderIdInt, phone, "phone", "String");
-//		OrderDAO.getInstance().updateOrderIntColumn(orderIdInt, city, "town", "String");
-//		OrderDAO.getInstance().updateOrderIntColumn(orderIdInt, street, "street", "String");
-//		OrderDAO.getInstance().updateOrderIntColumn(orderIdInt, status, "status", "Изчакване");
 		
 		OrderDAO.getInstance().updateOrderName(name, orderIdInt);
 		order.setName(name);
@@ -614,11 +543,6 @@ public class UserController {
 		order.setStreet(street);
 		OrderDAO.getInstance().updateOrderStatus("Потвърдена", orderIdInt);
 		order.setStatus("Потвърдена");
-		System.out.println("order");
-		System.out.println(order);
-		System.out.println("order");
-		
-		
 		
 		if(obj.get("block") != null){
 			if(!obj.get("block").getAsString().trim().isEmpty()){
@@ -650,7 +574,6 @@ public class UserController {
 		}
 		if(obj.get("descriptionAddress") != null){
 			if(!obj.get("descriptionAddress").getAsString().trim().isEmpty()){
-				System.out.println("hello");
 				String descriptionAddress = obj.get("descriptionAddress").getAsString();
 				OrderDAO.getInstance().updateOrderDescriptionAddress(descriptionAddress, orderIdInt);;
 				order.setDescriptionAddress(descriptionAddress);
@@ -659,7 +582,6 @@ public class UserController {
 		
 		return respJSON.toString();
 	}
-	
 	
 	
 	
