@@ -77,9 +77,9 @@
     
                 	</div>
                 	<c:if test = "${favPr}">
-                		 <a href="http://localhost:8080/TechnomarketSpring/user/removeFavProd/${product.productId}" class="btn-remove" title="Премахни от любими"><i class="icon-remove"></i></a>
+                		 <a href="/TechnomarketSpring/user/removeFavProd/${product.productId}" class="btn-remove" title="Премахни от любими"><i class="icon-remove"></i></a>
      				</c:if>
-        			<a itemprop="url" href="http://localhost:8080/TechnomarketSpring/product/viewProductPage/${product.productId}" class="product-thumb">
+        			<a itemprop="url" href="/TechnomarketSpring/product/viewProductPage/${product.productId}" class="product-thumb">
                 		<!--  
                 		<img itemprop="image" src="//cdn.technomarket.bg/media/cache/my_thumb/uploads/library/product/09126068/560af7c4f4122.jpeg" alt="Technomarket" />
             			-->
@@ -89,7 +89,7 @@
             			 
     			<figcaption>
         			<div class="product-name">
-            		<h3><a itemprop="url" href="http://localhost:8080/TechnomarketSpring/product/viewProductPage/${product.productId}"><span itemprop="name">${product.name}</span></a></h3>
+            		<h3><a itemprop="url" href="/TechnomarketSpring/product/viewProductPage/${product.productId}"><span itemprop="name">${product.name}</span></a></h3>
             		<small class="product-model">Арт.№: ${product.productId}<span itemprop="productID"></small>
             		<ul itemprop="description" class="product-description">
 

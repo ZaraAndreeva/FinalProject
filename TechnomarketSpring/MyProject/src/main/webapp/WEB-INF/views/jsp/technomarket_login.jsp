@@ -38,7 +38,7 @@
         </div>
         <div class="col-half">
             <h2>Нямаш профил?</h2>
-            <a href="http://localhost:8080/TechnomarketSpring/user/registerPage" class="btn btn-tm">Регистрирай се</a>
+            <a href="/TechnomarketSpring/user/registerPage" class="btn btn-tm">Регистрирай се</a>
             <hr>
                                                         </div>
     </div>
@@ -70,7 +70,7 @@
     					document.getElementById("emailError").innerHTML="";
     				  	
     				  if(!responseData.error){
-    					  	window.location.href = "http://localhost:8080/TechnomarketSpring/";
+    					  	window.location.href = "/TechnomarketSpring/";
     				  }
     				  else{
     					  var errors = responseData.errors;

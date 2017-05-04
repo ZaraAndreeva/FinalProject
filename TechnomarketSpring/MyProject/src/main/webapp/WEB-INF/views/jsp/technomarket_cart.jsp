@@ -24,7 +24,7 @@
            <h1>Количката е празна.</h1>
         </div>
          
-            <p><a href="http://localhost:8080/TechnomarketSpring" class="btn btn-tm"><i class="icon-arrow-long-left"></i> Избери продукт</a></p>
+            <p><a href="/TechnomarketSpring" class="btn btn-tm"><i class="icon-arrow-long-left"></i> Избери продукт</a></p>
             <hr>
             
             </div>
@@ -152,7 +152,7 @@
             </tbody>
             <tfoot>
                         <tr>
-            	<td colspan="2" align="left"><a href="http://localhost:8080/TechnomarketSpring" class="btn btn-tm-dark"><i class="icon-arrow-long-left"></i> Добави още продукти</a></td>
+            	<td colspan="2" align="left"><a href="/TechnomarketSpring" class="btn btn-tm-dark"><i class="icon-arrow-long-left"></i> Добави още продукти</a></td>
             	<td colspan="3" align="right">
 											<!--  	            	
                                             <span id="cart_save_button" style="display: none">

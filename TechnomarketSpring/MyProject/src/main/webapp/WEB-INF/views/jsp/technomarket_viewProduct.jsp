@@ -40,7 +40,7 @@
                         <div class="product-share">                                      
                             <ul>
                                 <li>
-                                                                            <a href="http://localhost:8080/TechnomarketSpring/user/addFavProd/${product.productId}" class="favorites favorites-add"><i class="icon-heart"></i> Любими</a>
+                                                                            <a href="/TechnomarketSpring/user/addFavProd/${product.productId}" class="favorites favorites-add"><i class="icon-heart"></i> Любими</a>
                                                                     </li>
                                 <li>
                                                                                                                    </li>                       	
@@ -76,7 +76,7 @@
 
                         </div>      
                                                 
-                        <form action="http://localhost:8080/TechnomarketSpring/user/addToCart/${product.productId}" method = "POST" novalidate="1">
+                        <form action="/TechnomarketSpring/user/addToCart/${product.productId}" method = "POST" novalidate="1">
  
                                                                                     <div class="buy-now">
                                 <input type="hidden" value="${product.productId}" name="product">
@@ -129,7 +129,7 @@
     					document.getElementById("newPriceError").innerHTML="";
     				  	
     				  if(!responseData.error){
-    					  window.location.href = "http://localhost:8080/TechnomarketSpring/product/viewProductPage/${product.productId}";  		
+    					  window.location.href = "/TechnomarketSpring/product/viewProductPage/${product.productId}";  		
     				  }
     				  else{
     					  var errors = responseData.errors;
@@ -155,17 +155,17 @@
                                   	
                                    	<c:if test = "${product.promoPrice != 0}">
                                    		<div class="buy-now">
-                                   		<a href="http://localhost:8080/TechnomarketSpring/admin/removePromotion/${product.productId}" class="btn btn-tm flix_cart_click_check">Премахни от промоция</a>
+                                   		<a href="/TechnomarketSpring/admin/removePromotion/${product.productId}" class="btn btn-tm flix_cart_click_check">Премахни от промоция</a>
                                    		</div>
                                    	</c:if>
                              
                                    	<div class="buy-now">
-                                   	<a href="http://localhost:8080/TechnomarketSpring/admin/deleteProduct/${product.productId}" class="btn btn-tm flix_cart_click_check">Премахни продукт</a>
+                                   	<a href="/TechnomarketSpring/admin/deleteProduct/${product.productId}" class="btn btn-tm flix_cart_click_check">Премахни продукт</a>
                                    	</div>
                  					
                                    	<div class="buy-now">
                                    		<button onclick="showDiv2()" class="btn btn-tm flix_cart_click_check">Редактирай продукт</button>
-                                   		<form action="http://localhost:8080/TechnomarketSpring/admin/editProduct/${product.productId}" method = "GET" novalidate="1">
+                                   		<form action="/TechnomarketSpring/admin/editProduct/${product.productId}" method = "GET" novalidate="1">
 			                  					<div id="welcomeDiv2"  style="display:none;" class="buy-now">
 				                              		<b>Име:</b> <br>
 				                                	<input type="text" id="name" name = "name"/> <br>

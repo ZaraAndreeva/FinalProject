@@ -340,7 +340,7 @@
     						//document.getElementById("address_city_br").value="";
     						//document.getElementById("street").value="";
     						alert("Вашата поръчка е потвърдена. Моля, очаквайте доставка.");
-    						window.location.href = "http://localhost:8080/TechnomarketSpring/user/ordersPage";
+    						window.location.href = "/TechnomarketSpring/user/ordersPage";
     				  }
     				  else{
     					  var errors = response.errors;

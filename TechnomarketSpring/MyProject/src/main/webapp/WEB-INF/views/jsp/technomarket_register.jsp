@@ -60,7 +60,7 @@
         </div>
         <div class="col-half">
             <h2>Имаш профил?</h2>
-            <a href="http://localhost:8080/TechnomarketSpring/user/loginPage" class="btn btn-tm">Вход в сайта</a>
+            <a href="/TechnomarketSpring/user/loginPage" class="btn btn-tm">Вход в сайта</a>
             <hr>
                                                         </div>
     </div>

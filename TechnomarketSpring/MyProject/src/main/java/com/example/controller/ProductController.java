@@ -206,7 +206,7 @@ public class ProductController {
 			productObj.addProperty("name", product.getName());
 			productObj.addProperty("price", product.getPrice());
 			productObj.addProperty("promoPrice", product.getPromoPrice());
-			productObj.addProperty("viewProductLink", "http://localhost:8080/TechnomarketSpring/product/viewProductPage/" + product.getProductId());
+			productObj.addProperty("viewProductLink", "/TechnomarketSpring/product/viewProductPage/" + product.getProductId());
 			productObj.addProperty("viewProductImage", "/TechnomarketSpring/image/" + product.getProductId());
 			productObj.addProperty("inPromotion", (product.getPromoPrice() > 0)? true : false);
 			productsArray.add(productObj);
@@ -246,18 +246,18 @@ public class ProductController {
 			@Override
 			public int compare(Product o1, Product o2) {
 				if(o1.getPromoPrice() != 0 && o2.getPromoPrice() != 0){
-					return o1.getPromoPrice() < o2.getPromoPrice() ? -1 : o1.getPromoPrice() == o2.getPromoPrice() ? 0 : 1;
+					return o1.getPromoPrice() < o2.getPromoPrice() ? -1 : 1;
 				}
 				else{
 					if(o1.getPromoPrice() != 0 && o2.getPromoPrice() == 0){
-						return o1.getPromoPrice() < o2.getPrice() ? -1 : o1.getPromoPrice() == o2.getPrice() ? 0 : 1;
+						return o1.getPromoPrice() < o2.getPrice() ? -1 : 1;
 					}
 					else{
 						if(o1.getPromoPrice() == 0 && o2.getPromoPrice() != 0){
-							return o1.getPrice() < o2.getPromoPrice() ? -1 : o1.getPrice() == o2.getPromoPrice() ? 0 : 1;
+							return o1.getPrice() < o2.getPromoPrice() ? -1 : 1;
 						}
 						else{
-							return o1.getPrice() < o2.getPrice() ? -1 : o1.getPrice() == o2.getPrice() ? 0 : 1;
+							return o1.getPrice() < o2.getPrice() ? -1 : 1;
 						}
 					}
 				}
@@ -283,7 +283,7 @@ public class ProductController {
 			productObj.addProperty("name", product.getName());
 			productObj.addProperty("price", product.getPrice());
 			productObj.addProperty("promoPrice", product.getPromoPrice());
-			productObj.addProperty("viewProductLink", "http://localhost:8080/TechnomarketSpring/product/viewProductPage/" + product.getProductId());
+			productObj.addProperty("viewProductLink", "/TechnomarketSpring/product/viewProductPage/" + product.getProductId());
 			productObj.addProperty("viewProductImage", "/TechnomarketSpring/image/" + product.getProductId());
 			productObj.addProperty("inPromotion", (product.getPromoPrice() > 0)? true : false);
 			productsArray.add(productObj);
@@ -322,18 +322,29 @@ public class ProductController {
 			@Override
 			public int compare(Product o1, Product o2) {
 				if(o1.getPromoPrice() != 0 && o2.getPromoPrice() != 0){
-					return o2.getPromoPrice() < o1.getPromoPrice() ? -1 : o1.getPromoPrice() == o2.getPromoPrice() ? 0 : 1;
+					return o2.getPromoPrice() < o1.getPromoPrice() ? -1 : 1;
+//					if(o2.getPromoPrice() < o1.getPromoPrice()){
+//						return -1;
+//					}
+//					else{
+//						if(o2.getPromoPrice() > o1.getPromoPrice()){
+//							return 1;
+//						}
+//						else{
+//							return o2.getName().compareTo(o1.getName());
+//						}
+//					}
 				}
 				else{
 					if(o1.getPromoPrice() != 0 && o2.getPromoPrice() == 0){
-						return o2.getPrice() < o1.getPromoPrice() ? -1 : o1.getPromoPrice() == o2.getPrice() ? 0 : 1;
+						return o2.getPrice() < o1.getPromoPrice() ? -1 : 1;
 					}
 					else{
 						if(o1.getPromoPrice() == 0 && o2.getPromoPrice() != 0){
-							return o2.getPromoPrice() < o1.getPrice() ? -1 : o1.getPrice() == o2.getPromoPrice() ? 0 : 1;
+							return o2.getPromoPrice() < o1.getPrice() ? -1 : 1;
 						}
 						else{
-							return o2.getPrice() < o1.getPrice() ? -1 : o1.getPrice() == o2.getPrice() ? 0 : 1;
+							return o2.getPrice() < o1.getPrice() ? -1 : 1;
 						}
 					}
 				}
